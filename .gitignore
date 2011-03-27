@@ -1,0 +1,6 @@
+modules/*
+!modules/custom
+!modules/features
+themes/*
+!themes/custom
+libraries/*

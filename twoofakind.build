@@ -1,0 +1,10 @@
+api = 2
+core = "7.x"
+projects[drupal][type] = "core"
+
+; Installation Profile
+
+projects[twoofakind][type] = "profile"
+projects[twoofakind][download][type] = "git"
+projects[twoofakind][download][url] = "gitosis@master.whatsthatweb.com.au:twoofakind.git"
+projects[twoofakind][download][branch] = "develop"
