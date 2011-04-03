@@ -94,4 +94,4 @@ dependencies[] = xmlsitemap
 ; CUSTOM FEATURES
 ; ---------------
 
-;dependencies[] = twoofakind
+dependencies[] = twoofakind
