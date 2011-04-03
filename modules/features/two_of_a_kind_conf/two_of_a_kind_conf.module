@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Two of a kind conf feature.
+ */
+
+include_once('two_of_a_kind_conf.features.inc');
