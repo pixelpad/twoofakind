@@ -138,6 +138,12 @@ projects[tao][version] = "3.0-beta3"
 projects[rubik][subdir] = "admin"
 projects[rubik][version] = "4.0-beta5"
 
+projects[fusion][subdir] = "contrib"
+projects[fusion][version] = "1.x-dev"
+
+projects[mix_and_match][subdir] = "contrib"
+projects[mix_and_match][version] = "1.x-dev"
+
 ; LIBRARIES
 
 libraries[ckeditor][download][type] = "get"
