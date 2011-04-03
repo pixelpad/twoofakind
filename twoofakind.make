@@ -73,6 +73,9 @@ projects[menu_block][version] = "2.2"
 projects[messaging][subdir] = "contrib"
 projects[messaging][version] = "1.0-alpha1"
 
+projects[metatags_quick][subdir] = "contrib"
+projects[metatags_quick][version] = "1.3"
+
 projects[mollom][subdir] = "contrib"
 projects[mollom][version] = "1.0"
 
