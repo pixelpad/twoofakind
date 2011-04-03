@@ -39,6 +39,9 @@ projects[entity][version] = "1.0-beta8"
 projects[features][subdir] = "contrib"
 projects[features][version] = "1.x-dev"
 
+projects[field_group][subdir] = "contrib"
+projects[field_group][version] = "1.0-rc2"
+
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "2.0-beta5"
 
