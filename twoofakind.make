@@ -133,6 +133,9 @@ projects[typekit][version] = "1.0-beta1"
 projects[views][subdir] = "contrib"
 projects[views][version] = "3.0-beta3"
 
+projects[views_slideshow][subdir] = "contrib"
+projects[views_slideshow][version] = "3.0-alpha1"
+
 projects[webform][subdir] = "contrib"
 projects[webform][version] = "3.9"
 
