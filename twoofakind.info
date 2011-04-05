@@ -60,6 +60,7 @@ dependencies[] = flag
 dependencies[] = globalredirect
 ;dependencies[] = google_analytics
 dependencies[] = jquery_update
+dependencies[] = libraries
 dependencies[] = link
 dependencies[] = location
 dependencies[] = location_cck
