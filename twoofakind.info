@@ -88,6 +88,7 @@ dependencies[] = transliteration
 dependencies[] = typekit
 dependencies[] = user_reference
 dependencies[] = views
+dependencies[] = views_slideshow
 dependencies[] = webform
 dependencies[] = wysiwyg
 dependencies[] = xmlsitemap
