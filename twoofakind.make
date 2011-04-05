@@ -103,6 +103,9 @@ projects[pathauto][version] = "1.0-beta1"
 projects[privatemsg][subdir] = "contrib"
 projects[privatemsg][version] = "1.1"
 
+projects[question_answer][subdir] = "contrib"
+projects[question_answer][version] = "1.6"
+
 projects[redirect][subdir] = "contrib"
 projects[redirect][version] = "1.0-beta1"
 
