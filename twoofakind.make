@@ -174,3 +174,8 @@ libraries[colorbox][download][type] = "get"
 libraries[colorbox][download][url] = "http://colorpowered.com/colorbox/colorbox.zip"
 libraries[colorbox][directory_name] = "colorbox"
 libraries[colorbox][destination] = "libraries"
+
+libraries[jquery_cycle][download][type] = "get"
+libraries[jquery_cycle][download][url] = "http://malsup.com/jquery/cycle/release/jquery.cycle.zip?v2.99"
+libraries[jquery_cycle][directory_name] = "jquery.cycle"
+libraries[jquery_cycle][destination] = "libraries"
