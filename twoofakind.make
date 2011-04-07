@@ -39,6 +39,9 @@ projects[entity][version] = "1.0-beta8"
 projects[features][subdir] = "contrib"
 projects[features][version] = "1.x-dev"
 
+projects[field_group][subdir] = "contrib"
+projects[field_group][version] = "1.0-rc2"
+
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "2.0-beta5"
 
@@ -53,6 +56,9 @@ projects[jquery_update][version] = "2.0"
 
 projects[link][subdir] = "contrib"
 projects[link][version] = "1.0-alpha3"
+
+projects[location][subdir] = "contrib"
+projects[location][version] = "3.x-dev"
 
 projects[logintoboggan][subdir] = "contrib"
 projects[logintoboggan][version] = "1.1"
@@ -99,6 +105,9 @@ projects[privatemsg][version] = "1.1"
 
 projects[redirect][subdir] = "contrib"
 projects[redirect][version] = "1.0-beta1"
+
+projects[references][subdir] = "contrib"
+projects[references][version] = "2.x-dev"
 
 projects[rules][subdir] = "contrib"
 projects[rules][version] = "2.0-beta1"
