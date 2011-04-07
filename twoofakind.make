@@ -133,6 +133,9 @@ projects[wysiwyg][version] = "2.0"
 projects[xmlsitemap][subdir] = "contrib"
 projects[xmlsitemap][version] = "2.0-beta2"
 
+projects[references][subdir] = "contrib"
+projects[references][version] = "2.x-dev"
+
 ; THEMES
 
 projects[tao][subdir] = "base"

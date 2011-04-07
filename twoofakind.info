@@ -74,6 +74,7 @@ dependencies[] = page_title
 dependencies[] = pathauto
 dependencies[] = privatemsg
 dependencies[] = redirect
+dependencies[] = references
 dependencies[] = rules
 dependencies[] = site_map
 dependencies[] = strongarm
@@ -90,6 +91,7 @@ dependencies[] = xmlsitemap
 ; --------------
 
 ;dependencies[] = twoofakind
+dependencies[] = wink
 
 ; CUSTOM FEATURES
 ; ---------------

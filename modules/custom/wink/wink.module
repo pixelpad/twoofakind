@@ -1,0 +1,166 @@
+<?php
+
+/**
+ * @file
+ * Test moduel for the entity API.
+ */
+
+/**
+ * Implement hook_entity_info().
+ */
+function wink_entity_info() {
+  $return = array(
+    'wink' => array(
+      'label' => t('Wink Entity'),
+      'controller class' => 'WinkItController',
+      'base table' => 'wink',
+      'fieldable' => FALSE,
+      'exportable' => FALSE,
+      'entity keys' => array(
+        'id' => 'wid',
+      ),
+//      'static cache' => TRUE,
+//      'bundles' => array(),
+//      'bundle keys' => array(
+//        'bundle' => 'name',
+//      ),
+    ),
+  );
+  return $return;
+}
+
+
+
+/**
+ * Returns all entries where the "user_from_id" was winking at others
+ */
+function get_winks_from_user_id($user_from_id = 0) {
+
+  $condition = ($user_from_id > 0) ? array('user_from_id' => $user_from_id) : array();
+
+  return entity_load('wink', array(), $condition);
+
+}
+
+
+/**
+ * Returns all entries where the "user_to_id" was winked at from others
+ */
+function get_winks_to_user_id($user_to_id = 0) {
+
+  $condition = ($user_to_id > 0) ? array('user_to_id' => $user_to_id) : array();
+
+  return entity_load('wink', array(), $condition);
+
+}
+
+
+
+/**
+ * Load multiple test entities based on certain conditions.
+ *
+ * @param $wids
+ *   An array of entity IDs.
+ * @param $conditions
+ *   An array of conditions to match against the {entity} table.
+ * @param $reset
+ *   A boolean indicating that the internal cache should be reset.
+ * @return
+ *   An array of test entity objects, indexed by pid.
+ */
+function wink_load_multiple($wids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('wink', $wids, $conditions, $reset);
+}
+
+
+
+/**
+ * Just need a simple way of calling a function 
+ */
+function wink_menu(){
+  $items['wink/add'] = array(
+    'title' => 'Add a wink!',
+    'page callback' => 'wink_add_my_form', // create a wink record
+    'access callback' => TRUE,
+/* == cannot make it show up: == 
+    'type' => MENU_CALLBACK,
+    'menu_name' => 'navigation',
+*/
+  );
+  $items['wink/test'] = array(
+    'title' => 'Test wink!',
+    'page callback' => 'wink_test', // show some wink records
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+
+
+function wink_test() {
+
+  // todo: form - variable
+
+  // load all records to id 22:
+  $list = wink_load_multiple(array(), array ('user_to_id' => 22) );
+
+  print_r($list);
+
+  // drupal_set_message($out);
+}
+
+
+
+function wink_add_my_form() {
+  $wink = array (
+    'user_from_id' => 0,
+    'user_to_id' => 0,
+  );
+  
+  return drupal_get_form('wink_add_form', $wink);
+}
+
+
+/**
+ * Create a testin form - send wink from to
+ */
+function wink_add_form($form, &$form_state, $wink) {
+  
+  $form['user_from_id'] = array(
+    '#type' => 'textfield',
+    '#title' => t('wink sender'),
+    '#required' => TRUE,
+  );
+
+  $form['user_to_id'] = array(
+    '#type' => 'textfield',
+    '#title' => t('wink reciever'),
+    '#required' => TRUE,
+  );
+  
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Send wink'),
+  );
+  
+ 
+  return $form;
+}
+
+
+function wink_add_form_submit($form, &$form_state) {
+  $from=$form_state['values']['user_from_id'];
+  $to  =$form_state['values']['user_to_id'];
+  drupal_set_message("storing wink from: $from  -> to: $to");
+
+ $wink = array (
+    'user_from_id' => $from,
+    'user_to_id' => $to,
+  );
+  entity_get_controller('wink')->save($wink);
+
+}
+
+
+
