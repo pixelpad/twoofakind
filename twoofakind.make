@@ -42,8 +42,8 @@ projects[features][subdir] = "contrib"
 projects[field_group][subdir] = "contrib"
 projects[field_group][version] = "1.0-rc2"
 
-;projects[flag][subdir] = "contrib"
-;projects[flag][version] = "2.0-beta5"
+projects[flag][subdir] = "contrib"
+projects[flag][version] = "2.0-beta5"
 
 projects[globalredirect][subdir] = "contrib"
 projects[globalredirect][version] = "1.3"
@@ -103,8 +103,8 @@ projects[page_title][version] = "2.4-beta1"
 projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.0-beta1"
 
-;projects[privatemsg][subdir] = "contrib"
-;projects[privatemsg][version] = "1.1"
+projects[privatemsg][subdir] = "contrib"
+projects[privatemsg][version] = "1.1"
 
 ;projects[question_answer][subdir] = "contrib"
 ;projects[question_answer][version] = "1.6"
