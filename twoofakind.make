@@ -112,8 +112,8 @@ projects[privatemsg][version] = "1.1"
 projects[redirect][subdir] = "contrib"
 projects[redirect][version] = "1.0-beta1"
 
-;projects[references][subdir] = "contrib"
-;projects[references][version] = "2.x-dev"
+projects[references][subdir] = "contrib"
+projects[references][version] = "2.x-dev"
 
 ;projects[rules][subdir] = "contrib"
 ;projects[rules][version] = "2.0-beta1"
