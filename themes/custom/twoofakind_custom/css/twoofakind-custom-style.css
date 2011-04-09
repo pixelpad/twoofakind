@@ -20,6 +20,13 @@ a:active {
 
 /* Logo
 -------------------------------------------------------------- */
+
+#Logo {
+    float: left;
+    margin: -40px 0 24px 60px;
+    position: absolute;
+}
+
 #Logo a {
 	background: url("../images/logo.png") no-repeat scroll 0 0 transparent
 }
