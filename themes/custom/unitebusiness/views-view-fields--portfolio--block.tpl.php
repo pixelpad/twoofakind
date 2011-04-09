@@ -1,0 +1,1 @@
+<?php if ($fields['entity_id_1']->content) { print $fields['entity_id_1']->content; } ?>
