@@ -1,11 +1,8 @@
 
-name = Two of a kind custom theme
-description = Custom theme based on unite business
+name = Two of a kind custom
+description = Tow of a kind custom theme
 base theme = unitebusiness
-screenshot = screenshot.png
 core = 7.x
-
-stylesheets[all][] = css/twoofakind-custom-style.css
 
 settings[skin] = 2
 settings[slide_shows] = 1
