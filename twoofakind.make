@@ -60,8 +60,8 @@ projects[libraries][version] = "1.0"
 ;projects[link][subdir] = "contrib"
 ;projects[link][version] = "1.0-alpha3"
 
-;projects[location][subdir] = "contrib"
-;projects[location][version] = "3.x-dev"
+projects[location][subdir] = "contrib"
+projects[location][version] = "3.x-dev"
 
 ;projects[logintoboggan][subdir] = "contrib"
 ;projects[logintoboggan][version] = "1.1"
