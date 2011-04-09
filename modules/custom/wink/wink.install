@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the wink module.
+ */
+
+
+/**
+ * Implement hook_schema().
+ */
+function wink_schema() {
+  $schema['wink'] = array (
+    'description' => 'The main store for our wink',
+    'fields' => array(
+      'wid' => array(
+        'description' => 'Primary key for our table of winks',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'user_from_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        // 'default' => 0,  // hope default not required
+        'description' => "User id of the winker.",
+      ),
+      'user_to_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        // 'default' => 0,  // hope default not required
+        'description' => "User id of the winkee.",
+      ),
+    ),
+/*    'indexes' => array(
+      'user_from_id' => array('user_from_id'),
+      'user_to_id' => array('user_to_id'),
+    ),
+    'foreign keys' => array(
+      'user_from_id' => array('users' => 'uid'),
+      'user_to_id' => array('users' => 'uid'),
+    ),  */
+    'primary key' => array('wid'),
+  );
+  
+  return $schema;
+}
+
+
+/*
+
+Download the entity API contrib module (check if it isn't already there) and look at the example included.
+All I need is an entity that has id, user_from_id and user_to_id. The example includes user ids so this should help. 
+
+Ideally we don't need it to do much.
+
+Data :
+id
+user from id
+user to id
+That's it.
+
+To add a wink we actually don't even need an admin screen. We would need a link on the profile screen that said "wink at this person". Have a think about how this might best be done. There must be some standard way of inserting a link like this.
+
+Also, we need to create some views based on winks i.e. who has winked at you. So, the entity needs to be exposed to views. This functionality should exist, see what you can find.
+
+Keep it light, don't go in to too much detail. As mentioned, it doesn't have to do much.
+*/

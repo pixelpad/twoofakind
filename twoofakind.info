@@ -99,6 +99,7 @@ dependencies[] = xmlsitemap
 ; --------------
 
 ;dependencies[] = twoofakind
+dependencies[] = wink
 
 ; CUSTOM FEATURES
 ; ---------------

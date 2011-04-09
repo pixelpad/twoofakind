@@ -1,0 +1,6 @@
+; $Id$
+name = Wink Entity
+description = Wink between users for your Drupal site
+core = 7.x
+files[] = wink.module
+files[] = wink.controller.inc
