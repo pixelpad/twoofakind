@@ -21,8 +21,8 @@ projects[boxes][version] = "1.0-beta2"
 ;projects[colorbox][subdir] = "contrib"
 ;projects[colorbox][version] = "1.0-beta3"
 
-;projects[context][subdir] = "contrib"
-;projects[context][version] = "3.0-beta1"
+projects[context][subdir] = "contrib"
+projects[context][version] = "3.0-beta1"
 
 projects[ctools][subdir] = "contrib"
 ;projects[ctools][version] = "1.x-dev"
@@ -98,7 +98,8 @@ projects[location][version] = "3.x-dev"
 ;projects[notifications][version] = "1.0-alpha1"
 
 projects[page_title][subdir] = "contrib"
-projects[page_title][version] = "2.4-beta1"
+projects[page_title][version] = "2.x-dev"
+projects[page_title][patches][] = "http://drupal.org/files/issues/views.page_title_workaround_1099792.patch"
 
 projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.0-beta1"
