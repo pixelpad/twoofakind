@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Theme Unite config feature.
+ */
+
+include_once('theme_unite_config.features.inc');
