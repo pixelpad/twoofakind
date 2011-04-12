@@ -4,8 +4,8 @@ description = Tow of a kind custom theme
 base theme = unitebusiness
 core = 7.x
 
-settings[skin] = 2
-settings[slide_shows] = 1
+settings[skin] = 0
+settings[slide_shows] = 0
 
 regions[sidebar_right] = Sidebar Right
 regions[content] = Content
