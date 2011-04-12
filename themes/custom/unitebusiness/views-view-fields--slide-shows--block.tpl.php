@@ -1,8 +1,9 @@
 <?php 
 $slide = theme_get_setting('slide_shows');
-
+dd($slide);
 switch ($slide) {
-	case 0: 
+	case 0:
+    dd($fields);
 		if ($fields['entity_id_1']->content) { 
 			print $fields['entity_id_1']->content;
 		}

@@ -238,6 +238,74 @@ function dating_suite_field_default_fields() {
     ),
   );
 
+  // Exported field: 'node-success_story-field_slideshows'
+  $fields['node-success_story-field_slideshows'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_slideshows',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          0 => '0',
+          1 => 'Slide shows',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => '1',
+      'type' => 'list_boolean',
+    ),
+    'field_instance' => array(
+      'bundle' => 'success_story',
+      'default_value' => array(
+        0 => array(
+          'value' => 0,
+        ),
+      ),
+      'deleted' => '0',
+      'description' => 'Check this box if you would like this content to be included in the slide show',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 3,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_slideshows',
+      'label' => 'Slide show',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(
+          'display_label' => 0,
+        ),
+        'type' => 'options_onoff',
+        'weight' => '6',
+      ),
+    ),
+  );
+
   // Exported field: 'user-user-field_body_type'
   $fields['user-user-field_body_type'] = array(
     'field_config' => array(
@@ -295,7 +363,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '20',
+        'weight' => '13',
       ),
     ),
   );
@@ -370,7 +438,7 @@ function dating_suite_field_default_fields() {
           'year_range' => '-100:+0',
         ),
         'type' => 'date_select',
-        'weight' => '6',
+        'weight' => '5',
       ),
     ),
   );
@@ -427,7 +495,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '23',
+        'weight' => '18',
       ),
     ),
   );
@@ -487,7 +555,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '29',
+        'weight' => '23',
       ),
     ),
   );
@@ -547,7 +615,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '17',
+        'weight' => '10',
       ),
     ),
   );
@@ -609,7 +677,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '18',
+        'weight' => '11',
       ),
     ),
   );
@@ -667,7 +735,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '29',
+        'weight' => '22',
       ),
     ),
   );
@@ -729,7 +797,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '24',
+        'weight' => '19',
       ),
     ),
   );
@@ -868,7 +936,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '19',
+        'weight' => '12',
       ),
     ),
   );
@@ -940,7 +1008,7 @@ function dating_suite_field_default_fields() {
           'progress_indicator' => 'throbber',
         ),
         'type' => 'image_image',
-        'weight' => '28',
+        'weight' => '3',
       ),
     ),
   );
@@ -1002,7 +1070,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '30',
+        'weight' => '24',
       ),
     ),
   );
@@ -1062,7 +1130,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '5',
+        'weight' => '6',
       ),
     ),
   );
@@ -1120,7 +1188,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_buttons',
-        'weight' => '27',
+        'weight' => '21',
       ),
     ),
   );
@@ -1182,7 +1250,7 @@ function dating_suite_field_default_fields() {
           'display_label' => 1,
         ),
         'type' => 'options_onoff',
-        'weight' => '29',
+        'weight' => '4',
       ),
     ),
   );
@@ -1244,7 +1312,7 @@ function dating_suite_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '28',
+        'weight' => '22',
       ),
     ),
   );
@@ -1306,7 +1374,7 @@ function dating_suite_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '25',
+        'weight' => '20',
       ),
     ),
   );
@@ -1365,7 +1433,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '21',
+        'weight' => '14',
       ),
     ),
   );
@@ -1423,7 +1491,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '32',
+        'weight' => '16',
       ),
     ),
   );
@@ -1482,7 +1550,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '28',
+        'weight' => '21',
       ),
     ),
   );
@@ -1541,7 +1609,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '4',
+        'weight' => '5',
       ),
     ),
   );
@@ -1654,7 +1722,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '22',
+        'weight' => '17',
       ),
     ),
   );
@@ -1720,7 +1788,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '31',
+        'weight' => '15',
       ),
     ),
   );
@@ -1834,7 +1902,7 @@ function dating_suite_field_default_fields() {
         'module' => 'location_cck',
         'settings' => array(),
         'type' => 'location',
-        'weight' => '7',
+        'weight' => '2',
       ),
     ),
   );
@@ -1893,7 +1961,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '30',
+        'weight' => '23',
       ),
     ),
   );
@@ -1904,6 +1972,7 @@ function dating_suite_field_default_fields() {
   t('Are you a smoker');
   t('Body');
   t('Body type');
+  t('Check this box if you would like this content to be included in the slide show');
   t('Date of Birth');
   t('Do you have kids');
   t('Do you have pets');
@@ -1927,6 +1996,7 @@ function dating_suite_field_default_fields() {
   t('Religious affiliation');
   t('Select the two people involved in this success story by typing their usernames.');
   t('Sex');
+  t('Slide show');
   t('Star sign');
   t('What languages do you speak');
   t('if other above - what language');

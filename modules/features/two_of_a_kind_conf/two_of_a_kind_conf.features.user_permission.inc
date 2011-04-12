@@ -319,12 +319,6 @@ function two_of_a_kind_conf_user_default_permissions() {
     'roles' => array(),
   );
 
-  // Exported permission: delete terms in 1
-  $permissions['delete terms in 1'] = array(
-    'name' => 'delete terms in 1',
-    'roles' => array(),
-  );
-
   // Exported permission: edit boxes
   $permissions['edit boxes'] = array(
     'name' => 'edit boxes',
@@ -333,12 +327,6 @@ function two_of_a_kind_conf_user_default_permissions() {
       1 => 'Editor',
     ),
     'module' => 'boxes',
-  );
-
-  // Exported permission: edit terms in 1
-  $permissions['edit terms in 1'] = array(
-    'name' => 'edit terms in 1',
-    'roles' => array(),
   );
 
   // Exported permission: notify of path changes

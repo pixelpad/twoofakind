@@ -58,7 +58,7 @@ function simple_site_benefit_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'page_title_type_simple_site_benefit';
-  $strongarm->value = '';
+  $strongarm->value = '[current-page:page-title] | Benefit | [site:name] | [site:slogan]';
   $export['page_title_type_simple_site_benefit'] = $strongarm;
 
   $strongarm = new stdClass;
