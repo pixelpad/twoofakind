@@ -12,8 +12,8 @@ projects[drupal][type] = "core"
 ; CONTRIB MODULES
 ; ---------------
 
-;projects[apachesolr][subdir] = "contrib"
-;projects[apachesolr][version] = "1.0-beta3"
+projects[apachesolr][subdir] = "contrib"
+projects[apachesolr][version] = "1.0-beta5"
 
 projects[boxes][subdir] = "contrib"
 projects[boxes][version] = "1.0-beta2"
