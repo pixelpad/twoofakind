@@ -46,7 +46,7 @@ dependencies[] = update
 ; CONTRIB MODULES
 ; ---------------
 
-dependencies[] = apachesolr
+dependencies[] = apachesolr_search
 dependencies[] = boxes
 ;dependencies[] = colorbox
 dependencies[] = context
