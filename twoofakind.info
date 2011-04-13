@@ -104,4 +104,11 @@ dependencies[] = xmlsitemap
 ; CUSTOM FEATURES
 ; ---------------
 
-;dependencies[] = twoofakind
+dependencies[] = dating_suite
+dependencies[] = simple_article
+dependencies[] = simple_event
+dependencies[] = simple_faq
+dependencies[] = simple_page
+dependencies[] = simple_site_benefit
+dependencies[] = theme_unite_config
+dependencies[] = two_of_a_kind_conf
