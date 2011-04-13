@@ -22,7 +22,7 @@ function two_of_a_kind_conf_menu_default_menu_links() {
     'external' => '0',
     'has_children' => '0',
     'expanded' => '0',
-    'weight' => '-47',
+    'weight' => '0',
   );
   // Exported menu link: main-menu:help
   $menu_links['main-menu:help'] = array(
@@ -36,7 +36,7 @@ function two_of_a_kind_conf_menu_default_menu_links() {
     'external' => '0',
     'has_children' => '0',
     'expanded' => '0',
-    'weight' => '-46',
+    'weight' => '0',
   );
   // Exported menu link: main-menu:news
   $menu_links['main-menu:news'] = array(
@@ -50,7 +50,7 @@ function two_of_a_kind_conf_menu_default_menu_links() {
     'external' => '0',
     'has_children' => '0',
     'expanded' => '0',
-    'weight' => '-48',
+    'weight' => '0',
   );
   // Exported menu link: main-menu:node/1
   $menu_links['main-menu:node/1'] = array(
