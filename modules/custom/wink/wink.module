@@ -2,8 +2,10 @@
 
 /**
  * @file
- * Test moduel for the entity API.
+ * moduel with wink entity.
  */
+
+
 
 /**
  * Implement hook_entity_info().
@@ -31,91 +33,11 @@ function wink_entity_info() {
 
 
 
-/**
- * Returns all entries where the "user_from_id" was winking at others
- */
-function get_winks_from_user_id($user_from_id = 0) {
 
-  $condition = ($user_from_id > 0) ? array('user_from_id' => $user_from_id) : array();
-
-  return entity_load('wink', array(), $condition);
-
-}
-
-
-/**
- * Returns all entries where the "user_to_id" was winked at from others
- */
-function get_winks_to_user_id($user_to_id = 0) {
-
-  $condition = ($user_to_id > 0) ? array('user_to_id' => $user_to_id) : array();
-
-  return entity_load('wink', array(), $condition);
-
-}
-
-
-
-/**
- * Load multiple test entities based on certain conditions.
- *
- * @param $wids
- *   An array of entity IDs.
- * @param $conditions
- *   An array of conditions to match against the {entity} table.
- * @param $reset
- *   A boolean indicating that the internal cache should be reset.
- * @return
- *   An array of test entity objects, indexed by pid.
- */
-function wink_load_multiple($wids = array(), $conditions = array(), $reset = FALSE) {
-  return entity_load('wink', $wids, $conditions, $reset);
-}
-
-
-
-/**
- * Just need a simple way of calling a function 
- */
-function wink_menu(){
-  $items['wink/add'] = array(
-    'title' => 'Add a wink!',
-    'page callback' => 'wink_add_my_form', // create a wink record
-    'access callback' => TRUE,
-/* == cannot make it show up: == 
-    'type' => MENU_CALLBACK,
-    'menu_name' => 'navigation',
-*/
-  );
-  $items['wink/test'] = array(
-    'title' => 'Test wink!',
-    'page callback' => 'wink_test', // show some wink records
-    'access callback' => TRUE,
-  );
-
-  return $items;
-}
-
-
-
-function wink_test() {
-
-  // todo: form - variable
-
-  // load all records to id 22:
-  $list = wink_load_multiple(array(), array ('user_to_id' => 22) );
-
-  print_r($list);
-
-  // drupal_set_message($out);
-}
-
-
-
-function wink_add_my_form() {
+function wink_add_my_form($from, $to) {
   $wink = array (
-    'user_from_id' => 0,
-    'user_to_id' => 0,
+    'user_from_id' => $from,
+    'user_to_id' => $to,
   );
   
   return drupal_get_form('wink_add_form', $wink);
@@ -123,25 +45,28 @@ function wink_add_my_form() {
 
 
 /**
- * Create a testin form - send wink from to
+ * Create a hidden send-wink-form - the sender and receiver 
+ *   are stored in the $wink object
  */
 function wink_add_form($form, &$form_state, $wink) {
   
   $form['user_from_id'] = array(
-    '#type' => 'textfield',
+    '#type' => 'hidden',
     '#title' => t('wink sender'),
     '#required' => TRUE,
+    '#value' => $wink['user_from_id'],
   );
 
   $form['user_to_id'] = array(
-    '#type' => 'textfield',
+    '#type' => 'hidden',
     '#title' => t('wink reciever'),
     '#required' => TRUE,
+    '#value' => $wink['user_to_id'],
   );
   
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Send wink'),
+    '#value' => t('Send a wink'),
   );
   
  
@@ -152,7 +77,7 @@ function wink_add_form($form, &$form_state, $wink) {
 function wink_add_form_submit($form, &$form_state) {
   $from=$form_state['values']['user_from_id'];
   $to  =$form_state['values']['user_to_id'];
-  drupal_set_message("storing wink from: $from  -> to: $to");
+  drupal_set_message("storing a wink from uid: $from  -> $to");
 
  $wink = array (
     'user_from_id' => $from,
@@ -164,3 +89,102 @@ function wink_add_form_submit($form, &$form_state) {
 
 
 
+
+
+
+/**
+ * Implementation of hook_block_info()
+ */
+function wink_block_info() {
+  $blocks['wink-they-at-me'] = array(
+    'info' => t('Who winks at me'),
+  );
+  $blocks['wink-me-at-them'] = array(
+    'info' => t('Who I wink at'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implementation of hook_block_view()
+ * 
+ * note: http://drupal.org/project/efq_views
+ * wasn't stable enough to be used (04/2011)
+ */
+function wink_block_view($delta='') {
+  $block = array();
+  switch ($delta) {
+    case 'wink-they-at-me':
+      $block['subject'] = t('Who has winked at me');
+      $block['content'] = wink_last_winks(TRUE);
+      break;
+    case 'wink-me-at-them':
+      $block['subject'] = t('Who I\'ve winked at');
+      $block['content'] = wink_last_winks(FALSE);
+      break;
+  }
+  return $block;
+}
+
+
+/**
+ * function outputs last $max_rows rows of users 
+ * based on the "they_at_me" parameter
+ *  - if it is not FALSE, these are users who have winked at me
+ *  - if it is FALSE,     these are users I have winked at
+ * @return string
+ */
+function wink_last_winks($they_at_me = FALSE) {
+  global $user;
+  $max_rows = 5; // how many winks to output
+
+  $out = '<div>';
+  if ($they_at_me) {
+    $winks = db_query('SELECT user_from_id AS id from {wink} WHERE user_to_id = :uid ORDER BY wid DESC LIMIT ' . $max_rows, array(':uid' => $user->uid));
+  } else { // me_at_them
+	$winks = db_query('SELECT user_to_id AS id from {wink} WHERE user_from_id = :uid ORDER BY wid DESC LIMIT ' . $max_rows, array(':uid' => $user->uid));
+  }
+  foreach ($winks as $record) {
+	if ($account = user_load($record->id)) {
+      $out .= '<div>' . l($account->name, "user/" . $record->id) . '</div>';
+    }
+  }
+  $out .= '</div>';
+  return $out;
+  
+  // This would be the entity (non-SQL) way:
+  // (the sort and limit to max_rows parts are missing in code below)
+  // 
+  // $condition = array('user_to_id' => $user->uid);
+  // $winks = entity_load('wink', array(), $condition); 
+  // foreach ($winks as $record) {
+  //   echo $record->user_from_id;
+  // }
+
+}
+
+
+
+
+
+/**
+* Implements hook_user_view().
+*/
+function wink_user_view($account, $view_mode, $langcode) {
+
+  global $user;
+  
+  // this properly generates a link 
+  // but not sure how to trigger my store function after a click
+  //
+  // $account->content['summary']['winklink'] =  array(
+  //     '#type' => 'user_profile_item', 
+  //     '#title' => t('Wink'), 
+  //     '#markup' => l(t('Wink at user') . " " . $account->name, "user/$account->uid"),
+  // );
+
+  // display a submit button instead:      
+  $account->content['summary']['testwink'] =  wink_add_my_form($user->uid, $account->uid);
+
+  // dsm($account->content); 
+}

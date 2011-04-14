@@ -34,14 +34,14 @@ function wink_schema() {
         'description' => "User id of the winkee.",
       ),
     ),
-/*    'indexes' => array(
+    'indexes' => array(
       'user_from_id' => array('user_from_id'),
       'user_to_id' => array('user_to_id'),
     ),
     'foreign keys' => array(
       'user_from_id' => array('users' => 'uid'),
       'user_to_id' => array('users' => 'uid'),
-    ),  */
+    ), 
     'primary key' => array('wid'),
   );
   
