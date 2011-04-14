@@ -10,6 +10,234 @@
 function dating_suite_field_default_fields() {
   $fields = array();
 
+  // Exported field: 'node-success_story-body'
+  $fields['node-success_story-body'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(
+        0 => 'node',
+      ),
+      'field_name' => 'body',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'module' => 'text',
+      'settings' => array(),
+      'translatable' => '1',
+      'type' => 'text_with_summary',
+    ),
+    'field_instance' => array(
+      'bundle' => 'success_story',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'hidden',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 0,
+        ),
+        'teaser' => array(
+          'label' => 'hidden',
+          'module' => 'text',
+          'settings' => array(
+            'trim_length' => 600,
+          ),
+          'type' => 'text_summary_or_trimmed',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'body',
+      'label' => 'Body',
+      'required' => FALSE,
+      'settings' => array(
+        'display_summary' => TRUE,
+        'text_processing' => 1,
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'module' => 'text',
+        'settings' => array(
+          'rows' => 20,
+          'summary_rows' => 5,
+        ),
+        'type' => 'text_textarea_with_summary',
+        'weight' => '1',
+      ),
+      'widget_type' => 'text_textarea_with_summary',
+    ),
+  );
+
+  // Exported field: 'node-success_story-field_image'
+  $fields['node-success_story-field_image'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_image',
+      'foreign keys' => array(
+        'fid' => array(
+          'columns' => array(
+            'fid' => 'fid',
+          ),
+          'table' => 'file_managed',
+        ),
+      ),
+      'indexes' => array(
+        'fid' => array(
+          0 => 'fid',
+        ),
+      ),
+      'module' => 'image',
+      'settings' => array(
+        'default_image' => 0,
+        'uri_scheme' => 'public',
+      ),
+      'translatable' => '1',
+      'type' => 'image',
+    ),
+    'field_instance' => array(
+      'bundle' => 'success_story',
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'image',
+          'settings' => array(
+            'image_link' => '',
+            'image_style' => '',
+          ),
+          'type' => 'image',
+          'weight' => 2,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_image',
+      'label' => 'Main image',
+      'required' => 0,
+      'settings' => array(
+        'alt_field' => 1,
+        'file_directory' => 'content_types/success',
+        'file_extensions' => 'png gif jpg jpeg',
+        'max_filesize' => '200KB',
+        'max_resolution' => '800x600',
+        'min_resolution' => '400x400',
+        'title_field' => 1,
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'image',
+        'settings' => array(
+          'preview_image_style' => 'thumbnail',
+          'progress_indicator' => 'throbber',
+        ),
+        'type' => 'image_image',
+        'weight' => '4',
+      ),
+    ),
+  );
+
+  // Exported field: 'node-success_story-field_partners'
+  $fields['node-success_story-field_partners'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '2',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_partners',
+      'foreign keys' => array(
+        'uid' => array(
+          'columns' => array(
+            'uid' => 'uid',
+          ),
+          'table' => 'users',
+        ),
+      ),
+      'indexes' => array(
+        'uid' => array(
+          0 => 'uid',
+        ),
+      ),
+      'module' => 'user_reference',
+      'settings' => array(
+        'referenceable_roles' => array(
+          2 => '2',
+          3 => 0,
+          4 => 0,
+        ),
+        'referenceable_status' => array(
+          0 => 0,
+          1 => '1',
+        ),
+      ),
+      'translatable' => '1',
+      'type' => 'user_reference',
+    ),
+    'field_instance' => array(
+      'bundle' => 'success_story',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => 'Select the two people involved in this success story by typing their usernames.',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'user_reference',
+          'settings' => array(),
+          'type' => 'user_reference_default',
+          'weight' => 1,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_partners',
+      'label' => 'Partners',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'user_reference',
+        'settings' => array(
+          'autocomplete_match' => 'contains',
+          'autocomplete_path' => 'user_reference/autocomplete',
+          'size' => '60',
+        ),
+        'type' => 'user_reference_autocomplete',
+        'weight' => '2',
+      ),
+    ),
+  );
+
   // Exported field: 'user-user-field_body_type'
   $fields['user-user-field_body_type'] = array(
     'field_config' => array(
@@ -67,7 +295,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '23',
+        'weight' => '13',
       ),
     ),
   );
@@ -142,7 +370,7 @@ function dating_suite_field_default_fields() {
           'year_range' => '-100:+0',
         ),
         'type' => 'date_select',
-        'weight' => '3',
+        'weight' => '5',
       ),
     ),
   );
@@ -199,7 +427,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '26',
+        'weight' => '18',
       ),
     ),
   );
@@ -259,7 +487,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '17',
+        'weight' => '23',
       ),
     ),
   );
@@ -319,7 +547,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '20',
+        'weight' => '10',
       ),
     ),
   );
@@ -381,7 +609,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '21',
+        'weight' => '11',
       ),
     ),
   );
@@ -439,7 +667,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '11',
+        'weight' => '22',
       ),
     ),
   );
@@ -501,7 +729,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '13',
+        'weight' => '19',
       ),
     ),
   );
@@ -529,7 +757,7 @@ function dating_suite_field_default_fields() {
       ),
       'module' => 'text',
       'settings' => array(
-        'max_length' => '255',
+        'max_length' => '150',
       ),
       'translatable' => '1',
       'type' => 'text',
@@ -545,16 +773,16 @@ function dating_suite_field_default_fields() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => 0,
+          'weight' => 28,
         ),
       ),
       'entity_type' => 'user',
       'field_name' => 'field_headline',
       'label' => 'Headline',
-      'required' => 1,
+      'required' => 0,
       'settings' => array(
         'text_processing' => '0',
-        'user_register_form' => 1,
+        'user_register_form' => 0,
       ),
       'widget' => array(
         'active' => 1,
@@ -563,7 +791,7 @@ function dating_suite_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '2',
+        'weight' => '0',
       ),
     ),
   );
@@ -640,7 +868,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '22',
+        'weight' => '12',
       ),
     ),
   );
@@ -696,11 +924,11 @@ function dating_suite_field_default_fields() {
       'required' => 0,
       'settings' => array(
         'alt_field' => 0,
-        'file_directory' => '',
+        'file_directory' => 'user_images/[current-user:uid]',
         'file_extensions' => 'png gif jpg jpeg',
-        'max_filesize' => '[current-user:uid]',
-        'max_resolution' => '640x480',
-        'min_resolution' => '',
+        'max_filesize' => '200KB',
+        'max_resolution' => '800x600',
+        'min_resolution' => '400x400',
         'title_field' => 0,
         'user_register_form' => 0,
       ),
@@ -712,7 +940,7 @@ function dating_suite_field_default_fields() {
           'progress_indicator' => 'throbber',
         ),
         'type' => 'image_image',
-        'weight' => '27',
+        'weight' => '3',
       ),
     ),
   );
@@ -774,7 +1002,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '18',
+        'weight' => '24',
       ),
     ),
   );
@@ -843,7 +1071,7 @@ function dating_suite_field_default_fields() {
   $fields['user-user-field_languages'] = array(
     'field_config' => array(
       'active' => '1',
-      'cardinality' => '1',
+      'cardinality' => '-1',
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_languages',
@@ -892,19 +1120,19 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_buttons',
-        'weight' => '15',
+        'weight' => '21',
       ),
     ),
   );
 
-  // Exported field: 'user-user-field_looking_for'
-  $fields['user-user-field_looking_for'] = array(
+  // Exported field: 'user-user-field_online'
+  $fields['user-user-field_online'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
-      'field_name' => 'field_looking_for',
+      'field_name' => 'field_online',
       'foreign keys' => array(),
       'indexes' => array(
         'value' => array(
@@ -914,18 +1142,21 @@ function dating_suite_field_default_fields() {
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
-          'man' => 'Man',
-          'man_or_woman' => 'Man or woman',
-          'woman' => 'Woman',
+          0 => 'No',
+          1 => 'Yes',
         ),
         'allowed_values_function' => '',
       ),
       'translatable' => '1',
-      'type' => 'list_text',
+      'type' => 'list_boolean',
     ),
     'field_instance' => array(
       'bundle' => 'user',
-      'default_value' => NULL,
+      'default_value' => array(
+        0 => array(
+          'value' => 1,
+        ),
+      ),
       'deleted' => '0',
       'description' => '',
       'display' => array(
@@ -934,12 +1165,12 @@ function dating_suite_field_default_fields() {
           'module' => 'list',
           'settings' => array(),
           'type' => 'list_default',
-          'weight' => 5,
+          'weight' => 29,
         ),
       ),
       'entity_type' => 'user',
-      'field_name' => 'field_looking_for',
-      'label' => 'Looking for',
+      'field_name' => 'field_online',
+      'label' => 'Allow others to see when I\'m online',
       'required' => 0,
       'settings' => array(
         'user_register_form' => 0,
@@ -947,9 +1178,11 @@ function dating_suite_field_default_fields() {
       'widget' => array(
         'active' => 1,
         'module' => 'options',
-        'settings' => array(),
-        'type' => 'options_select',
-        'weight' => '7',
+        'settings' => array(
+          'display_label' => 1,
+        ),
+        'type' => 'options_onoff',
+        'weight' => '4',
       ),
     ),
   );
@@ -1011,7 +1244,7 @@ function dating_suite_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '16',
+        'weight' => '22',
       ),
     ),
   );
@@ -1073,7 +1306,7 @@ function dating_suite_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '14',
+        'weight' => '20',
       ),
     ),
   );
@@ -1132,7 +1365,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '24',
+        'weight' => '14',
       ),
     ),
   );
@@ -1190,7 +1423,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '25',
+        'weight' => '16',
       ),
     ),
   );
@@ -1249,7 +1482,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '9',
+        'weight' => '21',
       ),
     ),
   );
@@ -1421,7 +1654,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '10',
+        'weight' => '17',
       ),
     ),
   );
@@ -1487,67 +1720,121 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '19',
+        'weight' => '15',
       ),
     ),
   );
 
-  // Exported field: 'user-user-field_visible_online'
-  $fields['user-user-field_visible_online'] = array(
+  // Exported field: 'user-user-field_user_location'
+  $fields['user-user-field_user_location'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
-      'field_name' => 'field_visible_online',
+      'field_name' => 'field_user_location',
       'foreign keys' => array(),
       'indexes' => array(
-        'value' => array(
-          0 => 'value',
+        'lid' => array(
+          0 => 'lid',
         ),
       ),
-      'module' => 'list',
+      'module' => 'location_cck',
       'settings' => array(
-        'allowed_values' => array(
-          0 => 'No',
-          1 => 'Yes',
+        'gmap_macro' => '[gmap ]',
+        'gmap_marker' => 'drupal',
+        'location_settings' => array(
+          'display' => array(
+            'hide' => array(
+              'additional' => 'additional',
+              'city' => 0,
+              'coords' => 'coords',
+              'country' => 'country',
+              'country_name' => 'country_name',
+              'locpick' => 'locpick',
+              'map_link' => 'map_link',
+              'name' => 'name',
+              'postal_code' => 'postal_code',
+              'province' => 0,
+              'province_name' => 'province_name',
+              'street' => 'street',
+            ),
+          ),
+          'form' => array(
+            'fields' => array(
+              'additional' => array(
+                'collect' => '0',
+                'default' => '',
+                'weight' => '6',
+              ),
+              'city' => array(
+                'collect' => '1',
+                'default' => '',
+                'weight' => '8',
+              ),
+              'country' => array(
+                'collect' => '4',
+                'default' => 'au',
+                'weight' => '14',
+              ),
+              'locpick' => array(
+                'collect' => '0',
+                'weight' => '20',
+              ),
+              'name' => array(
+                'collect' => '0',
+                'default' => '',
+                'weight' => '2',
+              ),
+              'postal_code' => array(
+                'collect' => '0',
+                'default' => '',
+                'weight' => '12',
+              ),
+              'province' => array(
+                'collect' => '1',
+                'default' => '',
+                'weight' => '10',
+              ),
+              'street' => array(
+                'collect' => '0',
+                'default' => '',
+                'weight' => '4',
+              ),
+            ),
+          ),
         ),
-        'allowed_values_function' => '',
       ),
       'translatable' => '1',
-      'type' => 'list_boolean',
+      'type' => 'location',
     ),
     'field_instance' => array(
       'bundle' => 'user',
-      'default_value' => array(
-        0 => array(
-          'value' => '1',
-        ),
-      ),
+      'default_value' => NULL,
       'deleted' => '0',
       'description' => '',
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'list',
+          'module' => 'location_cck',
           'settings' => array(),
-          'type' => 'list_default',
-          'weight' => 6,
+          'type' => 'location_default',
+          'weight' => 27,
         ),
       ),
       'entity_type' => 'user',
-      'field_name' => 'field_visible_online',
-      'label' => 'Other members can see when I’m online',
-      'required' => 1,
+      'field_name' => 'field_user_location',
+      'label' => 'Location',
+      'required' => 0,
       'settings' => array(
-        'user_register_form' => 1,
+        'user_register_form' => 0,
       ),
       'widget' => array(
-        'active' => 1,
-        'module' => 'options',
+        'active' => 0,
+        'module' => 'location_cck',
         'settings' => array(),
-        'type' => 'options_buttons',
-        'weight' => '8',
+        'type' => 'location',
+        'weight' => '2',
       ),
     ),
   );
@@ -1606,14 +1893,16 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '12',
+        'weight' => '23',
       ),
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Allow others to see when I\'m online');
   t('Are you a smoker');
+  t('Body');
   t('Body type');
   t('Date of Birth');
   t('Do you have kids');
@@ -1629,12 +1918,14 @@ function dating_suite_field_default_fields() {
   t('Images');
   t('Industry');
   t('Level of education');
-  t('Looking for');
-  t('Other members can see when I’m online');
+  t('Location');
+  t('Main image');
+  t('Partners');
   t('Personality');
   t('Political persuasion');
   t('Relationship status');
   t('Religious affiliation');
+  t('Select the two people involved in this success story by typing their usernames.');
   t('Sex');
   t('Star sign');
   t('What languages do you speak');

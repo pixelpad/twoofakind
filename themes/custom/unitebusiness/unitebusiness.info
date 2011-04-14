@@ -1,0 +1,47 @@
+name = Unite Business
+description = Premium Drupal theme by <a href="http://www.themesnap.com">ThemeSnap.com</a>.
+screenshot = screenshot.png
+version = "7.0-rc2"
+core = 7.x
+
+settings[skin] = 0
+settings[slide_shows] = 0
+
+regions[sidebar_right] = Sidebar Right
+regions[content] = Content
+regions[portfolio_top_img] = Portfolio Top Images
+regions[portfolio_top_txt] = Portfolio Top Text
+regions[home_banner_1] = Home Banner 1
+regions[home_banner_2] = Home Banner 2
+regions[home_banner_3] = Home Banner 3
+regions[featured_content] = Featured Content
+regions[footer_1] = Footer 1
+regions[footer_2] = Footer 2
+regions[footer_3] = Footer 3
+regions[footer] = Footer
+regions[slide_shows] = Slide Shows
+
+stylesheets[all][] = css/reset.min.css
+stylesheets[all][] = css/menu.min.css
+stylesheets[all][] = css/fancybox.css
+stylesheets[all][] = css/tooltip.min.css
+stylesheets[all][] = css/default.css
+stylesheets[all][] = css/demo.css
+
+scripts[] = js/jquery-ui-1.7.2.min.js
+scripts[] = js/jquery.easing.1.3.min.js
+scripts[] = js/hoverIntent.min.js
+scripts[] = js/jquery.bgiframe.min.js
+scripts[] = js/superfish.min.js
+scripts[] = js/supersubs.min.js
+scripts[] = js/jquery.overlabel.min.js
+scripts[] = js/jquery.scrollTo-min.js
+scripts[] = js/jquery.localscroll-min.js
+scripts[] = js/jquery.fancybox-1.2.6.pack.js
+scripts[] = js/jquery.cycle.all.min.js
+scripts[] = js/jquery.cluetip.min.js
+scripts[] = js/cufon-yui.js
+scripts[] = js/LiberationSans.font.js
+scripts[] = js/demo.js
+scripts[] = js/onLoad.min.js
+
