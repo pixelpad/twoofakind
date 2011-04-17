@@ -1,0 +1,5 @@
+; $Id$
+name = Two of a kind custom mods
+description = Site module
+core = 7.x
+version = 0.1
