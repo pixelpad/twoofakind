@@ -10,8 +10,12 @@
  */
 function wink_menu() {
     $items['wink/at/%'] = array(
+      'title' => 'wink at name',
       'page callback' => 'wink_at_name',
-      'page arguments' => array(1),
+      'page arguments' => array(2, 3),
+  //    'access arguments' => array('access content'), 
+      'access callback' => 'wink_at_name_access',
+      'type' => MENU_CALLBACK,
     );
     return $items;
 }
@@ -19,7 +23,7 @@ function wink_menu() {
 /*
  * Function to handle winking at someone
  */
-function wink_at_name($name) {
+function wink_at_name($name, $requri = NULL) {
   global $user;
   
   $to = user_load_by_name($name);
@@ -32,9 +36,26 @@ function wink_at_name($name) {
     'user_to_id' => $to->uid,
   );
   entity_get_controller('wink')->save($wink);
-  drupal_set_message("storing a wink from uid: {$user->name}  -> $name");
+  // note: Notice: Undefined index: type in drupal_write_record() 
+  // caused by https://drupal.org/node/998632
+
+  drupal_set_message(t("You have winked at") . " $name.");
+
+  if ($requri) {
+    drupal_goto(urldecode($requri));
+  }
 }
 
+/*
+ * Function returns true if the current user can wink.
+ * For our wink_menu function. Default is "user_access()",
+ * that one would require 'access arguments', e.g.
+ * 'access arguments' => array('access content')
+ */
+
+function wink_at_name_access() {
+	return user_is_logged_in();
+}
 
 
 /**
@@ -64,28 +85,27 @@ function wink_entity_info() {
 
 
 
+/**
+ * Another option:
+ * Sending wink via a hidden form
+ */
+
 function wink_add_my_form($from, $to) {
   $wink = array (
     'user_from_id' => $from,
     'user_to_id' => $to,
   );
-  
+
   return drupal_get_form('wink_add_form', $wink);
 }
 
 
 /**
- * Create a hidden send-wink-form - the sender and receiver 
- *   are stored in the $wink object
+ * Create a hidden send-wink-form
+ *   The receiver is read from the $wink object
  */
 function wink_add_form($form, &$form_state, $wink) {
   
-  $form['user_from_id'] = array(
-    '#type' => 'hidden',
-    '#title' => t('wink sender'),
-    '#required' => TRUE,
-    '#value' => $wink['user_from_id'],
-  );
 
   $form['user_to_id'] = array(
     '#type' => 'hidden',
@@ -98,23 +118,29 @@ function wink_add_form($form, &$form_state, $wink) {
     '#type' => 'submit',
     '#value' => t('Send a wink'),
   );
-  
- 
+
+
   return $form;
 }
 
 
-function wink_add_form_submit($form, &$form_state) {
-  $from=$form_state['values']['user_from_id'];
-  $to  =$form_state['values']['user_to_id'];
-  drupal_set_message("storing a wink from uid: $from  -> $to");
+/**
+ * Wink handler - when sent via a form (as oposed to link)
+ */
 
- $wink = array (
+function wink_add_form_submit($form, &$form_state) {
+  global $user;
+  // $from=$form_state['values']['user_from_id'];
+  $from=$user->uid;
+  $to  =$form_state['values']['user_to_id'];
+  if ($account = user_load($to)) {
+    drupal_set_message(t("You have winked at") . " $user->name.");   
+    $wink = array (
     'user_from_id' => $from,
     'user_to_id' => $to,
-  );
-  entity_get_controller('wink')->save($wink);
-
+    );
+    entity_get_controller('wink')->save($wink);
+  }
 }
 
 
@@ -136,6 +162,8 @@ function wink_block_info() {
 }
 
 /**
+ * Implementation of hook_block_view()
+ * Implementation of hook_block_view()
  * Implementation of hook_block_view()
  * 
  * note: http://drupal.org/project/efq_views
@@ -179,15 +207,20 @@ function wink_last_winks($they_at_me = FALSE) {
   } else { // me_at_them
     $winks = db_query('SELECT user_to_id AS id from {wink} WHERE user_from_id = :uid ORDER BY wid DESC LIMIT ' . $max_rows, array(':uid' => $user->uid));
   }
-  
+
+  $variables = array();
+  $out ="";
   // process wink items and extract user names and link
   foreach ($winks as $record) {
     if ($account = user_load($record->id)) {
-      $variables['items'][] = l($account->name, "user/" . $record->id);
+      $out .= "<div>"; 
+      //$variables['items'][] = l($account->name, "user/" . $record->id);
+      $out .= l($account->name, "user/" . $record->id);
+      $out .= "</div>";
     }
   }
   
-  $out = theme('list', array($variables));
+  // $out = theme('list', $variables);
   
   return $out;
   
@@ -219,17 +252,13 @@ function wink_user_view($account, $view_mode, $langcode) {
 
   global $user;
   
-  // this properly generates a link 
-  // but not sure how to trigger my store function after a click
-  //
-  // $account->content['summary']['winklink'] =  array(
-  //     '#type' => 'user_profile_item', 
-  //     '#title' => t('Wink'), 
-  //     '#markup' => l(t('Wink at user') . " " . $account->name, "user/$account->uid"),
-  // );
+  $account->content['summary']['winklink'] =  array(
+       '#type' => 'user_profile_item', 
+    // '#title' => t('Wink'), 
+       '#markup' => l(t('Wink at user') . " " . $account->name, "wink/at/" . $account->name . "/" . urlencode(request_uri())),
+  );
 
   // display a submit button instead:      
-  $account->content['summary']['testwink'] =  wink_add_my_form($user->uid, $account->uid);
+  $account->content['summary']['testwink'] =  wink_add_my_form($user->uid, $account->uid, $account->name);
 
-  // dsm($account->content); 
 }
