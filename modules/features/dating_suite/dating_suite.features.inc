@@ -19,6 +19,16 @@ function dating_suite_ctools_plugin_api() {
 }
 
 /**
+ * Implementation of hook_views_api().
+ */
+function dating_suite_views_api() {
+  list($module, $api) = func_get_args();
+  if ($module == "views" && $api == "views_default") {
+    return array("version" => 3.0);
+  }
+}
+
+/**
  * Implementation of hook_flag_default_flags().
  */
 function dating_suite_flag_default_flags() {
@@ -47,11 +57,11 @@ function dating_suite_flag_default_flags() {
     ),
     'show_on_profile' => 1,
     'access_uid' => 'others',
-    'api_version' => 2,
     'module' => 'dating_suite',
     'locked' => array(
       0 => 'name',
     ),
+    'api_version' => 2,
   );
   return $flags;
 }
