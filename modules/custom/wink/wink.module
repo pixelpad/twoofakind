@@ -5,6 +5,36 @@
  * moduel with wink entity.
  */
 
+/*
+ * implementation of hook_menu
+ */
+function wink_menu() {
+    $items['wink/at/%'] = array(
+      'page callback' => 'wink_at_name',
+      'page arguments' => array(1),
+    );
+    return $items;
+}
+
+/*
+ * Function to handle winking at someone
+ */
+function wink_at_name($name) {
+  global $user;
+  
+  $to = user_load_by_name($name);
+  if (!$to) {
+    drupal_set_message("User could not be found: $name", 'error');
+  }
+
+  $wink = array (
+    'user_from_id' => $user->uid,
+    'user_to_id' => $to->uid,
+  );
+  entity_get_controller('wink')->save($wink);
+  drupal_set_message("storing a wink from uid: {$user->name}  -> $name");
+}
+
 
 
 /**
