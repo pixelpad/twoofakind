@@ -34,10 +34,10 @@ function wink_schema() {
         'description' => "User id of the winkee.",
       ),
       'date_of_wink' => array(
-        'type' => 'timestamp',
+        'mysql_type' => 'timestamp',
+        'pgsql_type' => 'timestamp without time zone',
         'not null' => TRUE,
-        'default' => 'NOW()',  // hope default not required
-        'description' => 'The date the wink was made',
+        'description' => "The date the wink was made",
       ),
     ),
     'indexes' => array(
@@ -59,9 +59,9 @@ function wink_schema() {
  * 
  * This update is to include a timestamp value
  */
-function wink_update_7001() {
-  db_query('ALTER TABLE {wink} ADD FIELD \'date_of_wink\'');
-}
+//function wink_update_7001() {
+//  db_query('ALTER TABLE {wink} ADD FIELD \'date_of_wink\'');
+//}
 
 /*
 
