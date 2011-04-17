@@ -168,23 +168,27 @@ function wink_last_winks($they_at_me = FALSE) {
   global $user;
   $max_rows = 5; // how many winks to output
   
+  // set up variables for the theme_list function
   $list_variables = array(
     'items' => array(),
     'type' => 'ul'
   );
 
-  $out = '<div>';
   if ($they_at_me) {
     $winks = db_query('SELECT user_from_id AS id from {wink} WHERE user_to_id = :uid ORDER BY wid DESC LIMIT ' . $max_rows, array(':uid' => $user->uid));
   } else { // me_at_them
     $winks = db_query('SELECT user_to_id AS id from {wink} WHERE user_from_id = :uid ORDER BY wid DESC LIMIT ' . $max_rows, array(':uid' => $user->uid));
   }
+  
+  // process wink items and extract user names and link
   foreach ($winks as $record) {
     if ($account = user_load($record->id)) {
-      $out .= '<div>' . l($account->name, "user/" . $record->id) . '</div>';
+      $variables['items'][] = l($account->name, "user/" . $record->id);
     }
   }
-  $out .= '</div>';
+  
+  $out = theme('list', array($variables));
+  
   return $out;
   
   // To do this the Drupal way you will need to create a
