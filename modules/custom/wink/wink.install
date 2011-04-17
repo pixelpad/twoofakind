@@ -33,6 +33,12 @@ function wink_schema() {
         // 'default' => 0,  // hope default not required
         'description' => "User id of the winkee.",
       ),
+      'date_of_wink' => array(
+        'type' => 'timestamp',
+        'not null' => TRUE,
+        'default' => 'NOW()',  // hope default not required
+        'description' => 'The date the wink was made',
+      ),
     ),
     'indexes' => array(
       'user_from_id' => array('user_from_id'),
@@ -48,6 +54,14 @@ function wink_schema() {
   return $schema;
 }
 
+/**
+ * Implement hook_update_N().
+ * 
+ * This update is to include a timestamp value
+ */
+function wink_update_7001() {
+  db_query('ALTER TABLE {wink} ADD FIELD \'date_of_wink\'');
+}
 
 /*
 
