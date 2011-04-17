@@ -167,20 +167,31 @@ function wink_block_view($delta='') {
 function wink_last_winks($they_at_me = FALSE) {
   global $user;
   $max_rows = 5; // how many winks to output
+  
+  $list_variables = array(
+    'items' => array(),
+    'type' => 'ul'
+  );
 
   $out = '<div>';
   if ($they_at_me) {
     $winks = db_query('SELECT user_from_id AS id from {wink} WHERE user_to_id = :uid ORDER BY wid DESC LIMIT ' . $max_rows, array(':uid' => $user->uid));
   } else { // me_at_them
-	$winks = db_query('SELECT user_to_id AS id from {wink} WHERE user_from_id = :uid ORDER BY wid DESC LIMIT ' . $max_rows, array(':uid' => $user->uid));
+    $winks = db_query('SELECT user_to_id AS id from {wink} WHERE user_from_id = :uid ORDER BY wid DESC LIMIT ' . $max_rows, array(':uid' => $user->uid));
   }
   foreach ($winks as $record) {
-	if ($account = user_load($record->id)) {
+    if ($account = user_load($record->id)) {
       $out .= '<div>' . l($account->name, "user/" . $record->id) . '</div>';
     }
   }
   $out .= '</div>';
   return $out;
+  
+  // To do this the Drupal way you will need to create a
+  // EntityFieldQuery to obtain a list of entity id's
+  // you can then pass this in to the entity_load function
+  // $ids = EntityFieldQuery....
+  // entity_load('wink', $ids);
   
   // This would be the entity (non-SQL) way:
   // (the sort and limit to max_rows parts are missing in code below)
