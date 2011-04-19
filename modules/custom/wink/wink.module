@@ -257,7 +257,7 @@ function wink_entity_info() {
       'entity keys' => array(
         'id' => 'wid',
       ),
-//      'static cache' => TRUE,
+      'static cache' => TRUE, // our winks live
 //      'bundles' => array(),
 //      'bundle keys' => array(
 //        'bundle' => 'name',
@@ -356,15 +356,41 @@ function wink_block_view($delta='') {
   $block = array();
   switch ($delta) {
     case 'wink-they-at-me':
-      $block['subject'] = l(t('Who has winked at me'), "wink/received");
+      // moving title inside the block - commented out:
+      // $block['subject'] = l(t('Who has winked at me') . winks_cnt_from_last_login(), "wink/received");
       $block['content'] = wink_last_winks(TRUE);
       break;
     case 'wink-me-at-them':
-      $block['subject'] = l(t('Who I\'ve winked at'), "wink/made");
+      // moving title inside the block - commented out:
+      //$block['subject'] = l(t('Who I\'ve winked at'), "wink/made");
       $block['content'] = wink_last_winks(FALSE);
       break;
   }
   return $block;
+}
+
+
+/**
+ * returns the number of winks received since last login
+ * of current user
+  */
+function winks_cnt_from_last_login() {
+  global $user;
+
+  if (empty($user) || $user->uid < 1) return "";
+  
+  
+  $query = new EntityFieldQuery();
+  
+  $query
+    ->entityCondition('entity_type', 'wink', '=')
+    ->propertyCondition('user_to_id', $user->uid, '=')
+    ->propertyCondition('date_of_wink', $user->login, '>')
+    ->count();
+ 
+  $rv = $query->execute();
+  
+  return " ($rv)";
 }
 
 
@@ -387,25 +413,41 @@ function wink_last_winks($they_at_me = FALSE) {
     'type' => 'ul'
   );
 
+  $winks = NULL;
+  $title = "";
   if ($they_at_me) {
+    $title = l(t('Who has winked at me') . winks_cnt_from_last_login(), "wink/received");
+    
     $winks = db_query('SELECT user_from_id AS id from {wink} WHERE user_to_id = :uid ORDER BY wid DESC LIMIT ' . $max_rows, array(':uid' => $user->uid));
   } else { // me_at_them
+    $title = l(t('Who I\'ve winked at'), "wink/made");
+    
     $winks = db_query('SELECT user_to_id AS id from {wink} WHERE user_from_id = :uid ORDER BY wid DESC LIMIT ' . $max_rows, array(':uid' => $user->uid));
   }
 
-  $variables = array();
   $out ="";
+  $items = array();
   // process wink items and extract user names and link
   foreach ($winks as $record) {
     if ($account = user_load($record->id)) {
-      $out .= "<div>"; 
-      //$variables['items'][] = l($account->name, "user/" . $record->id);
-      $out .= l($account->name, "user/" . $record->id);
-      $out .= "</div>";
+//      $out .= "<div>"; 
+      $items[] = array(
+        'data' => l($account->name, "user/" . $record->id),
+      );
+      //$mylink = l($account->name, "user/" . $record->id);
+//      $out .= "</div>";
     }
+    
+
   }
-  // @todo
-  // $out = theme('list', $variables);
+  $out .= theme('item_list', array(
+    'items' => $items,
+    'title' => $title,
+    'type' => 'ul',
+  )
+  );
+
+  
 
   if ($they_at_me == TRUE) {
     $out .= '<div align="right">'. l("more...", "wink/received") . '</div>';
