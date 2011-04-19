@@ -13,12 +13,201 @@ function wink_menu() {
       'title' => 'wink at name',
       'page callback' => 'wink_at_name',
       'page arguments' => array(2, 3),
-  //    'access arguments' => array('access content'), 
-      'access callback' => 'wink_at_name_access',
+      'access callback' => 'wink_access_for_logged_in',
+// If we didn't specify the 
+//    'access callback'
+// and used the default one, we would need some 'access arguments', e.g.:
+//    'access arguments' => array('access content'), 
+// to avoid the "access denied" message
       'type' => MENU_CALLBACK,
     );
+    
+  $items['wink/received/%'] = array(
+    'title' => t('Received winks'),
+    'page callback' => 'winks_received_by_name',
+    'page arguments' => array(2),
+    'access callback' => 'wink_access_for_logged_in',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  // in case user is not specified, it will be the current user:
+  $items['wink/received'] = array(
+    'title' => t('Wink received by me'),
+    'page callback' => 'winks_received_by_name',
+    'page arguments' => array(),
+    'access callback' => 'wink_access_for_logged_in',
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+
+  $items['wink/made/%'] = array(
+    'title' => t('Made winks'),
+    'page callback' => 'winks_made_by_name',
+    'page arguments' => array(2),
+    'access callback' => 'wink_access_for_logged_in',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  // in case user is not specified, it will be the current user:
+  $items['wink/made'] = array(
+    'title' => t('Winks made by me'),
+    'page callback' => 'winks_made_by_name',
+    'page arguments' => array(),
+    'access callback' => 'wink_access_for_logged_in',
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+    
     return $items;
 }
+
+function winks_made_by_name($name = NULL) {
+  return winks_received_by_name($name, FALSE);
+}
+
+function winks_received_by_name($name = NULL, $they_at_me = TRUE) {
+  global $user;
+  
+  $uid = $user->uid;
+  if ($name != NULL) {
+    $urs = user_load_by_name($name);
+    if (!$usr) {
+      drupal_set_message("User could not be found: $name", 'error');
+      return "";
+    } else {
+      $uid = $usr->uid;
+    }
+  }
+
+  $query = new EntityFieldQuery();
+
+
+  if ($they_at_me) {
+    $query
+      ->entityCondition('entity_type', 'wink', '=')
+      ->propertyCondition('user_to_id', $uid, '=')
+      ->propertyOrderBy('wid', 'DESC')
+      ->pager(10, 0);;
+  // ->propertyCondition('created', '1294694496', '<');
+  }
+  else {
+    $query
+      ->entityCondition('entity_type', 'wink', '=')
+      ->propertyCondition('user_from_id', $uid, '=')
+      ->propertyOrderBy('wid', 'DESC')
+      ->pager(10, 0);;
+  // ->propertyCondition('created', '1294694496', '<');
+  }
+  $result = $query->execute();
+  // dsm($result);
+  
+  $entity_type = 'wink';
+  
+  if (!empty($result[$entity_type])) {
+    $entities = entity_load($entity_type, array_keys($result[$entity_type]));
+    // dsm($entities);
+
+    // return theme('table', $entities);
+    if ($they_at_me) {
+      return theme('mytablereceived', $entities, $they_at_me) .  theme('pager'); 
+    }
+    else {
+      return theme('mytablemade', $entities, $they_at_me) .  theme('pager'); 
+    }
+
+  }
+    
+  return "";
+}	  
+
+
+
+
+
+
+
+
+
+
+/**
+* Implements hook_theme().
+* http://drupal.org/node/933976
+* We need to register the theme functions we want to use
+*/
+function wink_theme() {
+  return array(
+    'mytablereceived' => array(
+      'render element' => 'element',
+    ),
+    'mytablemade' => array(
+      'render element' => 'element',
+    ),
+  );
+}
+
+function theme_mytablereceived( $entities = array() ) {
+
+  
+  $out = '<div><table>';
+  foreach ($entities as $record) {
+/**
+ *  @todo there is an strange emtpy array as the last member
+ * 
+    print_r($record);  echo "<br />";
+    echo ( empty($record) ? "EMPTY" : "NOT");
+    echo "<br />";
+  */ 
+    if ( empty($record)) continue;
+    
+    $x = $record->user_from_id;
+    
+    if ($account = user_load($record->user_from_id)) {
+	  $out .= '<tr><td>'; 
+	  //$variables['items'][] = l($account->name, "user/" . $record->id);
+      $out .= l($account->name, "user/" . $account->uid);
+      $out .= '</td><td>'; 
+      $out .= $record->date_of_wink;
+      $out .= '</td></tr>';
+    }
+  }
+
+  $out .= '</table></div><br />';
+
+  // dsm($entities);   
+  return $out;
+  
+}
+
+// @todo: this is a dirty copy of the above theme_mytablereceived,
+// just to have something (tuesda eve)
+function theme_mytablemade( $entities = array() ) {
+
+  
+  $out = '<div><table>';
+  foreach ($entities as $record) {
+    if ( empty($record)) continue;
+    
+    if ($account = user_load($record->user_to_id)) {
+	  $out .= '<tr><td>'; 
+	  //$variables['items'][] = l($account->name, "user/" . $record->id);
+      $out .= l($account->name, "user/" . $record->user_to_id);
+      $out .= '</td><td>'; 
+      $out .= $record->date_of_wink;
+      $out .= '</td></tr>';
+    }
+  }
+
+  $out .= '</table></div><br />';
+
+  // dsm($entities);   
+  return $out;
+  
+}
+
+
+
+
+
+
+
 
 /*
  * Function to handle winking at someone
@@ -47,13 +236,9 @@ function wink_at_name($name, $requri = NULL) {
 }
 
 /*
- * Function returns true if the current user can wink.
- * For our wink_menu function. Default is "user_access()",
- * that one would require 'access arguments', e.g.
- * 'access arguments' => array('access content')
+ * Function returns true if user is logged.
  */
-
-function wink_at_name_access() {
+function wink_access_for_logged_in() {
 	return user_is_logged_in();
 }
 
@@ -131,10 +316,10 @@ function wink_add_form($form, &$form_state, $wink) {
 function wink_add_form_submit($form, &$form_state) {
   global $user;
   // $from=$form_state['values']['user_from_id'];
-  $from=$user->uid;
-  $to  =$form_state['values']['user_to_id'];
+  $from = $user->uid;
+  $to = $form_state['values']['user_to_id'];
   if ($account = user_load($to)) {
-    drupal_set_message(t("You have winked at") . " $user->name.");   
+    drupal_set_message(t("You have winked at") . " " . $account->name . ".");   
     $wink = array (
     'user_from_id' => $from,
     'user_to_id' => $to,
@@ -163,8 +348,6 @@ function wink_block_info() {
 
 /**
  * Implementation of hook_block_view()
- * Implementation of hook_block_view()
- * Implementation of hook_block_view()
  * 
  * note: http://drupal.org/project/efq_views
  * wasn't stable enough to be used (04/2011)
@@ -191,6 +374,8 @@ function wink_block_view($delta='') {
  *  - if it is not FALSE, these are users who have winked at me
  *  - if it is FALSE,     these are users I have winked at
  * @return string
+ * 
+ * @todo - use entities - unify with the page functions
  */
 function wink_last_winks($they_at_me = FALSE) {
   global $user;
@@ -219,8 +404,15 @@ function wink_last_winks($they_at_me = FALSE) {
       $out .= "</div>";
     }
   }
-  
+  // @todo
   // $out = theme('list', $variables);
+
+  if ($they_at_me == TRUE) {
+    $out .= '<div align="right">'. l("more...", "wink/received") . '</div>';
+  }
+  else {
+    $out .= '<div align="right">'. l("more...", "wink/made") . '</div>';
+  }
   
   return $out;
   

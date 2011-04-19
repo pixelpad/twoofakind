@@ -39,6 +39,13 @@ function wink_schema() {
         'not null' => TRUE,
         'description' => "The date the wink was made",
       ),
+      'historic' => array(
+        'mysql_type' => 'boolean',
+        'pgsql_type' => 'boolean',
+        'not null' => TRUE,
+        'default' => '0',
+        'description' => "acknowledgement from the user that they've seen this wink",
+      ),
     ),
     'indexes' => array(
       'user_from_id' => array('user_from_id'),
@@ -57,15 +64,30 @@ function wink_schema() {
 /**
  * Implement hook_update_N().
  * 
- * This update is to include a timestamp value
+ * This update is to include a timestamp value.
  */
 function wink_update_7001() {
   db_add_field('wink', 'date_of_wink', array(
-      'date_of_wink' => array(
-        'mysql_type' => 'timestamp',
-        'pgsql_type' => 'timestamp without time zone',
-        'not null' => TRUE,
-        'description' => "The date the wink was made",
-      ),
-   ));
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'not null' => TRUE,
+    'description' => "The date the wink was made",
+  ));
 }
+
+
+/**
+ * Implement hook_update_N().
+ * 
+ * Modifies the wink schema to include a new char(1) field that is called historic
+*/
+function wink_update_7002() {
+  db_add_field('wink', 'historic', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0', // FALSE works OK here, but not in wink_schema(). '0' works for both functions.
+    'description' => 'acknowledgement from the user that they have seen this wink',
+  ));
+}
+ 
