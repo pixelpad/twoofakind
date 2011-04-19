@@ -36,12 +36,22 @@ function wink_schema() {
       'date_of_wink' => array(
         'mysql_type' => 'timestamp',
         'pgsql_type' => 'timestamp without time zone',
+        // the type below should not be needed (the mysql and pgsql_type should do)
+        // but is here to workaround this notice:
+        // Notice: Undefined index: type in drupal_write_record() 
+        // caused by https://drupal.org/node/998632
+        'type' => 'timestamp',
         'not null' => TRUE,
         'description' => "The date the wink was made",
       ),
       'historic' => array(
         'mysql_type' => 'boolean',
         'pgsql_type' => 'boolean',
+        // the type below should not be needed (the mysql and pgsql_type should do)
+        // but is here to workaround this notice:
+        // Notice: Undefined index: type in drupal_write_record() 
+        // caused by https://drupal.org/node/998632
+        'type' => 'boolean',
         'not null' => TRUE,
         'default' => '0',
         'description' => "acknowledgement from the user that they've seen this wink",
