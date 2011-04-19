@@ -356,11 +356,11 @@ function wink_block_view($delta='') {
   $block = array();
   switch ($delta) {
     case 'wink-they-at-me':
-      $block['subject'] = t('Who has winked at me');
+      $block['subject'] = l(t('Who has winked at me'), "wink/received");
       $block['content'] = wink_last_winks(TRUE);
       break;
     case 'wink-me-at-them':
-      $block['subject'] = t('Who I\'ve winked at');
+      $block['subject'] = l(t('Who I\'ve winked at'), "wink/made");
       $block['content'] = wink_last_winks(FALSE);
       break;
   }
