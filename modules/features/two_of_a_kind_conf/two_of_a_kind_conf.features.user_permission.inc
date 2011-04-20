@@ -16,6 +16,15 @@ function two_of_a_kind_conf_user_default_permissions() {
     'roles' => array(),
   );
 
+  // Exported permission: access comments
+  $permissions['access comments'] = array(
+    'name' => 'access comments',
+    'roles' => array(
+      0 => 'Administrator',
+    ),
+    'module' => 'comment',
+  );
+
   // Exported permission: access content
   $permissions['access content'] = array(
     'name' => 'access content',
@@ -145,6 +154,15 @@ function two_of_a_kind_conf_user_default_permissions() {
       0 => 'Administrator',
     ),
     'module' => 'boxes',
+  );
+
+  // Exported permission: administer comments
+  $permissions['administer comments'] = array(
+    'name' => 'administer comments',
+    'roles' => array(
+      0 => 'Administrator',
+    ),
+    'module' => 'comment',
   );
 
   // Exported permission: administer contact forms
@@ -329,10 +347,28 @@ function two_of_a_kind_conf_user_default_permissions() {
     'module' => 'boxes',
   );
 
+  // Exported permission: edit own comments
+  $permissions['edit own comments'] = array(
+    'name' => 'edit own comments',
+    'roles' => array(
+      0 => 'Administrator',
+    ),
+    'module' => 'comment',
+  );
+
   // Exported permission: notify of path changes
   $permissions['notify of path changes'] = array(
     'name' => 'notify of path changes',
     'roles' => array(),
+  );
+
+  // Exported permission: post comments
+  $permissions['post comments'] = array(
+    'name' => 'post comments',
+    'roles' => array(
+      0 => 'Administrator',
+    ),
+    'module' => 'comment',
   );
 
   // Exported permission: revert revisions
@@ -361,6 +397,15 @@ function two_of_a_kind_conf_user_default_permissions() {
   $permissions['set page title'] = array(
     'name' => 'set page title',
     'roles' => array(),
+  );
+
+  // Exported permission: skip comment approval
+  $permissions['skip comment approval'] = array(
+    'name' => 'skip comment approval',
+    'roles' => array(
+      0 => 'Administrator',
+    ),
+    'module' => 'comment',
   );
 
   // Exported permission: switch shortcut sets
