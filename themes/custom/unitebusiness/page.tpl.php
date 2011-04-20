@@ -135,7 +135,6 @@
 		<div class="pageMain">
 
 		<?php if ($is_front): ?>
-<?php dd($page); ?>
 		<?php if ($page['slide_shows']): ?><?php print render($page['slide_shows']); ?><?php endif;?>
 		<div id="Showcase">
 			<div class="two-thirds">
