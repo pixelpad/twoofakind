@@ -163,8 +163,10 @@ function theme_mytablereceived( $entities = array() ) {
 	  $out .= '<tr><td>'; 
 	  //$variables['items'][] = l($account->name, "user/" . $record->id);
       $out .= l($account->name, "user/" . $account->uid);
-      $out .= '</td><td>'; 
-      $out .= $record->date_of_wink;
+      $out .= '</td><td>';
+      $difference = time() - strtotime($record->date_of_wink);
+      $out .= format_interval($difference, 2) . " ago";
+      // $out .= date("d/m/Y, h:i:s a", strtotime($record->date_of_wink));
       $out .= '</td></tr>';
     }
   }
@@ -370,10 +372,13 @@ function wink_block_view($delta='') {
 }
 
 
+
+
+
 /**
  * returns the number of winks received since last login
  * of current user
-  */
+ */
 function winks_cnt_from_last_login() {
   global $user;
 
