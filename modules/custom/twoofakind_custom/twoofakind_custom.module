@@ -2,5 +2,76 @@
 
 /**
  * @file
- * Custom site mods for tweo of a kind
+ * Custom site mods for two of a kind
  */
+
+// Two of a kind custom mods
+
+
+/**
+ * Implementation of hook_block_info()
+ */
+function twoofakind_custom_block_info() {
+  $blocks['tok-last-msg'] = array(
+    'info' => t('Two of a kind: Last messages'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implementation of hook_block_view()
+ * 
+ * note: http://drupal.org/project/efq_views
+ * wasn't stable enough to be used (04/2011)
+ */
+function twoofakind_custom_block_view($delta='') {
+  $block = array();
+  switch ($delta) {
+    case 'tok-last-msg':
+      $block['content'] = tok_last_5_msgs(); //wink_last_winks(FALSE);
+      break;
+  }
+  return $block;
+}
+
+
+
+
+/**
+ * generates a block "Messages (N)" with the last 5 messages received by the current user
+ * N is the number of new messages
+ *
+ * this was inspired by http://drupal.org/node/624528 but that example is not functional
+ * (at least not in D7).
+ * 
+ */
+function tok_last_5_msgs() {
+  global $user;
+
+  // Generate the query to load the messages.
+  $query = _privatemsg_assemble_query('list', $user);
+  
+  // Replace 'inbox' with 'sent' to display sent messages or 'list' to display all messages.
+  // $query = _privatemsg_assemble_query('list', $user, 'inbox');
+  // @todo - inbox/sent gets ignored. Cannot get inbox or sent get via the gui either. 
+  //         is it how D7 version works?
+
+  // Load 5 messages/threads. Replace 5 if you want to display a different amount of messages.
+  $result = $query->limit(5)->execute();
+ 
+  $list = array();
+  foreach ($result as $thread) {
+    // Generate a link with the subject as title that points to the view message page.
+    $list[] = l($thread->subject, 'messages/view/' . $thread->thread_id);
+  }
+  
+  // Display list as a themed item_list.
+  $nmcount = privatemsg_unread_count();
+  return theme('item_list', array(
+      'items' => $list,
+      'title' => l(t('Messages') . " ($nmcount)", 'messages'),
+      'type' => 'ul',
+    )
+  );
+
+}

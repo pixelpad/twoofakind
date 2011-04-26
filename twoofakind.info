@@ -98,7 +98,7 @@ dependencies[] = xmlsitemap
 ; CUSTOM MODULES
 ; --------------
 
-;dependencies[] = twoofakind_custom
+dependencies[] = twoofakind_custom
 dependencies[] = wink
 
 ; CUSTOM FEATURES
