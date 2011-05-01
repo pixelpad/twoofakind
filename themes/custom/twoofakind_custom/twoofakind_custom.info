@@ -6,6 +6,9 @@ core = 7.x
 
 scripts[] = js/twoofakind-custom.js
 
+# removing some unrequired JS
+scripts[] = js/demo.js
+
 settings[skin] = 0
 settings[slide_shows] = 0
 
