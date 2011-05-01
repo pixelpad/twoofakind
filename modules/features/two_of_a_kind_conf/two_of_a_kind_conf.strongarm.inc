@@ -14,7 +14,7 @@ function two_of_a_kind_conf_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'admin_theme';
-  $strongarm->value = 'bartik';
+  $strongarm->value = 'seven';
   $export['admin_theme'] = $strongarm;
 
   $strongarm = new stdClass;
@@ -278,8 +278,8 @@ function two_of_a_kind_conf_strongarm() {
     'default_favicon' => 0,
     'favicon_path' => 'profiles/twoofakind/themes/custom/twoofakind_custom/favicon.png',
     'favicon_upload' => '',
-    'skin' => '0',
-    'slide_shows' => '0',
+    'skin' => '1',
+    'slide_shows' => '1',
     'favicon_mimetype' => 'image/png',
   );
   $export['theme_twoofakind_custom_settings'] = $strongarm;
@@ -304,8 +304,8 @@ function two_of_a_kind_conf_strongarm() {
     'default_favicon' => 1,
     'favicon_path' => '',
     'favicon_upload' => '',
-    'skin' => '2',
-    'slide_shows' => '1',
+    'skin' => '0',
+    'slide_shows' => '0',
   );
   $export['theme_unitebusiness_settings'] = $strongarm;
 
