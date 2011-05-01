@@ -204,13 +204,6 @@ function theme_mytablemade( $entities = array() ) {
   
 }
 
-
-
-
-
-
-
-
 /*
  * Function to handle winking at someone
  */
@@ -358,14 +351,10 @@ function wink_block_view($delta='') {
   $block = array();
   switch ($delta) {
     case 'wink-they-at-me':
-      // moving title inside the block - commented out:
-      // $block['subject'] = l(t('Who has winked at me') . winks_cnt_from_last_login(), "wink/received");
-      $block['content'] = wink_last_winks(TRUE);
+      wink_last_winks($block, TRUE);
       break;
     case 'wink-me-at-them':
-      // moving title inside the block - commented out:
-      //$block['subject'] = l(t('Who I\'ve winked at'), "wink/made");
-      $block['content'] = wink_last_winks(FALSE);
+      wink_last_winks($block, FALSE);
       break;
   }
   return $block;
@@ -408,76 +397,58 @@ function winks_cnt_from_last_login() {
  * 
  * @todo - use entities - unify with the page functions
  */
-function wink_last_winks($they_at_me = FALSE) {
+function wink_last_winks(&$block, $they_at_me = FALSE) {
   global $user;
   $max_rows = 5; // how many winks to output
-  
-  // set up variables for the theme_list function
-  $list_variables = array(
-    'items' => array(),
-    'type' => 'ul'
-  );
 
-  $winks = NULL;
-  $title = "";
   if ($they_at_me) {
-    $title = l(t('Who has winked at me') . winks_cnt_from_last_login(), "wink/received");
     
+    $more_link = 'wink/received';
+    // removing the link for the time being
+    // as we might make these titles and blocks interactive
+    //$title = l(t('Who winked at me') . winks_cnt_from_last_login(), $more_link);
+    $title = t('Who winked at me') . winks_cnt_from_last_login();
     $winks = db_query('SELECT user_from_id AS id from {wink} WHERE user_to_id = :uid ORDER BY wid DESC LIMIT ' . $max_rows, array(':uid' => $user->uid));
-  } else { // me_at_them
-    $title = l(t('Who I\'ve winked at'), "wink/made");
     
+  } else { // me_at_them
+    
+    $more_link = 'wink/made';
+    // similarly
+    //$title = l(t('Who I\'ve winked at'), $more_link);
+    $title = t('Who I\'ve winked at');
     $winks = db_query('SELECT user_to_id AS id from {wink} WHERE user_from_id = :uid ORDER BY wid DESC LIMIT ' . $max_rows, array(':uid' => $user->uid));
+    
   }
 
-  $out ="";
   $items = array();
   // process wink items and extract user names and link
   foreach ($winks as $record) {
     if ($account = user_load($record->id)) {
-//      $out .= "<div>"; 
       $items[] = array(
         'data' => l($account->name, "user/" . $record->id),
       );
-      //$mylink = l($account->name, "user/" . $record->id);
-//      $out .= "</div>";
     }
     
 
   }
-  $out .= theme('item_list', array(
-    'items' => $items,
-    'title' => $title,
-    'type' => 'ul',
-  )
+  $out = array();
+  $out[] = '<div class="item-list">';
+  $out[] = theme('item_list', array(
+      'items' => $items,
+      'type' => 'ul',
+      'attributes' => array(
+        'class' => 'menu'
+      ),
+    )
   );
-
+  $out[] = '</div>';
   
-
-  if ($they_at_me == TRUE) {
-    $out .= '<div align="right">'. l("more...", "wink/received") . '</div>';
-  }
-  else {
-    $out .= '<div align="right">'. l("more...", "wink/made") . '</div>';
-  }
+  $out[] = '<div class="more-link">';
+  $out[] = l('More', $more_link);
+  $out[] = '</div>';
   
-  return $out;
-  
-  // To do this the Drupal way you will need to create a
-  // EntityFieldQuery to obtain a list of entity id's
-  // you can then pass this in to the entity_load function
-  // $ids = EntityFieldQuery....
-  // entity_load('wink', $ids);
-  
-  // This would be the entity (non-SQL) way:
-  // (the sort and limit to max_rows parts are missing in code below)
-  // 
-  // $condition = array('user_to_id' => $user->uid);
-  // $winks = entity_load('wink', array(), $condition); 
-  // foreach ($winks as $record) {
-  //   echo $record->user_from_id;
-  // }
-
+  $block['subject'] = $title;
+  $block['content'] = implode("\n", $out);
 }
 
 
