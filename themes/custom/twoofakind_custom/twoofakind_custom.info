@@ -4,6 +4,8 @@ description = Tow of a kind custom theme
 base theme = unitebusiness
 core = 7.x
 
+scripts[] = js/twoofakind-custom.js
+
 settings[skin] = 0
 settings[slide_shows] = 0
 

@@ -30,3 +30,14 @@ a:active {
 #Logo a {
 	background: url("../images/logo.png") no-repeat scroll 0 0 transparent
 }
+
+/* Interactive blocks
+-------------------------------------------------------------- */
+/* Put the background image back in when things are working better */
+h4.title.interactive {
+/*  background: transparent url(../images/arrow.down.png) top right no-repeat;*/
+}
+/* Hide these later when JS issues have been sorted */
+div.sideNavWrapper {
+/*  display: none;*/
+}
