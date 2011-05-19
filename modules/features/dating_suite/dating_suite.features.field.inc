@@ -193,6 +193,11 @@ function dating_suite_field_default_fields() {
           0 => 0,
           1 => '1',
         ),
+        'view' => array(
+          'args' => array(),
+          'display_name' => '',
+          'view_name' => '',
+        ),
       ),
       'translatable' => '1',
       'type' => 'user_reference',
@@ -242,7 +247,7 @@ function dating_suite_field_default_fields() {
   $fields['user-user-field_body_type'] = array(
     'field_config' => array(
       'active' => '1',
-      'cardinality' => '1',
+      'cardinality' => '-1',
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_body_type',
@@ -257,7 +262,7 @@ function dating_suite_field_default_fields() {
         'allowed_values' => array(
           'athletic' => 'Athletic',
           'average' => 'Average',
-          'fir' => 'Fir',
+          'fit' => 'Fit',
           'large' => 'Large',
           'muscular' => 'Muscular',
           'slender' => 'Slender',
@@ -294,7 +299,7 @@ function dating_suite_field_default_fields() {
         'active' => 1,
         'module' => 'options',
         'settings' => array(),
-        'type' => 'options_select',
+        'type' => 'options_buttons',
         'weight' => '13',
       ),
     ),
@@ -350,7 +355,7 @@ function dating_suite_field_default_fields() {
       'label' => 'Date of Birth',
       'required' => 0,
       'settings' => array(
-        'default_format' => 'medium',
+        'default_format' => 'long',
         'default_value' => 'blank',
         'default_value2' => 'blank',
         'default_value_code' => '',
@@ -364,13 +369,13 @@ function dating_suite_field_default_fields() {
           'increment' => '1',
           'input_format' => 'm/d/Y - H:i:s',
           'input_format_custom' => '',
-          'label_position' => 'above',
+          'label_position' => 'within',
           'repeat_collapsed' => 0,
           'text_parts' => array(),
           'year_range' => '-100:+0',
         ),
         'type' => 'date_select',
-        'weight' => '5',
+        'weight' => '7',
       ),
     ),
   );
@@ -394,7 +399,7 @@ function dating_suite_field_default_fields() {
         'allowed_values' => array(
           'never' => 'Never',
           'often' => 'Often',
-          'socially/sometimes' => 'Socially/sometimes',
+          'sometimes' => 'Socially/sometimes',
         ),
         'allowed_values_function' => '',
       ),
@@ -427,7 +432,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '18',
+        'weight' => '9',
       ),
     ),
   );
@@ -487,7 +492,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '23',
+        'weight' => '11',
       ),
     ),
   );
@@ -631,7 +636,7 @@ function dating_suite_field_default_fields() {
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
-          'No' => 'No',
+          'no' => 'No',
           'yes_at_home' => 'Yes, have children living at home',
           'yes_at_home_sometimes' => 'Yes, have children who live at home sometimes',
           'yes_not_at_home' => 'Yes. have children who don’t live at home',
@@ -667,7 +672,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '22',
+        'weight' => '12',
       ),
     ),
   );
@@ -729,7 +734,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '19',
+        'weight' => '15',
       ),
     ),
   );
@@ -791,7 +796,7 @@ function dating_suite_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '0',
+        'weight' => '4',
       ),
     ),
   );
@@ -1002,7 +1007,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '24',
+        'weight' => '12',
       ),
     ),
   );
@@ -1052,7 +1057,7 @@ function dating_suite_field_default_fields() {
       ),
       'entity_type' => 'user',
       'field_name' => 'field_kosher',
-      'label' => 'Do you keep kosher',
+      'label' => 'Do you keep kosher?',
       'required' => 0,
       'settings' => array(
         'user_register_form' => 0,
@@ -1084,10 +1089,10 @@ function dating_suite_field_default_fields() {
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
-          'English' => 'English',
-          'Hebrew' => 'Hebrew',
-          'Other' => 'Other',
-          'Russian' => 'Russian',
+          'english' => 'English',
+          'hebrew' => 'Hebrew',
+          'other' => 'Other',
+          'russian' => 'Russian',
         ),
         'allowed_values_function' => '',
       ),
@@ -1111,6 +1116,739 @@ function dating_suite_field_default_fields() {
       'entity_type' => 'user',
       'field_name' => 'field_languages',
       'label' => 'What languages do you speak',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '9',
+      ),
+    ),
+  );
+
+  // Exported field: 'user-user-field_match_body_type'
+  $fields['user-user-field_match_body_type'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_match_body_type',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'athletic' => 'Athletic',
+          'average' => 'Average',
+          'fit' => 'Fit',
+          'large' => 'Large',
+          'muscular' => 'Muscular',
+          'slender' => 'Slender',
+          'slim' => 'Slim',
+          'voluptuous' => 'Voluptuous',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => '1',
+      'type' => 'list_text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 36,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_match_body_type',
+      'label' => 'Body type',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '26',
+      ),
+    ),
+  );
+
+  // Exported field: 'user-user-field_match_drinking'
+  $fields['user-user-field_match_drinking'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_match_drinking',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'never' => 'Never',
+          'often' => 'Often',
+          'sometimes' => 'Socially/sometimes',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => '1',
+      'type' => 'list_text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 40,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_match_drinking',
+      'label' => 'Drinking',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '30',
+      ),
+    ),
+  );
+
+  // Exported field: 'user-user-field_match_eye_colour'
+  $fields['user-user-field_match_eye_colour'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_match_eye_colour',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'blue' => 'Blue',
+          'brown' => 'Brown',
+          'dark brown' => 'Dark brown',
+          'green' => 'Green',
+          'grey' => 'Grey',
+          'hazel' => 'Hazel',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => '1',
+      'type' => 'list_text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 33,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_match_eye_colour',
+      'label' => 'Eye colour',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '23',
+      ),
+    ),
+  );
+
+  // Exported field: 'user-user-field_match_hair_colour'
+  $fields['user-user-field_match_hair_colour'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_match_hair_colour',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'a_little_grey' => 'A little grey',
+          'black' => 'Black',
+          'blond' => 'Blond',
+          'dark_brown' => 'Dark brown',
+          'grey_white' => 'Grey/white',
+          'light_brown' => 'Light brown',
+          'other' => 'Other',
+          'red_auburn' => 'Red/Auburn',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => '1',
+      'type' => 'list_text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 34,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_match_hair_colour',
+      'label' => 'Hair colour',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '24',
+      ),
+    ),
+  );
+
+  // Exported field: 'user-user-field_match_have_kids'
+  $fields['user-user-field_match_have_kids'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_match_have_kids',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'no' => 'No',
+          'yes_at_home' => 'Yes, have children living at home',
+          'yes_at_home_sometimes' => 'Yes, have children who live at home sometimes',
+          'yes_not_at_home' => 'Yes. have children who don’t live at home',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => '1',
+      'type' => 'list_text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 41,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_match_have_kids',
+      'label' => 'Kids',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '31',
+      ),
+    ),
+  );
+
+  // Exported field: 'user-user-field_match_height'
+  $fields['user-user-field_match_height'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_match_height',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          144 => 'Under 4’9” – 145cm',
+          145 => '4’9” – 145cm',
+          147 => '4’10” – 147cm',
+          150 => '4’11” – 150cm',
+          152 => '5’0” – 152cm',
+          154 => '5’1” – 154cm',
+          157 => '5’2” – 157cm',
+          160 => '5’3” – 160cm',
+          162 => '5’4” – 162cm',
+          165 => '5’5” – 165cm',
+          167 => '5’6” – 167cm',
+          170 => '5’7” – 170cm',
+          172 => '5’8” – 172cm',
+          175 => '5’9” – 175cm',
+          177 => '5’10” – 177cm',
+          180 => '5’11” – 180cm',
+          183 => '6’0” – 183cm',
+          185 => '6’1” – 185cm',
+          188 => '6’2” – 188cm',
+          190 => '6’3” – 190cm',
+          193 => '6’4” – 193cm',
+          195 => '6’5” – 195cm',
+          196 => 'Over 6’5” – 195cm',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => '1',
+      'type' => 'list_text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 35,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_match_height',
+      'label' => 'Height',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '25',
+      ),
+    ),
+  );
+
+  // Exported field: 'user-user-field_match_kosher'
+  $fields['user-user-field_match_kosher'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_match_kosher',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'at_home_only' => 'at home only',
+          'eat_out_vegetarian' => 'will eat out vegetarian',
+          'not_at_all' => 'not at all',
+          'other' => 'other',
+          'to_some_degree' => 'to some degree',
+          'yes_strictly' => 'yes strictly',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => '1',
+      'type' => 'list_text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 38,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_match_kosher',
+      'label' => 'Kosher',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '28',
+      ),
+    ),
+  );
+
+  // Exported field: 'user-user-field_match_personality'
+  $fields['user-user-field_match_personality'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_match_personality',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'average' => 'Average',
+          'private' => 'Private',
+          'quite_social' => 'Quite social',
+          'very_private' => 'Very private',
+          'very_social' => 'Very social',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => '1',
+      'type' => 'list_text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 32,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_match_personality',
+      'label' => 'Personality',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '22',
+      ),
+    ),
+  );
+
+  // Exported field: 'user-user-field_match_relig_affiliation'
+  $fields['user-user-field_match_relig_affiliation'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_match_relig_affiliation',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'conservative' => 'Conservative',
+          'orthodox' => 'Orthodox',
+          'other' => 'Other',
+          'reform_progressive' => 'Reform/Progressive',
+          'secular' => 'Secular',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => '1',
+      'type' => 'list_text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 37,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_match_relig_affiliation',
+      'label' => 'Religious affiliation',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '27',
+      ),
+    ),
+  );
+
+  // Exported field: 'user-user-field_match_sex'
+  $fields['user-user-field_match_sex'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_match_sex',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'female' => 'female',
+          'male' => 'male',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => '1',
+      'type' => 'list_text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 30,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_match_sex',
+      'label' => 'Sex',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '20',
+      ),
+    ),
+  );
+
+  // Exported field: 'user-user-field_match_smoker'
+  $fields['user-user-field_match_smoker'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_match_smoker',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'no' => 'No',
+          'occasional' => 'Occasional',
+          'yes' => 'Yes',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => '1',
+      'type' => 'list_text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 39,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_match_smoker',
+      'label' => 'Smoking',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '29',
+      ),
+    ),
+  );
+
+  // Exported field: 'user-user-field_match_star_sign'
+  $fields['user-user-field_match_star_sign'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_match_star_sign',
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'aquarius' => 'Aquarius',
+          'aries' => 'Aries',
+          'cancer' => 'Cancer',
+          'capricorn' => 'Capricorn',
+          'gemini' => 'Gemini',
+          'leo' => 'Leo',
+          'libra' => 'Libra',
+          'pisces' => 'Pisces',
+          'sagittarius' => 'Sagittarius',
+          'scorpio' => 'Scorpio',
+          'taurus' => 'Taurus',
+          'virgo' => 'Virgo',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => '1',
+      'type' => 'list_text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 31,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_match_star_sign',
+      'label' => 'Star sign',
       'required' => 0,
       'settings' => array(
         'user_register_form' => 0,
@@ -1182,7 +1920,7 @@ function dating_suite_field_default_fields() {
           'display_label' => 1,
         ),
         'type' => 'options_onoff',
-        'weight' => '4',
+        'weight' => '11',
       ),
     ),
   );
@@ -1244,7 +1982,7 @@ function dating_suite_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '22',
+        'weight' => '10',
       ),
     ),
   );
@@ -1306,7 +2044,7 @@ function dating_suite_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '20',
+        'weight' => '16',
       ),
     ),
   );
@@ -1365,7 +2103,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '14',
+        'weight' => '9',
       ),
     ),
   );
@@ -1423,7 +2161,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '16',
+        'weight' => '8',
       ),
     ),
   );
@@ -1482,7 +2220,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '21',
+        'weight' => '11',
       ),
     ),
   );
@@ -1588,16 +2326,16 @@ function dating_suite_field_default_fields() {
       'entity_type' => 'user',
       'field_name' => 'field_sex',
       'label' => 'Sex',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
-        'user_register_form' => 0,
+        'user_register_form' => 1,
       ),
       'widget' => array(
         'active' => 1,
         'module' => 'options',
         'settings' => array(),
-        'type' => 'options_select',
-        'weight' => '4',
+        'type' => 'options_buttons',
+        'weight' => '5',
       ),
     ),
   );
@@ -1644,7 +2382,7 @@ function dating_suite_field_default_fields() {
       ),
       'entity_type' => 'user',
       'field_name' => 'field_smoker',
-      'label' => 'Are you a smoker',
+      'label' => 'Are you a smoker?',
       'required' => 0,
       'settings' => array(
         'user_register_form' => 0,
@@ -1654,7 +2392,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '17',
+        'weight' => '8',
       ),
     ),
   );
@@ -1720,7 +2458,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '15',
+        'weight' => '8',
       ),
     ),
   );
@@ -1834,7 +2572,7 @@ function dating_suite_field_default_fields() {
         'module' => 'location_cck',
         'settings' => array(),
         'type' => 'location',
-        'weight' => '2',
+        'weight' => '6',
       ),
     ),
   );
@@ -1856,9 +2594,9 @@ function dating_suite_field_default_fields() {
       'module' => 'list',
       'settings' => array(
         'allowed_values' => array(
-          'No' => 'No, don’t want any (more) children of my own',
-          'No_yours_fine' => 'No, don’t want any (more) children of my own but yours are fine',
-          'No_yours_neither' => 'No, don’t want any (more) children of my own or anyone else’s',
+          'no' => 'No, don’t want any (more) children of my own',
+          'no_yours_fine' => 'No, don’t want any (more) children of my own but yours are fine',
+          'no_yours_neither' => 'No, don’t want any (more) children of my own or anyone else’s',
           'undecided' => 'Undecided',
           'yes' => 'Yes, want (more) children of my own',
         ),
@@ -1893,7 +2631,7 @@ function dating_suite_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '23',
+        'weight' => '13',
       ),
     ),
   );
@@ -1901,14 +2639,15 @@ function dating_suite_field_default_fields() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Allow others to see when I\'m online');
-  t('Are you a smoker');
+  t('Are you a smoker?');
   t('Body');
   t('Body type');
   t('Date of Birth');
   t('Do you have kids');
   t('Do you have pets');
-  t('Do you keep kosher');
+  t('Do you keep kosher?');
   t('Do you want kids');
+  t('Drinking');
   t('Drinking habits');
   t('Eye colour');
   t('Fill out in case you selected "other" in the "Do you have pets" question');
@@ -1917,6 +2656,8 @@ function dating_suite_field_default_fields() {
   t('Height');
   t('Images');
   t('Industry');
+  t('Kids');
+  t('Kosher');
   t('Level of education');
   t('Location');
   t('Main image');
@@ -1927,6 +2668,7 @@ function dating_suite_field_default_fields() {
   t('Religious affiliation');
   t('Select the two people involved in this success story by typing their usernames.');
   t('Sex');
+  t('Smoking');
   t('Star sign');
   t('What languages do you speak');
   t('if other above - what language');

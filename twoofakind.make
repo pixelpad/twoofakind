@@ -146,8 +146,8 @@ projects[views][subdir] = "contrib"
 ;projects[views_slideshow][subdir] = "contrib"
 ;projects[views_slideshow][version] = "3.0-alpha1"
 
-;projects[webform][subdir] = "contrib"
-;projects[webform][version] = "3.9"
+projects[webform][subdir] = "contrib"
+projects[webform][version] = "3.11"
 
 projects[wysiwyg][subdir] = "contrib"
 projects[wysiwyg][version] = "2.0"

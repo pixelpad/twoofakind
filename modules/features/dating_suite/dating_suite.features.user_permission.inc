@@ -13,13 +13,20 @@ function dating_suite_user_default_permissions() {
   // Exported permission: administer privatemsg settings
   $permissions['administer privatemsg settings'] = array(
     'name' => 'administer privatemsg settings',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'Administrator',
+      1 => 'Editor',
+    ),
+    'module' => 'privatemsg',
   );
 
   // Exported permission: allow disabling privatemsg
   $permissions['allow disabling privatemsg'] = array(
     'name' => 'allow disabling privatemsg',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'authenticated user',
+    ),
+    'module' => 'privatemsg',
   );
 
   // Exported permission: create success_story content
@@ -55,7 +62,10 @@ function dating_suite_user_default_permissions() {
   // Exported permission: delete privatemsg
   $permissions['delete privatemsg'] = array(
     'name' => 'delete privatemsg',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'authenticated user',
+    ),
+    'module' => 'privatemsg',
   );
 
   // Exported permission: edit any success_story content
@@ -81,19 +91,31 @@ function dating_suite_user_default_permissions() {
   // Exported permission: read all private messages
   $permissions['read all private messages'] = array(
     'name' => 'read all private messages',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'Administrator',
+      1 => 'Editor',
+    ),
+    'module' => 'privatemsg',
   );
 
   // Exported permission: read privatemsg
   $permissions['read privatemsg'] = array(
     'name' => 'read privatemsg',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'Administrator',
+      1 => 'Editor',
+      2 => 'authenticated user',
+    ),
+    'module' => 'privatemsg',
   );
 
   // Exported permission: reply only privatemsg
   $permissions['reply only privatemsg'] = array(
     'name' => 'reply only privatemsg',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'authenticated user',
+    ),
+    'module' => 'privatemsg',
   );
 
   // Exported permission: select text format for privatemsg
@@ -105,13 +127,20 @@ function dating_suite_user_default_permissions() {
   // Exported permission: use tokens in privatemsg
   $permissions['use tokens in privatemsg'] = array(
     'name' => 'use tokens in privatemsg',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'Administrator',
+      1 => 'Editor',
+    ),
+    'module' => 'privatemsg',
   );
 
   // Exported permission: write privatemsg
   $permissions['write privatemsg'] = array(
     'name' => 'write privatemsg',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'authenticated user',
+    ),
+    'module' => 'privatemsg',
   );
 
   return $permissions;

@@ -17,11 +17,6 @@ function two_of_a_kind_conf_context_default_contexts() {
   $context->description = 'Blocks for authenticated';
   $context->tag = 'authenticed';
   $context->conditions = array(
-    'sitewide' => array(
-      'values' => array(
-        1 => 1,
-      ),
-    ),
     'user' => array(
       'values' => array(
         'authenticated user' => 'authenticated user',
@@ -31,15 +26,9 @@ function two_of_a_kind_conf_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'views-user_favourites-block' => array(
+        'views--exp-matches-page_matches' => array(
           'module' => 'views',
-          'delta' => 'user_favourites-block',
-          'region' => 'sidebar_right',
-          'weight' => '-10',
-        ),
-        'wink-wink-they-at-me' => array(
-          'module' => 'wink',
-          'delta' => 'wink-they-at-me',
+          'delta' => '-exp-matches-page_matches',
           'region' => 'sidebar_right',
           'weight' => '-10',
         ),
@@ -47,7 +36,25 @@ function two_of_a_kind_conf_context_default_contexts() {
           'module' => 'wink',
           'delta' => 'wink-me-at-them',
           'region' => 'sidebar_right',
-          'weight' => '-10',
+          'weight' => '-9',
+        ),
+        'wink-wink-they-at-me' => array(
+          'module' => 'wink',
+          'delta' => 'wink-they-at-me',
+          'region' => 'sidebar_right',
+          'weight' => '-8',
+        ),
+        'privatemsg-privatemsg-menu' => array(
+          'module' => 'privatemsg',
+          'delta' => 'privatemsg-menu',
+          'region' => 'sidebar_right',
+          'weight' => '-7',
+        ),
+        'privatemsg-privatemsg-new' => array(
+          'module' => 'privatemsg',
+          'delta' => 'privatemsg-new',
+          'region' => 'sidebar_right',
+          'weight' => '-6',
         ),
       ),
     ),
@@ -81,10 +88,16 @@ function two_of_a_kind_conf_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'views-slide_shows-block_1' => array(
-          'module' => 'views',
-          'delta' => 'slide_shows-block_1',
-          'region' => 'slide_shows',
+        'user-login' => array(
+          'module' => 'user',
+          'delta' => 'login',
+          'region' => 'sidebar_right',
+          'weight' => '-10',
+        ),
+        'context_ui-editor' => array(
+          'module' => 'context_ui',
+          'delta' => 'editor',
+          'region' => 'sidebar_right',
           'weight' => '-10',
         ),
       ),

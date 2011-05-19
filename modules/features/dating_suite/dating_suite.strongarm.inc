@@ -13,6 +13,13 @@ function dating_suite_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'additional_settings__active_tab_match';
+  $strongarm->value = 'edit-page-title';
+  $export['additional_settings__active_tab_match'] = $strongarm;
+
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'date_format_privatemsg_current_day';
   $strongarm->value = 'g:i a';
   $export['date_format_privatemsg_current_day'] = $strongarm;

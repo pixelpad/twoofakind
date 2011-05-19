@@ -13,7 +13,11 @@ function two_of_a_kind_conf_user_default_permissions() {
   // Exported permission: access administration pages
   $permissions['access administration pages'] = array(
     'name' => 'access administration pages',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'Administrator',
+      1 => 'Editor',
+    ),
+    'module' => 'system',
   );
 
   // Exported permission: access comments
@@ -21,6 +25,7 @@ function two_of_a_kind_conf_user_default_permissions() {
     'name' => 'access comments',
     'roles' => array(
       0 => 'Administrator',
+      1 => 'Editor',
     ),
     'module' => 'comment',
   );
@@ -38,7 +43,11 @@ function two_of_a_kind_conf_user_default_permissions() {
   // Exported permission: access content overview
   $permissions['access content overview'] = array(
     'name' => 'access content overview',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'Administrator',
+      1 => 'Editor',
+    ),
+    'module' => 'node',
   );
 
   // Exported permission: access contextual links
@@ -46,29 +55,8 @@ function two_of_a_kind_conf_user_default_permissions() {
     'name' => 'access contextual links',
     'roles' => array(
       0 => 'Administrator',
-      1 => 'Editor',
     ),
     'module' => 'contextual',
-  );
-
-  // Exported permission: access dashboard
-  $permissions['access dashboard'] = array(
-    'name' => 'access dashboard',
-    'roles' => array(
-      0 => 'Administrator',
-      1 => 'Editor',
-    ),
-    'module' => 'dashboard',
-  );
-
-  // Exported permission: access overlay
-  $permissions['access overlay'] = array(
-    'name' => 'access overlay',
-    'roles' => array(
-      0 => 'Administrator',
-      1 => 'Editor',
-    ),
-    'module' => 'overlay',
   );
 
   // Exported permission: access site in maintenance mode
@@ -90,18 +78,11 @@ function two_of_a_kind_conf_user_default_permissions() {
   // Exported permission: access site reports
   $permissions['access site reports'] = array(
     'name' => 'access site reports',
-    'roles' => array(),
-  );
-
-  // Exported permission: access site-wide contact form
-  $permissions['access site-wide contact form'] = array(
-    'name' => 'access site-wide contact form',
     'roles' => array(
       0 => 'Administrator',
-      1 => 'anonymous user',
-      2 => 'authenticated user',
+      1 => 'Editor',
     ),
-    'module' => 'contact',
+    'module' => 'system',
   );
 
   // Exported permission: access toolbar
@@ -112,15 +93,6 @@ function two_of_a_kind_conf_user_default_permissions() {
       1 => 'Editor',
     ),
     'module' => 'toolbar',
-  );
-
-  // Exported permission: access user contact forms
-  $permissions['access user contact forms'] = array(
-    'name' => 'access user contact forms',
-    'roles' => array(
-      0 => 'Administrator',
-    ),
-    'module' => 'contact',
   );
 
   // Exported permission: access user profiles
@@ -161,17 +133,9 @@ function two_of_a_kind_conf_user_default_permissions() {
     'name' => 'administer comments',
     'roles' => array(
       0 => 'Administrator',
+      1 => 'Editor',
     ),
     'module' => 'comment',
-  );
-
-  // Exported permission: administer contact forms
-  $permissions['administer contact forms'] = array(
-    'name' => 'administer contact forms',
-    'roles' => array(
-      0 => 'Administrator',
-    ),
-    'module' => 'contact',
   );
 
   // Exported permission: administer content types
@@ -206,6 +170,7 @@ function two_of_a_kind_conf_user_default_permissions() {
     'name' => 'administer nodes',
     'roles' => array(
       0 => 'Administrator',
+      1 => 'Editor',
     ),
     'module' => 'node',
   );
@@ -352,6 +317,7 @@ function two_of_a_kind_conf_user_default_permissions() {
     'name' => 'edit own comments',
     'roles' => array(
       0 => 'Administrator',
+      1 => 'Editor',
     ),
     'module' => 'comment',
   );
@@ -367,6 +333,8 @@ function two_of_a_kind_conf_user_default_permissions() {
     'name' => 'post comments',
     'roles' => array(
       0 => 'Administrator',
+      1 => 'Editor',
+      2 => 'authenticated user',
     ),
     'module' => 'comment',
   );
@@ -404,6 +372,7 @@ function two_of_a_kind_conf_user_default_permissions() {
     'name' => 'skip comment approval',
     'roles' => array(
       0 => 'Administrator',
+      1 => 'Editor',
     ),
     'module' => 'comment',
   );
@@ -440,6 +409,7 @@ function two_of_a_kind_conf_user_default_permissions() {
     'roles' => array(
       0 => 'Administrator',
       1 => 'Editor',
+      2 => 'authenticated user',
     ),
     'module' => 'filter',
   );
@@ -458,8 +428,8 @@ function two_of_a_kind_conf_user_default_permissions() {
   $permissions['view own unpublished content'] = array(
     'name' => 'view own unpublished content',
     'roles' => array(
-      0 => 'anonymous user',
-      1 => 'authenticated user',
+      0 => 'Administrator',
+      1 => 'Editor',
     ),
     'module' => 'node',
   );
@@ -473,7 +443,11 @@ function two_of_a_kind_conf_user_default_permissions() {
   // Exported permission: view the administration theme
   $permissions['view the administration theme'] = array(
     'name' => 'view the administration theme',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'Administrator',
+      1 => 'Editor',
+    ),
+    'module' => 'system',
   );
 
   return $permissions;
