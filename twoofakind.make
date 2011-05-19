@@ -16,7 +16,7 @@ projects[apachesolr][subdir] = "contrib"
 projects[apachesolr][version] = "1.0-beta5"
 
 projects[boxes][subdir] = "contrib"
-projects[boxes][version] = "1.0-beta2"
+projects[boxes][version] = "1.0-beta3"
 
 ;projects[colorbox][subdir] = "contrib"
 ;projects[colorbox][version] = "1.0-beta3"
@@ -28,7 +28,7 @@ projects[ctools][subdir] = "contrib"
 ;projects[ctools][version] = "1.x-dev"
 
 projects[date][subdir] = "contrib"
-projects[date][version] = "2.0-alpha1"
+projects[date][version] = "2.0-alpha3"
 
 projects[email][subdir] = "contrib"
 projects[email][version] = "1.0-beta1"
@@ -40,7 +40,7 @@ projects[features][subdir] = "contrib"
 ;projects[features][version] = "1.x-dev"
 
 projects[field_group][subdir] = "contrib"
-projects[field_group][version] = "1.0-rc2"
+projects[field_group][version] = "1.x-dev"
 
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "2.0-beta5"
@@ -111,10 +111,10 @@ projects[privatemsg][version] = "1.1"
 ;projects[question_answer][version] = "1.6"
 
 projects[redirect][subdir] = "contrib"
-projects[redirect][version] = "1.0-beta1"
+projects[redirect][version] = "1.0-beta3"
 
 projects[references][subdir] = "contrib"
-projects[references][version] = "2.x-dev"
+projects[references][version] = "2.0-beta3"
 
 ;projects[rules][subdir] = "contrib"
 ;projects[rules][version] = "2.0-beta1"
@@ -160,8 +160,8 @@ projects[xmlsitemap][version] = "2.0-beta2"
 ;projects[tao][subdir] = "base"
 ;projects[tao][version] = "3.0-beta3"
 
-;projects[rubik][subdir] = "admin"
-;projects[rubik][version] = "4.0-beta5"
+projects[rubik][subdir] = "admin"
+projects[rubik][version] = "4.0-beta5"
 
 ;projects[fusion][subdir] = "contrib"
 ;projects[fusion][version] = "1.x-dev"
