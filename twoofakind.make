@@ -157,8 +157,8 @@ projects[xmlsitemap][version] = "2.0-beta2"
 
 ; THEMES
 
-;projects[tao][subdir] = "base"
-;projects[tao][version] = "3.0-beta3"
+projects[tao][subdir] = "base"
+projects[tao][version] = "3.0-beta3"
 
 projects[rubik][subdir] = "admin"
 projects[rubik][version] = "4.0-beta5"
