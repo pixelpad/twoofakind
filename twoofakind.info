@@ -46,7 +46,7 @@ dependencies[] = update
 ; CONTRIB MODULES
 ; ---------------
 
-dependencies[] = apachesolr_search
+;dependencies[] = apachesolr_search
 dependencies[] = boxes
 ;dependencies[] = colorbox
 dependencies[] = context
@@ -63,7 +63,7 @@ dependencies[] = globalredirect
 dependencies[] = libraries
 ;dependencies[] = link
 dependencies[] = location
-;dependencies[] = location_cck
+dependencies[] = location_cck
 ;dependencies[] = logintoboggan
 ;dependencies[] = markdown
 ;dependencies[] = media
@@ -75,14 +75,14 @@ dependencies[] = location
 ;dependencies[] = node_reference
 ;dependencies[] = nodequeue
 ;dependencies[] = notifications
-dependencies[] = page_title
+;dependencies[] = page_title
 dependencies[] = pathauto
 dependencies[] = privatemsg
 ;dependencies[] = question_answer
 dependencies[] = redirect
 dependencies[] = references
 ;dependencies[] = rules
-dependencies[] = site_map
+;dependencies[] = site_map
 dependencies[] = strongarm
 dependencies[] = styles
 dependencies[] = token
@@ -93,7 +93,7 @@ dependencies[] = views
 ;dependencies[] = views_slideshow
 ;dependencies[] = webform
 dependencies[] = wysiwyg
-dependencies[] = xmlsitemap
+;dependencies[] = xmlsitemap
 
 ; CUSTOM MODULES
 ; --------------
@@ -104,11 +104,11 @@ dependencies[] = wink
 ; CUSTOM FEATURES
 ; ---------------
 
-dependencies[] = dating_suite
-dependencies[] = simple_article
-dependencies[] = simple_event
-dependencies[] = simple_faq
-dependencies[] = simple_page
-dependencies[] = simple_site_benefit
-dependencies[] = theme_unite_config
-dependencies[] = two_of_a_kind_conf
+;dependencies[] = dating_suite
+;dependencies[] = simple_article
+;dependencies[] = simple_event
+;dependencies[] = simple_faq
+;dependencies[] = simple_page
+;dependencies[] = simple_site_benefit
+;dependencies[] = theme_unite_config
+;dependencies[] = two_of_a_kind_conf
