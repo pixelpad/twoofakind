@@ -149,8 +149,34 @@
 
 			<!-- Page Content -->
 			<div class="contentArea">
-        <?php dd(arg(0)); ?>
-			<?php if (arg(0) == 'portfolio') { ?>
+			<?php if (arg(0) == 'user' && arg(2) == 'edit') { ?>
+				<div class="full-page">
+
+            <?php if ($is_front): ?>
+              <?php if ($page['home_banner_3']): ?><?php print render($page['home_banner_3']); ?><?php endif; ?>
+              <?php if ($page['featured_content']): ?><?php print render($page['featured_content']); ?><?php endif; ?>
+              <br />
+            <?php endif; ?>
+            <?php if ($title): ?>
+              <h1 class="headline"><strong><?php echo $title ?></strong></h1>
+              <div class="hr"></div>
+            <?php endif; ?>
+            <!-- Breadcrumbs -->
+            <div class="breadcrumbs"><?php print $breadcrumb; ?></div>
+            <?php if (!empty($messages)): print $messages;
+            endif; ?>
+            <?php if ($tabs): print '' . render($tabs) . '';
+            endif; ?>
+            <?php //if ($tabs2): print ''. render($tabs2) .''; endif; ?>
+  <?php if (!empty($help)): print $help;
+  endif; ?>
+            <?php print render($page['content']); ?>
+            <!-- End of Content -->
+            <div class="clear"></div>
+          
+				</div>
+				<div class="clear"></div>
+			<?php } elseif (arg(0) == 'portfolio') { ?>
 				<div class="full-page">
 
 					<div class="portfolio">
