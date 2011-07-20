@@ -118,8 +118,19 @@ html.js fieldset.collapsible.collapsed .fieldset-legend a {
   display: none;
 }
 
-div#matches_form button.btn, div#matches_form button.btn span {
+div#matches_form button.btn,
+div#matches_form button.btn span {
   background-image: url("../images/button-sprite-dark.gif");
+}
+
+div#matches_form button#edit-submit-user-search,
+div#matches_form div.views-reset-button {
+  float: left;
+}
+
+/* This is purely here for the above floated buttons */
+div#matches_form div.views-exposed-widgets {
+  overflow: visible;
 }
 
 div.bef-select-all-none {
