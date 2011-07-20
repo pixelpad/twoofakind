@@ -118,15 +118,6 @@ function winks_received_by_name($name = NULL, $they_at_me = TRUE) {
   return "";
 }	  
 
-
-
-
-
-
-
-
-
-
 /**
 * Implements hook_theme().
 * http://drupal.org/node/933976
@@ -237,7 +228,6 @@ function wink_access_for_logged_in() {
 	return user_is_logged_in();
 }
 
-
 /**
  * Implement hook_entity_info().
  */
@@ -262,9 +252,6 @@ function wink_entity_info() {
   return $return;
 }
 
-
-
-
 /**
  * Another option:
  * Sending wink via a hidden form
@@ -278,7 +265,6 @@ function wink_add_my_form($from, $to) {
 
   return drupal_get_form('wink_add_form', $wink);
 }
-
 
 /**
  * Create a hidden send-wink-form
@@ -303,7 +289,6 @@ function wink_add_form($form, &$form_state, $wink) {
   return $form;
 }
 
-
 /**
  * Wink handler - when sent via a form (as oposed to link)
  */
@@ -322,11 +307,6 @@ function wink_add_form_submit($form, &$form_state) {
     entity_get_controller('wink')->save($wink);
   }
 }
-
-
-
-
-
 
 /**
  * Implementation of hook_block_info()
@@ -360,10 +340,6 @@ function wink_block_view($delta='') {
   return $block;
 }
 
-
-
-
-
 /**
  * returns the number of winks received since last login
  * of current user
@@ -386,7 +362,6 @@ function winks_cnt_from_last_login() {
   
   return " ($rv)";
 }
-
 
 /**
  * function outputs last $max_rows rows of users 
@@ -451,10 +426,6 @@ function wink_last_winks(&$block, $they_at_me = FALSE) {
   $block['content'] = implode("\n", $out);
 }
 
-
-
-
-
 /**
 * Implements hook_user_view().
 */
@@ -471,4 +442,14 @@ function wink_user_view($account, $view_mode, $langcode) {
   // display a submit button instead:      
   $account->content['summary']['testwink'] =  wink_add_my_form($user->uid, $account->uid, $account->name);
 
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function wink_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'wink') . '/views',
+  );
 }

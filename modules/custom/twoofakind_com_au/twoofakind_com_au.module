@@ -72,13 +72,6 @@ function tok_last_5_msgs() {
 }
 
 /**
- * Implementation of hook_views_pre_render()
- */
-function twoofakind_com_au_views_pre_render(&$view) {
-  
-}
-
-/**
  * Implementation of hook_form_alter()
  */
 function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
@@ -154,3 +147,19 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
     }
   }
 }
+
+/**
+ * Implementation of hook_views_query_alter()
+ */
+//function twoofakind_com_au_views_query_alter(&$view, &$query) {
+//  if ($view->name == 'profiles') {
+//    if ($view->current_display == 'profiles_page_winks_sent') {
+//      
+//      // join wink to users
+//      // join where 
+////      $query->add_relationship('wink', $join, $base);
+//    }
+//  }
+////  dsm($view);
+////  dsm($query);
+//}
