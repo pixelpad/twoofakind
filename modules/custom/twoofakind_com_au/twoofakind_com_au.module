@@ -110,7 +110,7 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
         $search_key = str_replace('field_match', 'field', $key) . '_value';
       }
 
-      // now, if the search key value is empty
+      // now, if the search key value is empty (in the form state)
       // populate it with the value from the users match criteria
       if (array_key_exists($search_key, $form)) {
 
@@ -120,10 +120,6 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
           // form_state value for this field is empty
           // look for a corresponding value in match criteria
           if (!empty($data[LANGUAGE_NONE])) {
-
-            // we need to rebuild the form to make sure
-            // these changes take affect
-//            $form_state['rebuild'] = TRUE;
             
             // we have match criteria
             // process the data from the user array format
@@ -141,9 +137,8 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
             if ($data_is_text) {
               
               // treat text data differently to the others
-              // there should be only one value
               $form_state['input'][$search_key] = $data_formatted[0];
-              $form_state['view']->exposed_input[$search_key] = $data_formatted;
+              $form_state['view']->exposed_input[$search_key] = $data_formatted[0];
               $form[$search_key]['#default_value'] = $data_formatted[0];
               $form[$search_key]['#value'] = $data_formatted[0];
               
