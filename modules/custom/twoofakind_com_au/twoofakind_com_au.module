@@ -75,12 +75,18 @@ function tok_last_5_msgs() {
  * Implementation of hook_views_pre_render()
  */
 function twoofakind_com_au_views_pre_render(&$view) {
-  dsm($view);
+  
 }
 
 /**
  * Implementation of hook_form_alter()
  */
 function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
-  dd($form_id);
+  if ($form_id == 'views_exposed_form') {
+    
+    // wrap the whole form in a div
+    $form['#prefix'] = '<div id="matches_form">';
+    $form['#suffix'] = '</div>';
+    
+  }
 }

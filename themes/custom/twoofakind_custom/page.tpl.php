@@ -81,13 +81,14 @@
 			
 			<!-- Search -->
 			<div id="Search">
-				<form action="<?php print url("search/node") ?>" id="SearchForm" method="post">
+				<form action="#" id="SearchForm" method="post">
 					<div class="m4"><input type="text" name="keys" id="SearchInput" value="" /></div>
 					<div class="m4"><input type="submit" name="op" id="SearchSubmit" class="noStyle" value="<?php print t("Search") ?>" /></div>
 					<input type="hidden" name="form_token" id="edit-search-block-form-form-token" value="<?php print drupal_get_token("search_form") ?>"  />
 					<input type="hidden" name="form_id" id="edit-search-block-form" value="search_form"  />
 				</form>
 			</div>
+      <div id="SearchOptions"><a href="#" title="More search options">More search options</a></div>
 			
 			<!-- Logo -->
 			<div id="Logo">

@@ -47,3 +47,101 @@ div.sideNavWrapper {
   float: none;
   padding: 0;
 }
+
+/* Matches view exposed filter form
+-------------------------------------------------------------- */
+
+div#SearchOptions {
+  clear: right;
+  float: right;
+  margin: -20px 30px 0 0;
+}
+
+div#SearchOptions a {
+  
+}
+
+div#matches_form {
+  display: none;
+  background: none repeat scroll 0 0 #2C2C2C;
+  position: absolute;
+  top: 170px;
+  width: 273px;
+  z-index: 100;
+  padding: 10px;
+  -moz-border-radius-topright: 5px;
+  -moz-border-radius-topleft: 5px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border: 1px solid #F4F5F6;
+}
+
+/* hide the first one */
+div#matches_form div#edit-name-wrapper {
+  display: none;
+}
+
+div#matches_form input.form-text {
+  width: 260px;
+}
+
+div#matches_form label {
+  color: #CACACA;
+}
+
+html.js fieldset.collapsible .fieldset-legend {
+  background-image: url("../images/arrowdown.gif");
+  width: 260px;
+  overflow: hidden;
+  background-position: 2px 8px;
+}
+
+html.js fieldset.collapsible.collapsed .fieldset-legend {
+  background-image: url("../images/arrowright.gif");
+  background-position: 5px 5px;
+}
+
+html.js fieldset.collapsible .fieldset-legend a {
+  border-bottom: none;
+  display: block;
+  margin-left: -10px;
+  padding: 2px 0px 5px 10px;
+  width: 254px;
+}
+
+html.js fieldset.collapsible.collapsed .fieldset-legend a {
+  border-bottom: 1px dotted #CACACA;
+}
+
+.fieldset-legend span.summary {
+  display: none;
+}
+
+div#matches_form button.btn, div#matches_form button.btn span {
+  background-image: url("../images/button-sprite-dark.gif");
+}
+
+div.bef-select-all-none {
+  border-bottom: 1px dotted #CACACA;
+}
+
+div.bef-select-all-none a.bef-toggle {
+  padding-left: 15px;
+}
+
+div.bef-select-all-none ul.bef-tree {
+  list-style: none inside none;
+  margin: 0 0 5px -15px;
+}
+
+div.bef-select-all-none ul.bef-tree li {
+  background: none repeat scroll 0 0 transparent;
+}
+
+div#edit-field-self-summary-value-wrapper {
+  margin-top: 10px;
+}
