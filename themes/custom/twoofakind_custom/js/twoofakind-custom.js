@@ -44,7 +44,7 @@
          */
         $('#SearchSubmit', $(this)).bind({
           click: function() {
-            $('form#views-exposed-form-matches-page-matches').submit();
+            $('form#views-exposed-form-user-search-page-user-search').submit();
             return false;
           }
         });
@@ -58,10 +58,6 @@
         click: function () {
           matchesForm.toggle();
         }
-      });
-      
-      matchesForm.each(function () {
-        $(this).addClass('js-processed');
       });
     }
   }
