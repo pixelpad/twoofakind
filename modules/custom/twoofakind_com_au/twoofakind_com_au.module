@@ -5,6 +5,7 @@
  * Custom site mods for two of a kind
  */
 
+module_load_include('inc', 'twoofakind_com_au', 'includes/match.entity');
 
 /**
  * Implementation of hook_block_info()
@@ -146,4 +147,47 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
       }
     }
   }
+}
+
+/******************************************************************************
+ * View functions
+ ******************************************************************************/
+
+/**
+ * Implements hook_views_api().
+ */
+function twoofakind_com_au_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'twoofakind_com_au') . '/views',
+  );
+}
+
+/******************************************************************************
+ * Entity functions
+ ******************************************************************************/
+
+/**
+ * Implement hook_entity_info().
+ */
+function twoofakind_com_au_entity_info() {
+  $return = array();
+  $return['match'] = array(
+    'label' => t('Match'),
+    'controller class' => 'MatchController',
+    'base table' => 'matches',
+    'fieldable' => FALSE,
+    'exportable' => FALSE,
+    'entity keys' => array(
+      'id' => 'mid',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'static cache' => TRUE,
+//    'bundles' => array(),
+//    'bundle keys' => array(
+//      'bundle' => 'name',
+//    ),
+  );
+  return $return;
 }

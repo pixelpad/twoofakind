@@ -11,18 +11,18 @@ function dating_suite_views_default_views() {
   $export = array();
 
   $view = new view;
-  $view->name = 'matches';
+  $view->name = 'user_search';
   $view->description = '';
   $view->tag = 'default';
   $view->base_table = 'users';
-  $view->human_name = 'Matches';
+  $view->human_name = 'User Search';
   $view->core = 7;
   $view->api_version = '3.0-alpha1';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Matches';
+  $handler->display->display_options['title'] = 'User Search';
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['access']['perm'] = 'access user profiles';
   $handler->display->display_options['cache']['type'] = 'none';
@@ -359,9 +359,9 @@ function dating_suite_views_default_views() {
   $handler->display->display_options['filters']['field_have_kids_value']['expose']['reduce'] = 0;
 
   /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'page_matches');
-  $handler->display->display_options['path'] = 'matches';
-  $translatables['matches'] = array(
+  $handler = $view->new_display('page', 'Page', 'page_user_search');
+  $handler->display->display_options['path'] = 'user-search';
+  $translatables['user_search'] = array(
     t('Master'),
     t('Matches'),
     t('more'),

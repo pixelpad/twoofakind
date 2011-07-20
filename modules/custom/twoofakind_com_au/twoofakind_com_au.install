@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the two of a kind distro module.
+ */
+
+
+/**
+ * Implement hook_schema().
+ */
+function twoofakind_com_au_schema() {
+  $schema['matches'] = array (
+    'description' => 'Table for matches',
+    'fields' => array(
+      'mid' => array(
+        'description' => 'Primary key for matches',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id that we are finding matches for',
+      ),
+      'match_uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of user matches',
+      ),
+      'created' => array(
+        'mysql_type' => 'timestamp',
+        'pgsql_type' => 'timestamp without time zone',
+        'not null' => TRUE,
+        'description' => 'Date the match was created',
+      ),
+      'viewed' => array(
+        'mysql_type' => 'boolean',
+        'pgsql_type' => 'boolean',
+        'not null' => TRUE,
+        'default' => '0',
+        'description' => 'Whether or not this match has been viewed',
+      ),
+    ),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'match_uid' => array('match_uid'),
+    ),
+    'foreign keys' => array(
+      'uid' => array('users' => 'uid'),
+      'match_uid' => array('users' => 'uid'),
+    ), 
+    'primary key' => array('mid'),
+  );
+  
+  return $schema;
+}
