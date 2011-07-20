@@ -82,11 +82,80 @@ function twoofakind_com_au_views_pre_render(&$view) {
  * Implementation of hook_form_alter()
  */
 function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
+  
+  global $user;
+  
   if ($form_id == 'views_exposed_form') {
     
     // wrap the whole form in a div
     $form['#prefix'] = '<div id="matches_form">';
     $form['#suffix'] = '</div>';
-    
+
+    // grab the match criteria of the currently logged in user
+    // if any exist
+    $user_complete = (array) user_load($user->uid);
+    foreach ($user_complete as $key => $data) {
+      
+      // we only want fields data
+      // and only those that pertain to matches
+      if (strpos($key, 'field_match') === false) {
+        continue;
+      }
+
+      // create the field key for the match
+      // special treatment for location
+      if ($key == 'field_match_user_location') {
+        $search_key = 'city';
+      } else {
+        $search_key = str_replace('field_match', 'field', $key) . '_value';
+      }
+
+      // now, if the search key value is empty
+      // populate it with the value from the users match criteria
+      if (array_key_exists($search_key, $form)) {
+
+        // check to see if there is a value in form_state
+        if (!array_key_exists($search_key, $form_state['input']) || empty($form_state['input'][$search_key])) {
+
+          // form_state value for this field is empty
+          // look for a corresponding value in match criteria
+          if (!empty($data[LANGUAGE_NONE])) {
+
+            // we need to rebuild the form to make sure
+            // these changes take affect
+//            $form_state['rebuild'] = TRUE;
+            
+            // we have match criteria
+            // process the data from the user array format
+            // to that which form state uses
+            $data_formatted = array();
+            $data_is_text = FALSE;
+            foreach ($data[LANGUAGE_NONE] as $value) {
+              $data_formatted[] = $value['value'];
+              if (array_key_exists('format', $value) || array_key_exists('safe_value', $value)) {
+                $data_is_text = TRUE;
+              }
+            }
+
+            // now plug the values in to the form_state
+            if ($data_is_text) {
+              
+              // treat text data differently to the others
+              // there should be only one value
+              $form_state['input'][$search_key] = $data_formatted[0];
+              $form_state['view']->exposed_input[$search_key] = $data_formatted;
+              $form[$search_key]['#default_value'] = $data_formatted[0];
+              $form[$search_key]['#value'] = $data_formatted[0];
+              
+            } else {
+              $form_state['input'][$search_key] = $data_formatted;
+              $form_state['view']->exposed_input[$search_key] = $data_formatted;
+              $form[$search_key]['#default_value'] = $data_formatted;
+              $form[$search_key]['#value'] = $data_formatted;
+            } 
+          } 
+        }
+      }
+    }
   }
 }
