@@ -41,3 +41,9 @@ h4.title.interactive {
 div.sideNavWrapper {
 /*  display: none;*/
 }
+
+/* exposed filters */
+.views-exposed-form .views-exposed-widget {
+  float: none;
+  padding: 0;
+}

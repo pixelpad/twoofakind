@@ -23,7 +23,9 @@ a:hover, a:active	{ color: #d00044 ; text-decoration: none; }
 #MainMenu .sf-menu li li:hover, #MainMenu .sf-menu li li.sfHover, 
 #MainMenu .sf-menu li li a:focus, #MainMenu .sf-menu li li a:hover, #MainMenu .sf-menu li li a:active {
 	background: #278C7D;	/* menu links - sub-menu items */
-	color: #fff;}
+	color: #fff;
+	z-index: 2000;
+	}
 
 #MainMenu .sf-menu li.expanded, #MainMenu .sf-menu li.collapsed, #MainMenu .sf-menu li.leaf {
   list-style-image: none;
@@ -405,6 +407,7 @@ body #Footer .last 	{ background: none; }	/* no right border on last */
 	display:none;
 	background: transparent;
 	border: 0;
+	text-indent: -1000px;
 	width:73px;
 	height:30px;
 	margin: 1px 0 0;
@@ -494,20 +497,23 @@ a.slidePrev:hover, a.slideNext:hover { background-position: 0 -64px;}
 #SlideShow-GalleryView {
 	width:990px; 
 	height: 400px; 
-	background:transparent url("../images/pageBg-repeat.png") repeat-y 0 0;}
+	background:transparent url("../images/pageBg-repeat.png") repeat-y 0 0;
+}
 #SlideShow-GalleryView #GalleryView	{ height:938px; height:340px; overflow:hidden; margin:0 0 0 26px; }
 #GalleryView .filmstrip li {background: none;} /* prevents image based bullets */
 
 #SlideShow-GalleryView a.lno {
-	width:938px; 
-	height: 340px; 
+	position: absolute;
 	margin-top: -267px; 
 	margin-left: -14px; 
+	width:938px; 
+	height: 340px; 
 	display: block;
-	position: absolute;
-	z-index: 1000;
+	/*z-index: 0;*/
+	background:transparent url("../images/spacer.gif") no-repeat 0 0;
 	}
-	
+
+
 /* showcase/spotlight */
 
 #Showcase 	{ padding: 10px 0 0; }

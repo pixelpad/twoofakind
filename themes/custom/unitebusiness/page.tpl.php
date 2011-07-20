@@ -82,10 +82,10 @@
 			<!-- Search -->
 			<div id="Search">
 				<form action="<?php print url("search/node") ?>" id="SearchForm" method="post">
-					<div class="m4"><input type="text" name="search_block_form" id="SearchInput" value="" /></div>
-					<div class="m4"><input type="submit" name="op" id="SearchSubmit" class="noStyle" value="" /></div>
-					<input type="hidden" name="form_token" id="edit-search-block-form-form-token" value="<?php print drupal_get_token("search_block_form") ?>"  />
-					<input type="hidden" name="form_id" id="edit-search-block-form" value="search_block_form"  />
+					<div class="m4"><input type="text" name="keys" id="SearchInput" value="" /></div>
+					<div class="m4"><input type="submit" name="op" id="SearchSubmit" class="noStyle" value="<?php print t("Search") ?>" /></div>
+					<input type="hidden" name="form_token" id="edit-search-block-form-form-token" value="<?php print drupal_get_token("search_form") ?>"  />
+					<input type="hidden" name="form_id" id="edit-search-block-form" value="search_form"  />
 				</form>
 			</div>
 			
@@ -149,6 +149,7 @@
 
 			<!-- Page Content -->
 			<div class="contentArea">
+        <?php dd(arg(0)); ?>
 			<?php if (arg(0) == 'portfolio') { ?>
 				<div class="full-page">
 
