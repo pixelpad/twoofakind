@@ -20,7 +20,7 @@ function dating_suite_field_group_info() {
   $field_group->parent_name = 'group_tabs';
   $field_group->data = array(
     'label' => 'Appearance',
-    'weight' => '7',
+    'weight' => '6',
     'children' => array(
       0 => 'field_body_type',
       1 => 'field_eye_colour',
@@ -82,7 +82,7 @@ function dating_suite_field_group_info() {
   $field_group->parent_name = 'group_tabs';
   $field_group->data = array(
     'label' => 'Habits',
-    'weight' => '9',
+    'weight' => '8',
     'children' => array(
       0 => 'field_drinking',
       1 => 'field_smoker',
@@ -246,7 +246,7 @@ function dating_suite_field_group_info() {
   $field_group->parent_name = 'group_tabs';
   $field_group->data = array(
     'label' => 'Pics',
-    'weight' => '6',
+    'weight' => '5',
     'children' => array(
       0 => 'field_images',
     ),
@@ -271,7 +271,7 @@ function dating_suite_field_group_info() {
   $field_group->parent_name = 'group_tabs';
   $field_group->data = array(
     'label' => 'The rest',
-    'weight' => '11',
+    'weight' => '10',
     'children' => array(
       0 => 'field_education',
       1 => 'field_industry',
@@ -327,7 +327,7 @@ function dating_suite_field_group_info() {
   $field_group->parent_name = 'group_tabs';
   $field_group->data = array(
     'label' => 'Relationships',
-    'weight' => '10',
+    'weight' => '9',
     'children' => array(
       0 => 'field_have_kids',
       1 => 'field_have_pets',
@@ -358,7 +358,7 @@ function dating_suite_field_group_info() {
   $field_group->parent_name = 'group_tabs';
   $field_group->data = array(
     'label' => 'Religion',
-    'weight' => '8',
+    'weight' => '7',
     'children' => array(
       0 => 'field_kosher',
       1 => 'field_relig_affiliation',
@@ -423,6 +423,7 @@ function dating_suite_field_group_info() {
       4 => 'group_relationships',
       5 => 'group_other',
       6 => 'group_appearance',
+      7 => 'group_more',
     ),
     'format_type' => 'htabs',
     'format_settings' => array(

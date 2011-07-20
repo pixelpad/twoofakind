@@ -27,13 +27,116 @@ function dating_suite_views_default_views() {
   $handler->display->display_options['access']['perm'] = 'access user profiles';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
-  $handler->display->display_options['exposed_form']['type'] = 'input_required';
+  $handler->display->display_options['exposed_form']['type'] = 'better_exposed_filters';
   $handler->display->display_options['exposed_form']['options']['submit_button'] = 'Search';
-  $handler->display->display_options['exposed_form']['options']['reset_button'] = TRUE;
-  $handler->display->display_options['exposed_form']['options']['text_input_required'] = array(
-    'value' => '<p>Select any filter and click on Search to see results</p>
-',
-    'format' => 'html_full',
+  $handler->display->display_options['exposed_form']['options']['bef'] = array(
+    'sort' => array(
+      'bef_format' => 'bef',
+      'combine' => 1,
+      'reset' => 0,
+      'reset_label' => '',
+    ),
+    'field_sex_value' => array(
+      'bef_format' => 'bef_ul',
+      'more_options' => array(
+        'bef_select_all_none' => 1,
+        'bef_collapsible' => 1,
+        'bef_filter_description' => '',
+      ),
+    ),
+    'city' => array(
+      'more_options' => array(
+        'bef_filter_description' => '',
+      ),
+    ),
+    'field_star_sign_value' => array(
+      'bef_format' => 'bef_ul',
+      'more_options' => array(
+        'bef_select_all_none' => 1,
+        'bef_collapsible' => 1,
+        'bef_filter_description' => '',
+      ),
+    ),
+    'field_personality_value' => array(
+      'bef_format' => 'bef_ul',
+      'more_options' => array(
+        'bef_select_all_none' => 1,
+        'bef_collapsible' => 1,
+        'bef_filter_description' => '',
+      ),
+    ),
+    'field_eye_colour_value' => array(
+      'bef_format' => 'bef_ul',
+      'more_options' => array(
+        'bef_select_all_none' => 1,
+        'bef_collapsible' => 1,
+        'bef_filter_description' => '',
+      ),
+    ),
+    'field_hair_colour_value' => array(
+      'bef_format' => 'bef_ul',
+      'more_options' => array(
+        'bef_select_all_none' => 1,
+        'bef_collapsible' => 1,
+        'bef_filter_description' => '',
+      ),
+    ),
+    'field_height_value' => array(
+      'bef_format' => 'bef_ul',
+      'more_options' => array(
+        'bef_select_all_none' => 1,
+        'bef_collapsible' => 1,
+        'bef_filter_description' => '',
+      ),
+    ),
+    'field_body_type_value' => array(
+      'bef_format' => 'bef_ul',
+      'more_options' => array(
+        'bef_select_all_none' => 1,
+        'bef_collapsible' => 1,
+        'bef_filter_description' => '',
+      ),
+    ),
+    'field_relig_affiliation_value' => array(
+      'bef_format' => 'bef_ul',
+      'more_options' => array(
+        'bef_select_all_none' => 1,
+        'bef_collapsible' => 1,
+        'bef_filter_description' => '',
+      ),
+    ),
+    'field_kosher_value_1' => array(
+      'bef_format' => 'bef_ul',
+      'more_options' => array(
+        'bef_select_all_none' => 1,
+        'bef_collapsible' => 1,
+        'bef_filter_description' => '',
+      ),
+    ),
+    'field_smoker_value' => array(
+      'bef_format' => 'bef_ul',
+      'more_options' => array(
+        'bef_select_all_none' => 1,
+        'bef_collapsible' => 1,
+        'bef_filter_description' => '',
+      ),
+    ),
+    'field_drinking_value' => array(
+      'bef_format' => 'bef_ul',
+      'more_options' => array(
+        'bef_select_all_none' => 1,
+        'bef_collapsible' => 1,
+        'bef_filter_description' => '',
+      ),
+    ),
+    'field_have_kids_value' => array(
+      'bef_format' => 'bef_ul',
+      'more_options' => array(
+        'bef_select_all_none' => 1,
+        'bef_collapsible' => 1,
+        'bef_filter_description' => '',
+      ),
+    ),
   );
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '10';
@@ -84,19 +187,6 @@ function dating_suite_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = '1';
   $handler->display->display_options['filters']['status']['group'] = 0;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: Fields: Sex (field_sex) */
-  $handler->display->display_options['filters']['field_sex_value']['id'] = 'field_sex_value';
-  $handler->display->display_options['filters']['field_sex_value']['table'] = 'field_data_field_sex';
-  $handler->display->display_options['filters']['field_sex_value']['field'] = 'field_sex_value';
-  $handler->display->display_options['filters']['field_sex_value']['group'] = 0;
-  $handler->display->display_options['filters']['field_sex_value']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['field_sex_value']['expose']['operator_id'] = 'field_sex_value_op';
-  $handler->display->display_options['filters']['field_sex_value']['expose']['label'] = 'Sex';
-  $handler->display->display_options['filters']['field_sex_value']['expose']['operator'] = 'field_sex_value_op';
-  $handler->display->display_options['filters']['field_sex_value']['expose']['identifier'] = 'field_sex_value';
-  $handler->display->display_options['filters']['field_sex_value']['expose']['remember'] = 1;
-  $handler->display->display_options['filters']['field_sex_value']['expose']['multiple'] = 1;
-  $handler->display->display_options['filters']['field_sex_value']['expose']['reduce'] = 0;
   /* Filter criterion: Location: City */
   $handler->display->display_options['filters']['city']['id'] = 'city';
   $handler->display->display_options['filters']['city']['table'] = 'location';
@@ -111,6 +201,19 @@ function dating_suite_views_default_views() {
   $handler->display->display_options['filters']['city']['expose']['required'] = FALSE;
   $handler->display->display_options['filters']['city']['expose']['remember'] = 1;
   $handler->display->display_options['filters']['city']['expose']['multiple'] = FALSE;
+  /* Filter criterion: Fields: Sex (field_sex) */
+  $handler->display->display_options['filters']['field_sex_value']['id'] = 'field_sex_value';
+  $handler->display->display_options['filters']['field_sex_value']['table'] = 'field_data_field_sex';
+  $handler->display->display_options['filters']['field_sex_value']['field'] = 'field_sex_value';
+  $handler->display->display_options['filters']['field_sex_value']['group'] = 0;
+  $handler->display->display_options['filters']['field_sex_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_sex_value']['expose']['operator_id'] = 'field_sex_value_op';
+  $handler->display->display_options['filters']['field_sex_value']['expose']['label'] = 'Sex';
+  $handler->display->display_options['filters']['field_sex_value']['expose']['operator'] = 'field_sex_value_op';
+  $handler->display->display_options['filters']['field_sex_value']['expose']['identifier'] = 'field_sex_value';
+  $handler->display->display_options['filters']['field_sex_value']['expose']['remember'] = 1;
+  $handler->display->display_options['filters']['field_sex_value']['expose']['multiple'] = 1;
+  $handler->display->display_options['filters']['field_sex_value']['expose']['reduce'] = 0;
   /* Filter criterion: Fields: Star sign (field_star_sign) */
   $handler->display->display_options['filters']['field_star_sign_value']['id'] = 'field_star_sign_value';
   $handler->display->display_options['filters']['field_star_sign_value']['table'] = 'field_data_field_star_sign';
@@ -274,8 +377,8 @@ function dating_suite_views_default_views() {
 '),
     t('User joined'),
     t('Date of Birth'),
-    t('Sex'),
     t('City'),
+    t('Sex'),
     t('Star sign'),
     t('Personality'),
     t('Eye colour'),

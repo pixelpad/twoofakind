@@ -557,6 +557,68 @@ function dating_suite_field_default_fields() {
     ),
   );
 
+  // Exported field: 'user-user-field_friend_summary'
+  $fields['user-user-field_friend_summary'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_friend_summary',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'module' => 'text',
+      'settings' => array(),
+      'translatable' => '1',
+      'type' => 'text_with_summary',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 43,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_friend_summary',
+      'label' => 'Mr friends describe me as',
+      'required' => 0,
+      'settings' => array(
+        'display_summary' => 0,
+        'text_processing' => '0',
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'rows' => '5',
+          'summary_rows' => 5,
+        ),
+        'type' => 'text_textarea_with_summary',
+        'weight' => '14',
+      ),
+    ),
+  );
+
   // Exported field: 'user-user-field_hair_colour'
   $fields['user-user-field_hair_colour'] = array(
     'field_config' => array(
@@ -2049,6 +2111,68 @@ function dating_suite_field_default_fields() {
     ),
   );
 
+  // Exported field: 'user-user-field_passionate_about'
+  $fields['user-user-field_passionate_about'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_passionate_about',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'module' => 'text',
+      'settings' => array(),
+      'translatable' => '1',
+      'type' => 'text_with_summary',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 44,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_passionate_about',
+      'label' => 'I am passionate about',
+      'required' => 0,
+      'settings' => array(
+        'display_summary' => 0,
+        'text_processing' => '0',
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'rows' => '5',
+          'summary_rows' => 5,
+        ),
+        'type' => 'text_textarea_with_summary',
+        'weight' => '15',
+      ),
+    ),
+  );
+
   // Exported field: 'user-user-field_personality'
   $fields['user-user-field_personality'] = array(
     'field_config' => array(
@@ -2280,6 +2404,68 @@ function dating_suite_field_default_fields() {
         'settings' => array(),
         'type' => 'options_select',
         'weight' => '5',
+      ),
+    ),
+  );
+
+  // Exported field: 'user-user-field_self_summary'
+  $fields['user-user-field_self_summary'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_self_summary',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'module' => 'text',
+      'settings' => array(),
+      'translatable' => '1',
+      'type' => 'text_with_summary',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 42,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_self_summary',
+      'label' => 'My self-summary',
+      'required' => 0,
+      'settings' => array(
+        'display_summary' => 0,
+        'text_processing' => '0',
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'rows' => '5',
+          'summary_rows' => 5,
+        ),
+        'type' => 'text_textarea_with_summary',
+        'weight' => '13',
       ),
     ),
   );
@@ -2654,6 +2840,7 @@ function dating_suite_field_default_fields() {
   t('Hair colour');
   t('Headline');
   t('Height');
+  t('I am passionate about');
   t('Images');
   t('Industry');
   t('Kids');
@@ -2661,6 +2848,8 @@ function dating_suite_field_default_fields() {
   t('Level of education');
   t('Location');
   t('Main image');
+  t('Mr friends describe me as');
+  t('My self-summary');
   t('Partners');
   t('Personality');
   t('Political persuasion');
