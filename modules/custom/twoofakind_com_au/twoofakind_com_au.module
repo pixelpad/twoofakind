@@ -5,13 +5,11 @@
  * Custom site mods for two of a kind
  */
 
-// Two of a kind custom mods
-
 
 /**
  * Implementation of hook_block_info()
  */
-function twoofakind_custom_block_info() {
+function twoofakind_com_au_block_info() {
   $blocks['tok-last-msg'] = array(
     'info' => t('Two of a kind: Last messages'),
   );
@@ -24,7 +22,7 @@ function twoofakind_custom_block_info() {
  * note: http://drupal.org/project/efq_views
  * wasn't stable enough to be used (04/2011)
  */
-function twoofakind_custom_block_view($delta='') {
+function twoofakind_com_au_block_view($delta='') {
   $block = array();
   switch ($delta) {
     case 'tok-last-msg':
@@ -33,9 +31,6 @@ function twoofakind_custom_block_view($delta='') {
   }
   return $block;
 }
-
-
-
 
 /**
  * generates a block "Messages (N)" with the last 5 messages received by the current user
@@ -74,4 +69,18 @@ function tok_last_5_msgs() {
     )
   );
 
+}
+
+/**
+ * Implementation of hook_views_pre_render()
+ */
+function twoofakind_com_au_views_pre_render(&$view) {
+  dsm($view);
+}
+
+/**
+ * Implementation of hook_form_alter()
+ */
+function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
+  dd($form_id);
 }
