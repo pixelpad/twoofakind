@@ -64,8 +64,9 @@ div#SearchOptions a {
 div#matches_form {
   display: none;
   background: none repeat scroll 0 0 #2C2C2C;
-  position: absolute;
-  top: 170px;
+/*  position: absolute;
+  top: 170px;*/
+  margin: -10px 0 10px;
   width: 273px;
   z-index: 100;
   padding: 10px;
