@@ -80,10 +80,25 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
   global $user;
   
   if ($form_id == 'views_exposed_form') {
-    
+
     // wrap the whole form in a div
     $form['#prefix'] = '<div id="matches_form">';
     $form['#suffix'] = '</div>';
+
+    // check if we're clearing
+    if (isset($_GET['op']) && $_GET['op'] == 'Clear') {
+      // we are, don't populate from match criteria
+      // and add a value to the session to indicate this
+      $_SESSION['FormClear'] = TRUE;
+      return;
+    }
+    
+    // check the session for clear value
+    // I'm going to retain the clear value for the remainder of the session
+    // otherwise with each load match criteria will be reinstated
+    if (isset($_SESSION['FormClear'])) {
+      return;
+    }
 
     // grab the match criteria of the currently logged in user
     // if any exist
