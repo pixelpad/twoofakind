@@ -66,12 +66,37 @@ function match_load_all($conditions = array(), $reset = FALSE) {
 }
 
 /**
- * Count un-viewed matches for logged in user
+ * Count un-viewed matches when logged in user is matcher
+ * 
+ * @return
+ *   An integer equal to the number of unviewed matches for matcher
+ */
+function match_count_matcher_unviewed_matches() {
+  
+  return match_count_unviewed_matches('viewed_uid');
+}
+
+/**
+ * Count un-viewed matches when logged in user is matchee
+ * 
+ * @return
+ *   An integer equal to the number of unviewed matches for matchee
+ */
+function match_count_matchee_unviewed_matches() {
+  
+  return match_count_unviewed_matches('viewed_match_uid');
+}
+
+/**
+ * Count un-viewed matches for matcher or matchee
+ * 
+ * @param $field_viewed
+ *   Which viewed field to count on
  * 
  * @return
  *   An integer equal to the number of unviewed matches for currently logged in user
  */
-function match_count_matches() {
+function match_count_unviewed_matches($field_viewed = 'viewed_uid') {
   
   global $user;
   
@@ -81,8 +106,10 @@ function match_count_matches() {
   $query->entityCondition('entity_type', 'match', '=');
 
   // we want matches for currently logged in user
-  $query->propertyCondition('uid', $user->uid, '=');
-  $query->propertyCondition('viewed_uid', '0', '=');
+  // determine the field based on the viewed field
+  $match_uid = str_replace('viewed_', '', $field_viewed);
+  $query->propertyCondition($match_uid, $user->uid, '=');
+  $query->propertyCondition($field_viewed, '0', '=');
   
   // execute
   $result = $query->execute();

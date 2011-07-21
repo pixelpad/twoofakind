@@ -17,9 +17,14 @@ module_load_include('inc', 'twoofakind_com_au', 'includes/match.entity');
 function twoofakind_com_au_block_view_alter(&$data, $block) {
 
   // modify my matches block
-  if ($block->module == 'views' && $block->delta == 'matches-my_matches_block') {
-    $match_count = match_count_matches();
-    $data['subject'] .= " ($match_count)";
+  if ($block->module == 'views') {
+    if ($block->delta == 'matches-block_my_matches') {
+      $match_count = match_count_matcher_unviewed_matches();
+      $data['subject'] .= " ($match_count)";
+    } elseif ($block->delta == 'match_me-block_match_me') {
+      $match_count = match_count_matchee_unviewed_matches();
+      $data['subject'] .= " ($match_count)";
+    }
   }
   
 }
