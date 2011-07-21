@@ -10,3 +10,8 @@ class MatchController extends EntityAPIController{
     
   
 }
+
+class WinkController extends EntityAPIController{
+    
+  
+}

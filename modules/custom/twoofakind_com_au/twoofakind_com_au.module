@@ -230,5 +230,22 @@ function twoofakind_com_au_entity_info() {
 //      'bundle' => 'name',
 //    ),
   );
+  $return['wink'] = array(
+    'label' => t('Wink'),
+    'controller class' => 'WinkController',
+    'base table' => 'winks',
+    'fieldable' => FALSE,
+    'exportable' => FALSE,
+    'entity keys' => array(
+      'id' => 'mid',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'static cache' => TRUE,
+//    'bundles' => array(),
+//    'bundle keys' => array(
+//      'bundle' => 'name',
+//    ),
+  );
   return $return;
 }

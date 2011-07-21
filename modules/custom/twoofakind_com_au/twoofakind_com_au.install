@@ -10,6 +10,8 @@
  * Implement hook_schema().
  */
 function twoofakind_com_au_schema() {
+  
+  // matches
   $schema['matches'] = array (
     'description' => 'Table for matches',
     'fields' => array(
@@ -63,6 +65,53 @@ function twoofakind_com_au_schema() {
     'primary key' => array('mid'),
   );
   
+  // winks
+  $schema['winks'] = array (
+    'description' => 'Table for winks',
+    'fields' => array(
+      'wid' => array(
+        'description' => 'Primary key for winks',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the winker',
+      ),
+      'wink_uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the wink receiver',
+      ),
+      'created' => array(
+        'mysql_type' => 'timestamp',
+        'pgsql_type' => 'timestamp without time zone',
+        'not null' => TRUE,
+        'description' => 'Date the wink was created',
+      ),
+      'viewed' => array(
+        'mysql_type' => 'boolean',
+        'pgsql_type' => 'boolean',
+        'not null' => TRUE,
+        'default' => '0',
+        'description' => 'Whether or not this wink has been viewed',
+      ),
+    ),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'wink_uid' => array('wink_uid'),
+    ),
+    'foreign keys' => array(
+      'uid' => array('users' => 'uid'),
+      'wink_uid' => array('users' => 'uid'),
+    ), 
+    'primary key' => array('wid'),
+  );
+  
   return $schema;
 }
 
@@ -92,4 +141,19 @@ function twoofakind_com_au_update_7001() {
     'default' => '0',
     'description' => 'Whether or not this match has been viewed by the matchee',
   ));
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * This update adds the winks table
+ */
+function twoofakind_com_au_update_7002() {
+  
+  // grab the schema
+  $schema = twoofakind_com_au_schema();
+  
+  // add wink table
+  db_create_table('winks', $schema['winks']);
+  
 }
