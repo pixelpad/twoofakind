@@ -6,6 +6,7 @@
  */
 
 module_load_include('inc', 'twoofakind_com_au', 'includes/match.entity');
+module_load_include('inc', 'twoofakind_com_au', 'includes/wink.entity');
 
 /******************************************************************************
  * Block functions
@@ -23,6 +24,12 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
       $data['subject'] .= " ($match_count)";
     } elseif ($block->delta == 'match_me-block_match_me') {
       $match_count = match_count_matchee_unviewed_matches();
+      $data['subject'] .= " ($match_count)";
+    } elseif ($block->delta == 'winks-block_winked_at') {
+      $match_count = wink_count_winker_unviewed_winks();
+      $data['subject'] .= " ($match_count)";
+    } elseif ($block->delta == 'winks_received-block_winks_received') {
+      $match_count = wink_count_winkee_unviewed_winks();
       $data['subject'] .= " ($match_count)";
     }
   }
@@ -237,7 +244,7 @@ function twoofakind_com_au_entity_info() {
     'fieldable' => FALSE,
     'exportable' => FALSE,
     'entity keys' => array(
-      'id' => 'mid',
+      'id' => 'wid',
     ),
     'label callback' => 'entity_class_label',
     'uri callback' => 'entity_class_uri',

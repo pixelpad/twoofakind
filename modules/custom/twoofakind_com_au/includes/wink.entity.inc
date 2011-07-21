@@ -66,12 +66,37 @@ function wink_load_all($conditions = array(), $reset = FALSE) {
 }
 
 /**
- * Count un-viewed winks
+ * Count un-viewed winks when logged in user is winker
+ * 
+ * @return
+ *   An integer equal to the number of unviewed winks for winker
+ */
+function wink_count_winker_unviewed_winks() {
+  
+  return wink_count_unviewed_winks('uid');
+}
+
+/**
+ * Count un-viewed winks when logged in user is winkee
+ * 
+ * @return
+ *   An integer equal to the number of unviewed winks for winkee
+ */
+function wink_count_winkee_unviewed_winks() {
+  
+  return wink_count_unviewed_winks('wink_uid');
+}
+
+/**
+ * Count un-viewed winks for winker or winkee
+ * 
+ * @param $field_viewed
+ *   Which viewed field to count on
  * 
  * @return
  *   An integer equal to the number of unviewed winks for currently logged in user
  */
-function wink_count_unviewed_winks() {
+function wink_count_unviewed_winks($field_uid = 'uid') {
   
   global $user;
   
@@ -81,7 +106,8 @@ function wink_count_unviewed_winks() {
   $query->entityCondition('entity_type', 'wink', '=');
 
   // we want winks for currently logged in user
-  $query->propertyCondition('uid', $user->uid, '=');
+  // determine the field based on the viewed field
+  $query->propertyCondition($field_uid, $user->uid, '=');
   $query->propertyCondition('viewed', '0', '=');
   
   // execute
