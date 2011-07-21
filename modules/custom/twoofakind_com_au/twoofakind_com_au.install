@@ -37,12 +37,19 @@ function twoofakind_com_au_schema() {
         'not null' => TRUE,
         'description' => 'Date the match was created',
       ),
-      'viewed' => array(
+      'viewed_uid' => array(
         'mysql_type' => 'boolean',
         'pgsql_type' => 'boolean',
         'not null' => TRUE,
         'default' => '0',
-        'description' => 'Whether or not this match has been viewed',
+        'description' => 'Whether or not this match has been viewed by the matcher',
+      ),
+      'viewed_match_uid' => array(
+        'mysql_type' => 'boolean',
+        'pgsql_type' => 'boolean',
+        'not null' => TRUE,
+        'default' => '0',
+        'description' => 'Whether or not this match has been viewed by the matchee',
       ),
     ),
     'indexes' => array(
@@ -57,4 +64,32 @@ function twoofakind_com_au_schema() {
   );
   
   return $schema;
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * This update is to modify the viewed field to be
+ * viewed by matchee and adding another field which
+ * will represent viewed by match
+ */
+function twoofakind_com_au_update_7001() {
+  
+  // change current field
+  db_change_field('matches', 'viewed', 'viewed_uid', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0',
+    'description' => 'Whether or not this match has been viewed by the matcher',
+  ));
+  
+  // add new field
+  db_add_field('matches', 'viewed_match_uid', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0',
+    'description' => 'Whether or not this match has been viewed by the matchee',
+  ));
 }
