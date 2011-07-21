@@ -20,19 +20,19 @@
  *   A boolean indicating that the internal cache should be reset.
  * 
  * @return
- *   An array of match objects, indexed by rid or FALSE if no matches found
+ *   An array of match objects, indexed by mid or FALSE if no matches found
  * 
  * @see entity_load()
  */
-function match_load($rid, $conditions = array(), $reset = FALSE) {
-  $match = match_load_multiple(array($rid), $conditions, $reset);
+function match_load($mid, $conditions = array(), $reset = FALSE) {
+  $match = match_load_multiple(array($mid), $conditions, $reset);
   return reset($match);
 }
 
 /**
  * Load multiple matches
  *
- * @param $rids
+ * @param $mids
  *   An array of match IDs.
  * @param $conditions
  *   An array of conditions to match against the {match} table.
@@ -40,12 +40,12 @@ function match_load($rid, $conditions = array(), $reset = FALSE) {
  *   A boolean indicating that the internal cache should be reset.
  * 
  * @return
- *   An array of match objects, indexed by rid or FALSE if no matches found
+ *   An array of match objects, indexed by mid or FALSE if no matches found
  *
  * @see entity_load()
  */
-function match_load_multiple($rids = array(), $conditions = array(), $reset = FALSE) {
-  return entity_load('match', $rids, $conditions, $reset);
+function match_load_multiple($mids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('match', $mids, $conditions, $reset);
 }
 
 /**
@@ -63,4 +63,34 @@ function match_load_multiple($rids = array(), $conditions = array(), $reset = FA
  */
 function match_load_all($conditions = array(), $reset = FALSE) {
   return match_load_multiple(FALSE, $conditions, $reset);
+}
+
+/**
+ * Count un-viewed matches for logged in user
+ * 
+ * @return
+ *   An integer equal to the number of unviewed matches for currently logged in user
+ */
+function match_count_matches() {
+  
+  global $user;
+  
+  // set up the query   
+  $query = new EntityFieldQuery();
+  // we only want matches
+  $query->entityCondition('entity_type', 'match', '=');
+
+  // we want matches for currently logged in user
+  $query->propertyCondition('uid', $user->uid, '=');
+  $query->propertyCondition('viewed', '0', '=');
+  
+  // execute
+  $result = $query->execute();
+
+  // return result
+  if (isset($result['match'])) {
+    return count($result['match']);
+  }
+  
+  return 0;
 }

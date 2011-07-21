@@ -7,6 +7,23 @@
 
 module_load_include('inc', 'twoofakind_com_au', 'includes/match.entity');
 
+/******************************************************************************
+ * Block functions
+ ******************************************************************************/
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function twoofakind_com_au_block_view_alter(&$data, $block) {
+
+  // modify my matches block
+  if ($block->module == 'views' && $block->delta == 'matches-my_matches_block') {
+    $match_count = match_count_matches();
+    $data['subject'] .= " ($match_count)";
+  }
+  
+}
+
 /**
  * Implementation of hook_block_info()
  */
@@ -71,6 +88,10 @@ function tok_last_5_msgs() {
   );
 
 }
+
+/******************************************************************************
+ * Form functions
+ ******************************************************************************/
 
 /**
  * Implementation of hook_form_alter()
