@@ -33,44 +33,44 @@ function twoofakind_com_au_views_data() {
       ),
       'uid' => array(
         'group' => t('Match'),
-        'title' => t('User id for Matchee'),
-        'help' => t('User id that we\'re finding matches for'),
+        'title' => t('User id for Matcher'),
+        'help' => t('User id of the Matcher'),
         'relationship' => array(
           'base' => 'users',
           'field' => 'uid',
           'left_field' => 'uid',
           'left_table' => 'users',
           'handler' => 'views_handler_relationship',
-          'label' => t('Matchee'),
+          'label' => t('Matcher'),
         ),
       ),
       'uid_current' => array(
         'real field' => 'uid',
         'group' => t('Match'),
-        'title' => t('Matchee is logged in user'),
-        'help' => t('Filter results so that only the current user is the matchee'),
+        'title' => t('Matcher is logged in user'),
+        'help' => t('Filter results so the current user is the Matcher'),
         'filter' => array(
           'handler' => 'views_handler_filter_user_current',
         ),
       ),
       'match_uid' => array(
         'group' => t('Match'),
-        'title' => t('User id of Match'),
-        'help' => t('User id of matches found'),
+        'title' => t('User id of Matchee'),
+        'help' => t('User id of Matchee'),
         'relationship' => array(
           'base' => 'users',
           'field' => 'match_uid',
           'left_field' => 'uid',
           'left_table' => 'users',
           'handler' => 'views_handler_relationship',
-          'label' => t('Match'),
+          'label' => t('Matchee'),
         ),
       ),
       'match_uid_current' => array(
         'real field' => 'match_uid',
         'group' => t('Match'),
-        'title' => t('Match is logged in user'),
-        'help' => t('Filter results so that only the current user is the match'),
+        'title' => t('Matchee is logged in user'),
+        'help' => t('Filter results so that only the current user is the Matchee'),
         'filter' => array(
           'handler' => 'views_handler_filter_user_current',
         ),
@@ -90,17 +90,17 @@ function twoofakind_com_au_views_data() {
           'handler' => 'views_handler_filter_date',
         ),
       ),
-      'viewed' => array(
+      'viewed_uid' => array(
         'group' => t('Match'),
-        'title' => t('Viewed'),
-        'help' => t('Has this Match been viewed?'),
+        'title' => t('Viewed by Matcher'),
+        'help' => t('Has this Match been viewed by the Matcher?'),
         'field' => array(
           'handler' => 'views_handler_field_boolean',
           'click sortable' => TRUE,
         ),
         'filter' => array(
           'handler' => 'views_handler_filter_boolean_operator',
-          'label' => t('Viewed'),
+          'label' => t('Viewed by Matcher'),
           'type' => 'yes-no',
           // use boolean_field = 1 instead of boolean_field <> 0 in WHERE statment
           'use equal' => TRUE,
@@ -109,17 +109,17 @@ function twoofakind_com_au_views_data() {
           'handler' => 'views_handler_sort',
         ),
       ),
-      'viewed' => array(
+      'viewed_match_uid' => array(
         'group' => t('Match'),
-        'title' => t('Viewed'),
-        'help' => t('Has this Match been viewed?'),
+        'title' => t('Viewed by Matchee'),
+        'help' => t('Has this Match been viewed by the Matchee?'),
         'field' => array(
           'handler' => 'views_handler_field_boolean',
           'click sortable' => TRUE,
         ),
         'filter' => array(
           'handler' => 'views_handler_filter_boolean_operator',
-          'label' => t('Viewed'),
+          'label' => t('Viewed by Matchee'),
           'type' => 'yes-no',
           // use boolean_field = 1 instead of boolean_field <> 0 in WHERE statment
           'use equal' => TRUE,
