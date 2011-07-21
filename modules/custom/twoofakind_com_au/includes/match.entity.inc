@@ -82,7 +82,7 @@ function match_count_matches() {
 
   // we want matches for currently logged in user
   $query->propertyCondition('uid', $user->uid, '=');
-  $query->propertyCondition('viewed', '0', '=');
+  $query->propertyCondition('viewed_uid', '0', '=');
   
   // execute
   $result = $query->execute();

@@ -108,6 +108,25 @@ function twoofakind_com_au_views_data() {
         'sort' => array(
           'handler' => 'views_handler_sort',
         ),
+      ),
+      'viewed' => array(
+        'group' => t('Match'),
+        'title' => t('Viewed'),
+        'help' => t('Has this Match been viewed?'),
+        'field' => array(
+          'handler' => 'views_handler_field_boolean',
+          'click sortable' => TRUE,
+        ),
+        'filter' => array(
+          'handler' => 'views_handler_filter_boolean_operator',
+          'label' => t('Viewed'),
+          'type' => 'yes-no',
+          // use boolean_field = 1 instead of boolean_field <> 0 in WHERE statment
+          'use equal' => TRUE,
+        ),
+        'sort' => array(
+          'handler' => 'views_handler_sort',
+        ),
       )
     ),
   );
