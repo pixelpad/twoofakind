@@ -18,7 +18,7 @@ module_load_include('inc', 'twoofakind_com_au', 'includes/wink.entity');
 function twoofakind_com_au_block_view_alter(&$data, $block) {
 
   // modify my matches block
-  if ($block->module == 'views') {
+  if ($block->module == 'views' && !empty($data['subject'])) {
     if ($block->delta == 'matches-block_my_matches') {
       $match_count = match_count_matcher_unviewed_matches();
       $data['subject'] .= " ($match_count)";
