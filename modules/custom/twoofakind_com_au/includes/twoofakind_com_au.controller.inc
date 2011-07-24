@@ -15,3 +15,13 @@ class WinkController extends EntityAPIController{
     
   
 }
+
+class RecentViewController extends EntityAPIController{
+    
+  
+}
+
+class FavouriteController extends EntityAPIController{
+    
+  
+}

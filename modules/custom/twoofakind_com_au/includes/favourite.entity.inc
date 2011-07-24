@@ -2,7 +2,7 @@
 
 /**
  * @file
- * wink entity information and functions
+ * favourite entity information and functions
  */
 
 /******************************************************************************
@@ -10,102 +10,102 @@
  ******************************************************************************/
 
 /**
- * Load a wink
+ * Load a favourite
  *
  * @param $id
- *   Id of wink
+ *   Id of favourite
  * @param $conditions
  *   Conditions you would like to specify
  * @param $reset
  *   A boolean indicating that the internal cache should be reset.
  * 
  * @return
- *   An array of wink objects, indexed by wid or FALSE if no winks found
+ *   An array of favourite objects, indexed by wid or FALSE if no favourites found
  * 
  * @see entity_load()
  */
-function wink_load($wid, $conditions = array(), $reset = FALSE) {
-  $wink = wink_load_multiple(array($wid), $conditions, $reset);
-  return reset($wink);
+function favourite_load($wid, $conditions = array(), $reset = FALSE) {
+  $favourite = favourite_load_multiple(array($wid), $conditions, $reset);
+  return reset($favourite);
 }
 
 /**
- * Load multiple winks
+ * Load multiple favourites
  *
  * @param $wids
- *   An array of wink IDs.
+ *   An array of favourite IDs.
  * @param $conditions
- *   An array of conditions to wink against the {wink} table.
+ *   An array of conditions to favourite against the {favourite} table.
  * @param $reset
  *   A boolean indicating that the internal cache should be reset.
  * 
  * @return
- *   An array of wink objects, indexed by wid or FALSE if no winks found
+ *   An array of favourite objects, indexed by wid or FALSE if no favourites found
  *
  * @see entity_load()
  */
-function wink_load_multiple($wids = array(), $conditions = array(), $reset = FALSE) {
-  return entity_load('wink', $wids, $conditions, $reset);
+function favourite_load_multiple($wids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('favourite', $wids, $conditions, $reset);
 }
 
 /**
- * Load all winks
+ * Load all favourites
  *
  * @param $conditions
- *   An array of conditions to wink against the {wink} table.
+ *   An array of conditions to favourite against the {favourite} table.
  * @param $reset
  *   A boolean indicating that the internal cache should be reset.
  * 
  * @return
- *   An array of wink objects, indexed by pid or FALSE if no winks found
+ *   An array of favourite objects, indexed by pid or FALSE if no favourites found
  *
  * @see entity_load()
  */
-function wink_load_all($conditions = array(), $reset = FALSE) {
-  return wink_load_multiple(FALSE, $conditions, $reset);
+function favourite_load_all($conditions = array(), $reset = FALSE) {
+  return favourite_load_multiple(FALSE, $conditions, $reset);
 }
 
 /**
- * Count un-viewed winks when logged in user is winker
+ * Count un-viewed favourites when logged in user is favourite-er
  * 
  * @return
- *   An integer equal to the number of unviewed winks for winker
+ *   An integer equal to the number of unviewed favourites for favourite-er
  */
-function wink_count_winker_unviewed_winks() {
+function favourite_count_favouriteer_unviewed_favourites() {
   
-  return wink_count_unviewed_winks('uid');
+  return favourite_count_unviewed_favourites('uid');
 }
 
 /**
- * Count un-viewed winks when logged in user is winkee
+ * Count un-viewed favourites when logged in user is favourite-ee
  * 
  * @return
- *   An integer equal to the number of unviewed winks for winkee
+ *   An integer equal to the number of unviewed favourites for favourite-ee
  */
-function wink_count_winkee_unviewed_winks() {
+function favourite_count_favouriteee_unviewed_favourites() {
   
-  return wink_count_unviewed_winks('wink_uid');
+  return favourite_count_unviewed_favourites('favourite_uid');
 }
 
 /**
- * Count un-viewed winks for winker or winkee
+ * Count un-viewed favourites for favourite-er or favourite-ee
  * 
  * @param $field_viewed
  *   Which viewed field to count on
  * 
  * @return
- *   An integer equal to the number of unviewed winks for currently logged in user
+ *   An integer equal to the number of unviewed favourites for currently logged in user
  */
-function wink_count_unviewed_winks($field_uid = 'uid') {
+function favourite_count_unviewed_favourites($field_uid = 'uid') {
   
   global $user;
   
   // set up the query   
   $query = new EntityFieldQuery();
-  // we only want winks
-  $query->entityCondition('entity_type', 'wink', '=');
+  // we only want favourites
+  $query->entityCondition('entity_type', 'favourite', '=');
 
-  // we want winks for currently logged in user
+  // we want favourites for currently logged in user
   // determine the field based on the viewed field
   $query->propertyCondition($field_uid, $user->uid, '=');
   $query->propertyCondition('viewed', '0', '=');
@@ -114,8 +114,8 @@ function wink_count_unviewed_winks($field_uid = 'uid') {
   $result = $query->execute();
 
   // return result
-  if (isset($result['wink'])) {
-    return count($result['wink']);
+  if (isset($result['favourite'])) {
+    return count($result['favourite']);
   }
   
   return 0;

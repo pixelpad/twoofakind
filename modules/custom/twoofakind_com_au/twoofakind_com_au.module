@@ -7,6 +7,8 @@
 
 module_load_include('inc', 'twoofakind_com_au', 'includes/match.entity');
 module_load_include('inc', 'twoofakind_com_au', 'includes/wink.entity');
+module_load_include('inc', 'twoofakind_com_au', 'includes/recent_view.entity');
+module_load_include('inc', 'twoofakind_com_au', 'includes/favourite.entity');
 
 /******************************************************************************
  * Block functions
@@ -270,6 +272,40 @@ function twoofakind_com_au_entity_info() {
     'label' => t('Wink'),
     'controller class' => 'WinkController',
     'base table' => 'winks',
+    'fieldable' => FALSE,
+    'exportable' => FALSE,
+    'entity keys' => array(
+      'id' => 'wid',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'static cache' => TRUE,
+//    'bundles' => array(),
+//    'bundle keys' => array(
+//      'bundle' => 'name',
+//    ),
+  );
+  $return['recent_view'] = array(
+    'label' => t('Recent View'),
+    'controller class' => 'RecentViewController',
+    'base table' => 'recent_views',
+    'fieldable' => FALSE,
+    'exportable' => FALSE,
+    'entity keys' => array(
+      'id' => 'wid',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'static cache' => TRUE,
+//    'bundles' => array(),
+//    'bundle keys' => array(
+//      'bundle' => 'name',
+//    ),
+  );
+  $return['favourite'] = array(
+    'label' => t('Favourite'),
+    'controller class' => 'FavouriteController',
+    'base table' => 'favourites',
     'fieldable' => FALSE,
     'exportable' => FALSE,
     'entity keys' => array(
