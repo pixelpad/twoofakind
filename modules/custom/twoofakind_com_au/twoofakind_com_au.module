@@ -292,7 +292,7 @@ function twoofakind_com_au_entity_info() {
     'fieldable' => FALSE,
     'exportable' => FALSE,
     'entity keys' => array(
-      'id' => 'wid',
+      'id' => 'vid',
     ),
     'label callback' => 'entity_class_label',
     'uri callback' => 'entity_class_uri',
@@ -309,7 +309,7 @@ function twoofakind_com_au_entity_info() {
     'fieldable' => FALSE,
     'exportable' => FALSE,
     'entity keys' => array(
-      'id' => 'wid',
+      'id' => 'fid',
     ),
     'label callback' => 'entity_class_label',
     'uri callback' => 'entity_class_uri',

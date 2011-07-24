@@ -140,7 +140,7 @@ function twoofakind_com_au_views_data() {
         'field' => 'wid',
         'title' => t('Wink'),
         'help' => t('Winks between users'),
-        'weight' => 100,
+        'weight' => 101,
       ),
     ),
     'wid' => array(
@@ -235,12 +235,12 @@ function twoofakind_com_au_views_data() {
   // recent_views
   $data['recent_views'] = array(
     'table' => array(
-      'group' => t('recent_view'),
+      'group' => t('Recent View'),
       'base' => array(
         'field' => 'vid',
         'title' => t('Recent View'),
         'help' => t('Recent views of one user to another'),
-        'weight' => 100,
+        'weight' => 102,
       ),
     ),
     'vid' => array(
@@ -284,7 +284,7 @@ function twoofakind_com_au_views_data() {
         'left_field' => 'uid',
         'left_table' => 'users',
         'handler' => 'views_handler_relationship',
-        'label' => t('Recent View recipient'),
+        'label' => t('Recently Viewed'),
       ),
     ),
     'recent_view_uid_current' => array(
@@ -299,7 +299,7 @@ function twoofakind_com_au_views_data() {
     'created' => array(
       'group' => t('Recent View'),
       'title' => t('Created'),
-      'help' => t('The date this user was viewed.'),
+      'help' => t('The date the user was viewed.'),
       'field' => array(
         'handler' => 'views_handler_field_date',
         'click sortable' => TRUE,
@@ -313,7 +313,7 @@ function twoofakind_com_au_views_data() {
     ),
     'viewed' => array(
       'group' => t('Recent View'),
-      'title' => t('Viewed by Recent View recipient'),
+      'title' => t('Viewed by Recently Viewed'),
       'help' => t('Has this Recent View been viewed / acknolowedged by the user recently viewed?'),
       'field' => array(
         'handler' => 'views_handler_field_boolean',
@@ -340,7 +340,7 @@ function twoofakind_com_au_views_data() {
         'field' => 'fid',
         'title' => t('Favourite'),
         'help' => t('Users marking each other as favourites'),
-        'weight' => 100,
+        'weight' => 103,
       ),
     ),
     'fid' => array(
@@ -355,7 +355,7 @@ function twoofakind_com_au_views_data() {
     'uid' => array(
       'group' => t('Favourite'),
       'title' => t('Uid of favourite-er'),
-      'help' => t('User id of person marking another as a favourite'),
+      'help' => t('User id of person marking the other as a favourite'),
       'relationship' => array(
         'base' => 'users',
         'field' => 'uid',
