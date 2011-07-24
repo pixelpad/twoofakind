@@ -18,21 +18,34 @@ module_load_include('inc', 'twoofakind_com_au', 'includes/favourite.entity');
  * Implements hook_block_view_alter().
  */
 function twoofakind_com_au_block_view_alter(&$data, $block) {
-//dsm($block->delta);
+  
   // modify my matches block
   if ($block->module == 'views' && !empty($data['subject'])) {
     if ($block->delta == 'matches-block_my_matches') {
-      $match_count = match_count_matcher_unviewed_matches();
-      $data['subject'] .= " ($match_count)";
+//dsm($data);
+      $count = match_count_matcher_unviewed_matches();
+      $data['subject'] .= " ($count)";
     } elseif ($block->delta == 'match_me-block_match_me') {
-      $match_count = match_count_matchee_unviewed_matches();
-      $data['subject'] .= " ($match_count)";
+      $count = match_count_matchee_unviewed_matches();
+      $data['subject'] .= " ($count)";
     } elseif ($block->delta == 'winks-block_winked_at') {
-      $match_count = wink_count_winker_unviewed_winks();
-      $data['subject'] .= " ($match_count)";
-    } elseif ($block->delta == 'winks_received-block_winks_received') {
-      $match_count = wink_count_winkee_unviewed_winks();
-      $data['subject'] .= " ($match_count)";
+      $count = wink_count_winker_unviewed_winks();
+      $data['subject'] .= " ($count)";
+    } elseif ($block->delta == 'winks_received-block_w_rec') {
+      $count = wink_count_winkee_unviewed_winks();
+      $data['subject'] .= " ($count)";
+    } elseif ($block->delta == 'favourites-block_fav') {
+      $count = favourite_count_favouriteer_unviewed_favourites();
+      $data['subject'] .= " ($count)";
+    } elseif ($block->delta == 'favourites_received-block_fr') {
+      $count = wink_count_winkee_unviewed_winks();
+      $data['subject'] .= " ($count)";
+    } elseif ($block->delta == 'recent_views-block_rec_viewed') {
+      $count = wink_count_winkee_unviewed_winks();
+      $data['subject'] .= " ($count)";
+    } elseif ($block->delta == 'recent_views_received-block_rvr') {
+      $count = wink_count_winkee_unviewed_winks();
+      $data['subject'] .= " ($count)";
     }
   }
   
