@@ -16,7 +16,7 @@ module_load_include('inc', 'twoofakind_com_au', 'includes/wink.entity');
  * Implements hook_block_view_alter().
  */
 function twoofakind_com_au_block_view_alter(&$data, $block) {
-
+//dsm($block->delta);
   // modify my matches block
   if ($block->module == 'views' && !empty($data['subject'])) {
     if ($block->delta == 'matches-block_my_matches') {
@@ -40,8 +40,8 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
  * Implementation of hook_block_info()
  */
 function twoofakind_com_au_block_info() {
-  $blocks['tok-last-msg'] = array(
-    'info' => t('Two of a kind: Last messages'),
+  $blocks['twoofakind_privatemsg_messages'] = array(
+    'info' => t('Two of a kind : PrivateMsg : Recent messages'),
   );
   return $blocks;
 }
@@ -52,11 +52,11 @@ function twoofakind_com_au_block_info() {
  * note: http://drupal.org/project/efq_views
  * wasn't stable enough to be used (04/2011)
  */
-function twoofakind_com_au_block_view($delta='') {
+function twoofakind_com_au_block_view($delta = '') {
   $block = array();
   switch ($delta) {
-    case 'tok-last-msg':
-      $block['content'] = tok_last_5_msgs(); //wink_last_winks(FALSE);
+    case 'twoofakind_privatemsg_messages':
+      $block = _twoofakind_com_au_recent_messages();
       break;
   }
   return $block;
@@ -70,7 +70,7 @@ function twoofakind_com_au_block_view($delta='') {
  * (at least not in D7).
  * 
  */
-function tok_last_5_msgs() {
+function _twoofakind_com_au_recent_messages() {
   global $user;
 
   // Generate the query to load the messages.
@@ -87,17 +87,38 @@ function tok_last_5_msgs() {
   $list = array();
   foreach ($result as $thread) {
     // Generate a link with the subject as title that points to the view message page.
-    $list[] = l($thread->subject, 'messages/view/' . $thread->thread_id);
+    // limit the subject to a certain number of characters
+    $alter = array(
+      'max_length' => 150,
+      'word_boundary' => TRUE,
+      'ellipsis' => '...',
+      'html' => FALSE
+    );
+    $thread_subject = views_trim_text($alter, $thread->subject);
+    // work out if the message has been read or not
+    $options = array();
+    if ($thread->is_new) {
+      $options['attributes']['class'] = 'unread';
+    }
+    $list[] = l($thread_subject, 'messages/view/' . $thread->thread_id, $options);
   }
   
   // Display list as a themed item_list.
-  $nmcount = privatemsg_unread_count();
-  return theme('item_list', array(
+  $count = privatemsg_unread_count();
+  
+  // put the block together
+  $block = array(
+    'subject' => l(t('Messages') . " ($count)", 'messages')
+  );
+  $block['content'] = theme('item_list', array(
       'items' => $list,
-      'title' => l(t('Messages') . " ($nmcount)", 'messages'),
       'type' => 'ul',
+      'attributes' => array(
+        'class' => 'menu'
+      )
     )
   );
+  return $block;
 
 }
 

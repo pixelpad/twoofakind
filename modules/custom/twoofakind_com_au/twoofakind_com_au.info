@@ -4,3 +4,4 @@ description = Site module
 core = 7.x
 version = 0.1
 files[] = includes/twoofakind_com_au.controller.inc
+dependencies[] = views
