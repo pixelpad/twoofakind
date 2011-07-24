@@ -118,6 +118,14 @@ function _twoofakind_com_au_recent_messages() {
       )
     )
   );
+  $block['content'] .= '<div class="more-link">';
+  $options = array(
+    'attributes' => array(
+      'title' => 'VIew more messages'
+    )
+  );
+  $block['content'] .= l(t('more'), 'messages', $options);
+  $block['content'] .= '</div>';
   return $block;
 
 }
