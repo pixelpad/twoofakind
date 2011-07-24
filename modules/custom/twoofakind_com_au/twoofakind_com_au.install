@@ -112,6 +112,100 @@ function twoofakind_com_au_schema() {
     'primary key' => array('wid'),
   );
   
+  // recent views
+  $schema['recent_views'] = array (
+    'description' => 'Table for recent_views',
+    'fields' => array(
+      'vid' => array(
+        'description' => 'Primary key for recent_views',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the viewer',
+      ),
+      'recent_view_uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the person viewed',
+      ),
+      'created' => array(
+        'mysql_type' => 'timestamp',
+        'pgsql_type' => 'timestamp without time zone',
+        'not null' => TRUE,
+        'description' => 'Date the user was viewed',
+      ),
+      'viewed' => array(
+        'mysql_type' => 'boolean',
+        'pgsql_type' => 'boolean',
+        'not null' => TRUE,
+        'default' => '0',
+        'description' => 'Whether or not this recent view has been acknowledged / viewed by the person being viewed',
+      ),
+    ),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'recent_view_uid' => array('recent_view_uid'),
+    ),
+    'foreign keys' => array(
+      'uid' => array('users' => 'uid'),
+      'recent_view_uid' => array('users' => 'uid'),
+    ), 
+    'primary key' => array('vid'),
+  );
+  
+  // favourites
+  $schema['favourites'] = array (
+    'description' => 'Table for favourites',
+    'fields' => array(
+      'fid' => array(
+        'description' => 'Primary key for favourites',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the person favourite\'ing',
+      ),
+      'favourite_uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the person who was favourite\'ed',
+      ),
+      'created' => array(
+        'mysql_type' => 'timestamp',
+        'pgsql_type' => 'timestamp without time zone',
+        'not null' => TRUE,
+        'description' => 'Date the favourite was created',
+      ),
+      'viewed' => array(
+        'mysql_type' => 'boolean',
+        'pgsql_type' => 'boolean',
+        'not null' => TRUE,
+        'default' => '0',
+        'description' => 'Whether or not this favourite\'ing has been acknowledged / viewed by the person being favourited',
+      ),
+    ),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'favourite_uid' => array('favourite_uid'),
+    ),
+    'foreign keys' => array(
+      'uid' => array('users' => 'uid'),
+      'favourite_uid' => array('users' => 'uid'),
+    ), 
+    'primary key' => array('fid'),
+  );
+  
   return $schema;
 }
 
@@ -155,5 +249,23 @@ function twoofakind_com_au_update_7002() {
   
   // add wink table
   db_create_table('winks', $schema['winks']);
+  
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * This update adds the recent views and favourites tables
+ */
+function twoofakind_com_au_update_7003() {
+  
+  // grab the schema
+  $schema = twoofakind_com_au_schema();
+  
+  // add recent views table
+  db_create_table('recent_views', $schema['recent_views']);
+  
+  // add favourites table
+  db_create_table('favourites', $schema['favourites']);
   
 }
