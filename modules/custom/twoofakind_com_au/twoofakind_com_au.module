@@ -164,6 +164,12 @@ function twoofakind_com_au_block_view($delta = '') {
 /**
  * generates a block "Messages (N)" with the last 5 messages received by the current user
  * N is the number of new messages
+ * 
+ * NOTE : It would be nicer if we could get the username to be used instead of the email
+ * subject for consistency with other blocks. May be too much overhead at this time so 
+ * will wait until it is requested by client. Would also be difficult to get the sex.
+ * The only way might be to expose the messages to views and do the blocks in a similar way
+ * TOO MUCH EFFORT FOR THE TIME BEING
  *
  * this was inspired by http://drupal.org/node/624528 but that example is not functional
  * (at least not in D7).
@@ -195,7 +201,11 @@ function _twoofakind_com_au_recent_messages() {
     );
     $thread_subject = views_trim_text($alter, $thread->subject);
     // work out if the message has been read or not
-    $options = array();
+    $options = array(
+      'attributes' => array(
+        'title' => $thread->subject
+      )
+    );
     if ($thread->is_new) {
       $options['attributes']['class'] = 'unread';
     }
@@ -206,9 +216,17 @@ function _twoofakind_com_au_recent_messages() {
   $count = privatemsg_unread_count();
   
   // put the block together
-  $block = array(
-    'subject' => l(t('Messages') . " ($count)", 'messages')
+  // set up title as link
+  $subject = t('Messages') . " ($count)";
+  $options = array(
+    'attributes' => array(
+      'title' => $subject
+    )
   );
+  $block = array(
+    'subject' => l($subject, 'messages', $options)
+  );
+  // add the list to the content
   $block['content'] = theme('item_list', array(
       'items' => $list,
       'type' => 'ul',
@@ -217,6 +235,7 @@ function _twoofakind_com_au_recent_messages() {
       )
     )
   );
+  // and a more link to the content
   $block['content'] .= '<div class="more-link">';
   $options = array(
     'attributes' => array(
