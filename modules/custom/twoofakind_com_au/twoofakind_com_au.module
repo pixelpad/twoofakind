@@ -100,48 +100,21 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
 }
 
 /**
- * Implements hook_block_view_alter().
- */
-function _twoofakind_com_au_subject_more(&$data) {
-  
-  // grab view information
-  $view_path = false;
-  if (isset($data['content']['#views_contextual_links_info']['views_ui']['view_name'])) {
-
-    // grab the view name and display
-    $view_name = $data['content']['#views_contextual_links_info']['views_ui']['view_name'];
-    $view = views_get_view($view_name);
-
-    // from the view grab the page path
-    if ($view) {
-      foreach ($view->display as $display) {
-        if ($display->display_plugin != 'page' || !array_key_exists('path', $display->display_options)) {
-          continue;
-        }
-        $view_path = $display->display_options['path'];
-        break;
-      }
-    }
-  }
-  
-  // did we find a view path
-  if ($view_path) {
-    $options = array(
-      'attributes' => array(
-        'title' => $data['subject']
-      )
-    );
-    $data['subject'] = l($data['subject'], $view_path, $options);
-  }
-}
-
-/**
  * Implementation of hook_block_info()
  */
 function twoofakind_com_au_block_info() {
+  $blocks = array();
+  
+  // recent messages block
   $blocks['twoofakind_privatemsg_messages'] = array(
     'info' => t('Two of a kind : PrivateMsg : Recent messages'),
   );
+  
+  // profile block
+  $blocks['twoofakind_profile'] = array(
+    'info' => t('Two of a kind : Profile block'),
+  );
+  
   return $blocks;
 }
 
@@ -154,28 +127,37 @@ function twoofakind_com_au_block_info() {
 function twoofakind_com_au_block_view($delta = '') {
   $block = array();
   switch ($delta) {
+    
     case 'twoofakind_privatemsg_messages':
-      $block = _twoofakind_com_au_recent_messages();
+      $block = _twoofakind_com_au_block_recent_messages();
+      break;
+    
+    case 'twoofakind_profile':
+      $block = _twoofakind_com_au_block_profile();
       break;
   }
   return $block;
 }
 
 /**
- * generates a block "Messages (N)" with the last 5 messages received by the current user
- * N is the number of new messages
+ * Render the recent messages block
  * 
- * NOTE : It would be nicer if we could get the username to be used instead of the email
+ * Grabs up to 5 most recent messages and adds the unread count to the block subject
+ * 
+ * this was inspired by http://drupal.org/node/624528 but that example is not functional
+ * (at least not in D7).
+ * 
+ * @todo
+ * It would be nicer if we could get the username to be used instead of the email
  * subject for consistency with other blocks. May be too much overhead at this time so 
  * will wait until it is requested by client. Would also be difficult to get the sex.
  * The only way might be to expose the messages to views and do the blocks in a similar way
  * TOO MUCH EFFORT FOR THE TIME BEING
- *
- * this was inspired by http://drupal.org/node/624528 but that example is not functional
- * (at least not in D7).
  * 
+ * @return
+ *   A completed block array with subject and content
  */
-function _twoofakind_com_au_recent_messages() {
+function _twoofakind_com_au_block_recent_messages() {
   global $user;
 
   // Generate the query to load the messages.
@@ -212,7 +194,7 @@ function _twoofakind_com_au_recent_messages() {
     $list[] = l($thread_subject, 'messages/view/' . $thread->thread_id, $options);
   }
   
-  // Display list as a themed item_list.
+  // grab count of unread messages
   $count = privatemsg_unread_count();
   
   // put the block together
@@ -246,6 +228,69 @@ function _twoofakind_com_au_recent_messages() {
   $block['content'] .= '</div>';
   return $block;
 
+}
+
+/**
+ * Render the profile block
+ * 
+ * Simple block that will output picture and links
+ * 
+ * @return
+ *   A completed block array with subject and content
+ */
+function _twoofakind_com_au_block_profile() {
+  
+  global $user;
+  
+  $block = array();
+  
+  // empty subject
+  $block['subject'] = '<none>';
+  
+  // initialise content
+  $content = array();
+  
+  // grab the picture of the user
+  $content[] = theme('user_picture', array('account' => $user));
+  
+  // grab the user profile menu
+  $menu_minified = array();
+  $options = array(
+    'attributes' => array(
+      'title' => ''
+    )
+  );
+  $menu_items = menu_tree('menu-user-profile-block');
+  foreach ($menu_items as $menu_item) {
+    
+    // only process actual menu items
+    if (is_array($menu_item) && !array_key_exists('#title', $menu_item)) {
+      continue;
+    }
+    
+    if (isset($menu_item['#localized_options']['attributes']['title'])) {
+      $options['attributes']['title'] = $menu_item['#localized_options']['attributes']['title'];
+    } else {
+      $options['attributes']['title'] = $menu_item['#title'];
+    }
+    $menu_minified[] = l($menu_item['#title'], $menu_item['#href'], $options);
+  }
+  
+  // add the menu to the content
+  $content[] = theme('item_list', array(
+      'items' => $menu_minified,
+      'type' => 'ul',
+//      'attributes' => array(
+//        'class' => 'menu'
+//      )
+    )
+  );
+  
+  // finalise the content
+  $block['content'] = implode("\n", $content);
+  
+  return $block;
+  
 }
 
 /******************************************************************************
@@ -436,4 +481,44 @@ function twoofakind_com_au_entity_info() {
 //    ),
   );
   return $return;
+}
+
+/******************************************************************************
+ * Utility functions
+ ******************************************************************************/
+
+/**
+ * 
+ */
+function _twoofakind_com_au_subject_more(&$data) {
+  
+  // grab view information
+  $view_path = false;
+  if (isset($data['content']['#views_contextual_links_info']['views_ui']['view_name'])) {
+
+    // grab the view name and display
+    $view_name = $data['content']['#views_contextual_links_info']['views_ui']['view_name'];
+    $view = views_get_view($view_name);
+
+    // from the view grab the page path
+    if ($view) {
+      foreach ($view->display as $display) {
+        if ($display->display_plugin != 'page' || !array_key_exists('path', $display->display_options)) {
+          continue;
+        }
+        $view_path = $display->display_options['path'];
+        break;
+      }
+    }
+  }
+  
+  // did we find a view path
+  if ($view_path) {
+    $options = array(
+      'attributes' => array(
+        'title' => $data['subject']
+      )
+    );
+    $data['subject'] = l($data['subject'], $view_path, $options);
+  }
 }
