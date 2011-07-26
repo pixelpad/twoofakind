@@ -19,36 +19,122 @@ module_load_include('inc', 'twoofakind_com_au', 'includes/favourite.entity');
  */
 function twoofakind_com_au_block_view_alter(&$data, $block) {
   
-  // modify my matches block
+  // modify view blocks that have a subject
   if ($block->module == 'views' && !empty($data['subject'])) {
+    
+    // add any count information to the subject
+    // and make the subject a link to the page
+    
     if ($block->delta == 'matches-block_my_matches') {
-//dsm($data);
+      
+      // my matches
+      
       $count = match_count_matcher_unviewed_matches();
       $data['subject'] .= " ($count)";
-    } elseif ($block->delta == 'match_me-block_match_me') {
+      _twoofakind_com_au_subject_more($data);
+    }
+    elseif ($block->delta == 'match_me-block_match_me') {
+      
+      // match me
+      
       $count = match_count_matchee_unviewed_matches();
       $data['subject'] .= " ($count)";
-    } elseif ($block->delta == 'winks-block_winked_at') {
-      $count = wink_count_winker_unviewed_winks();
-      $data['subject'] .= " ($count)";
-    } elseif ($block->delta == 'winks_received-block_w_rec') {
+      _twoofakind_com_au_subject_more($data);
+    }
+    elseif ($block->delta == 'winks-block_winked_at') {
+      
+      // winked at
+
+      // don't need count for this one
+      // however, this is how it would be done
+//      $count = wink_count_winker_unviewed_winks();
+//      $data['subject'] .= " ($count)";
+      _twoofakind_com_au_subject_more($data);
+    }
+    elseif ($block->delta == 'winks_received-block_w_rec') {
+      
+      // winks received
+      
       $count = wink_count_winkee_unviewed_winks();
       $data['subject'] .= " ($count)";
-    } elseif ($block->delta == 'favourites-block_fav') {
-      $count = favourite_count_favouriteer_unviewed_favourites();
+      _twoofakind_com_au_subject_more($data);
+    }
+    elseif ($block->delta == 'favourites-block_fav') {
+      
+      // favourites
+      
+      // don't need count for this one
+      // however, this is how it would be done
+//      $count = favourite_count_favouriteer_unviewed_favourites();
+//      $data['subject'] .= " ($count)";
+      _twoofakind_com_au_subject_more($data);
+    }
+    elseif ($block->delta == 'favourites_received-block_fr') {
+      
+      // favourites received
+      
+      $count = favourite_count_favouriteee_unviewed_favourites();
       $data['subject'] .= " ($count)";
-    } elseif ($block->delta == 'favourites_received-block_fr') {
-      $count = wink_count_winkee_unviewed_winks();
-      $data['subject'] .= " ($count)";
-    } elseif ($block->delta == 'recent_views-block_rec_viewed') {
-      $count = wink_count_winkee_unviewed_winks();
-      $data['subject'] .= " ($count)";
-    } elseif ($block->delta == 'recent_views_received-block_rvr') {
-      $count = wink_count_winkee_unviewed_winks();
-      $data['subject'] .= " ($count)";
+      _twoofakind_com_au_subject_more($data);
+    }
+    elseif ($block->delta == 'recent_views-block_rec_viewed') {
+      
+      // recently viewed
+      
+      // don't need count for this one
+      // however, this is how it would be done
+//      $count = recent_view_count_recent_viewer_unviewed_recent_views();
+//      $data['subject'] .= " ($count)";
+      _twoofakind_com_au_subject_more($data);
+    }
+    elseif ($block->delta == 'recent_views_received-block_rvr') {
+      
+      // recently viewed received
+      
+      // don't need count for this one
+      // however, this is how it would be done
+//      $count = recent_view_count_recent_viewee_unviewed_recent_views();
+//      $data['subject'] .= " ($count)";
+      _twoofakind_com_au_subject_more($data);
     }
   }
   
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function _twoofakind_com_au_subject_more(&$data) {
+  
+  // grab view information
+  $view_path = false;
+  if (isset($data['content']['#views_contextual_links_info']['views_ui']['view_name'])) {
+
+    // grab the view name and display
+    $view_name = $data['content']['#views_contextual_links_info']['views_ui']['view_name'];
+    $view = views_get_view($view_name);
+
+    // from the view grab the page path
+    if ($view) {
+      foreach ($view->display as $display) {
+        if ($display->display_plugin != 'page' || !array_key_exists('path', $display->display_options)) {
+          continue;
+        }
+        $view_path = $display->display_options['path'];
+        break;
+      }
+    }
+  }
+  
+  // did we find a view path
+  if ($view_path) {
+    $options = array(
+      'attributes' => array(
+        'title' => $data['subject']
+      )
+    );
+    $data['subject'] = l($data['subject'], $view_path, $options);
+  }
 }
 
 /**
