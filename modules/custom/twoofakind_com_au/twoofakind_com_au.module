@@ -301,92 +301,152 @@ function _twoofakind_com_au_block_profile() {
  * Implementation of hook_form_alter()
  */
 function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
+
+  switch ($form_id) {
+    
+    case 'views_exposed_form':
+      _twoofakind_com_au_form_views_exposed_form($form, $form_state);
+      break;
+    
+    case 'user_profile_form':
+      _twoofakind_com_au_form_user_profile_form($form, $form_state);
+      break;
+  }
+}
+
+/**
+ * Alter the views exposed form
+ * 
+ * Adding users match criteria to the form
+ * if no criteria has been entered manually
+ * 
+ * @param
+ *   A form
+ * 
+ * @param
+ *   And it's for  state
+ */
+function _twoofakind_com_au_form_views_exposed_form(&$form, &$form_state) {
   
   global $user;
   
-  if ($form_id == 'views_exposed_form') {
+  // wrap the whole form in a div
+  $form['#prefix'] = '<div id="matches_form">';
+  $form['#suffix'] = '</div>';
 
-    // wrap the whole form in a div
-    $form['#prefix'] = '<div id="matches_form">';
-    $form['#suffix'] = '</div>';
+  // check if we're clearing
+  if (isset($_GET['op']) && $_GET['op'] == 'Clear') {
+    // we are, don't populate from match criteria
+    // and add a value to the session to indicate this
+    $_SESSION['FormClear'] = TRUE;
+    return;
+  }
 
-    // check if we're clearing
-    if (isset($_GET['op']) && $_GET['op'] == 'Clear') {
-      // we are, don't populate from match criteria
-      // and add a value to the session to indicate this
-      $_SESSION['FormClear'] = TRUE;
-      return;
+  // check the session for clear value
+  // I'm going to retain the clear value for the remainder of the session
+  // otherwise with each load match criteria will be reinstated
+  if (isset($_SESSION['FormClear'])) {
+    return;
+  }
+
+  // grab the match criteria of the currently logged in user
+  // if any exist
+  $user_complete = (array) user_load($user->uid);
+  foreach ($user_complete as $key => $data) {
+
+    // we only want fields data
+    // and only those that pertain to matches
+    if (strpos($key, 'field_match') === false) {
+      continue;
     }
-    
-    // check the session for clear value
-    // I'm going to retain the clear value for the remainder of the session
-    // otherwise with each load match criteria will be reinstated
-    if (isset($_SESSION['FormClear'])) {
-      return;
+
+    // create the field key for the match
+    // special treatment for location
+    if ($key == 'field_match_user_location') {
+      $search_key = 'city';
+    } else {
+      $search_key = str_replace('field_match', 'field', $key) . '_value';
     }
 
-    // grab the match criteria of the currently logged in user
-    // if any exist
-    $user_complete = (array) user_load($user->uid);
-    foreach ($user_complete as $key => $data) {
-      
-      // we only want fields data
-      // and only those that pertain to matches
-      if (strpos($key, 'field_match') === false) {
-        continue;
-      }
+    // now, if the search key value is empty (in the form state)
+    // populate it with the value from the users match criteria
+    if (array_key_exists($search_key, $form)) {
 
-      // create the field key for the match
-      // special treatment for location
-      if ($key == 'field_match_user_location') {
-        $search_key = 'city';
-      } else {
-        $search_key = str_replace('field_match', 'field', $key) . '_value';
-      }
+      // check to see if there is a value in form_state
+      if (!array_key_exists($search_key, $form_state['input']) || empty($form_state['input'][$search_key])) {
 
-      // now, if the search key value is empty (in the form state)
-      // populate it with the value from the users match criteria
-      if (array_key_exists($search_key, $form)) {
+        // form_state value for this field is empty
+        // look for a corresponding value in match criteria
+        if (!empty($data[LANGUAGE_NONE])) {
 
-        // check to see if there is a value in form_state
-        if (!array_key_exists($search_key, $form_state['input']) || empty($form_state['input'][$search_key])) {
-
-          // form_state value for this field is empty
-          // look for a corresponding value in match criteria
-          if (!empty($data[LANGUAGE_NONE])) {
-            
-            // we have match criteria
-            // process the data from the user array format
-            // to that which form state uses
-            $data_formatted = array();
-            $data_is_text = FALSE;
-            foreach ($data[LANGUAGE_NONE] as $value) {
-              $data_formatted[] = $value['value'];
-              if (array_key_exists('format', $value) || array_key_exists('safe_value', $value)) {
-                $data_is_text = TRUE;
-              }
+          // we have match criteria
+          // process the data from the user array format
+          // to that which form state uses
+          $data_formatted = array();
+          $data_is_text = FALSE;
+          foreach ($data[LANGUAGE_NONE] as $value) {
+            $data_formatted[] = $value['value'];
+            if (array_key_exists('format', $value) || array_key_exists('safe_value', $value)) {
+              $data_is_text = TRUE;
             }
+          }
 
-            // now plug the values in to the form_state
-            if ($data_is_text) {
-              
-              // treat text data differently to the others
-              $form_state['input'][$search_key] = $data_formatted[0];
-              $form_state['view']->exposed_input[$search_key] = $data_formatted[0];
-              $form[$search_key]['#default_value'] = $data_formatted[0];
-              $form[$search_key]['#value'] = $data_formatted[0];
-              
-            } else {
-              $form_state['input'][$search_key] = $data_formatted;
-              $form_state['view']->exposed_input[$search_key] = $data_formatted;
-              $form[$search_key]['#default_value'] = $data_formatted;
-              $form[$search_key]['#value'] = $data_formatted;
-            } 
+          // now plug the values in to the form_state
+          if ($data_is_text) {
+
+            // treat text data differently to the others
+            $form_state['input'][$search_key] = $data_formatted[0];
+            $form_state['view']->exposed_input[$search_key] = $data_formatted[0];
+            $form[$search_key]['#default_value'] = $data_formatted[0];
+            $form[$search_key]['#value'] = $data_formatted[0];
+
+          } else {
+            $form_state['input'][$search_key] = $data_formatted;
+            $form_state['view']->exposed_input[$search_key] = $data_formatted;
+            $form[$search_key]['#default_value'] = $data_formatted;
+            $form[$search_key]['#value'] = $data_formatted;
           } 
-        }
+        } 
       }
     }
   }
+}
+
+/**
+ * Alter the user profile form
+ * 
+ * Adding some headings and text to user profile form
+ * and collapsing (by default) the pvt messages fieldset
+ * 
+ * @param
+ *   A form
+ * 
+ * @param
+ *   And it's for  state
+ */
+function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
+  
+  // add some headings and text
+  // profile
+  $markup = array();
+  $markup[] = '<h2>Profile information<a name="profile">&nbsp;</a></h2>';
+  $markup[] = '<p>Please enter your profile information.</p>';
+  $form['profile_help'] = array(
+    '#markup' => implode("\n", $markup),
+    '#weight' => -1000
+  );
+  // match criteria
+  $markup = array();
+  $markup[] = '<h2>Match criteria<a name="match">&nbsp;</a></h2>';
+  $markup[] = '<p>Please enter your match criteria.</p>';
+  $form['match_help'] = array(
+    '#markup' => implode("\n", $markup),
+    '#weight' => 1
+  );
+  
+  // collapse the pvt messages fieldset
+  $form['privatemsg']['#collapsed'] = TRUE;
+  
 }
 
 /******************************************************************************
