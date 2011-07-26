@@ -90,11 +90,9 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
     elseif ($block->delta == 'recent_views_received-block_rvr') {
       
       // recently viewed received
-      
-      // don't need count for this one
-      // however, this is how it would be done
-//      $count = recent_view_count_recent_viewee_unviewed_recent_views();
-//      $data['subject'] .= " ($count)";
+
+      $count = recent_view_count_recent_viewee_unviewed_recent_views();
+      $data['subject'] .= " ($count)";
       _twoofakind_com_au_subject_more($data);
     }
   }
