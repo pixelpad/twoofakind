@@ -326,7 +326,7 @@ function theme_ds_wink_field($field) {
 
   // Put together text for link
   if (isset($field['properties']['entity_render_key']) && isset($field['entity']->{$field['properties']['entity_render_key']})) {
-    $output = sprintf(TWOOFAKIND_TITLE_WINK, '');
+    $output = 'Wink';
   } else {
     $output = FALSE;
   }
