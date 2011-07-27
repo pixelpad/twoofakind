@@ -626,10 +626,47 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
         'entity_render_key' => 'name',
       )
     );
+    
+    // age
+    $fields['age'] = array(
+      'title' => t('Age'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|user_list', 'user|user_list_block'),
+      'function' => 'theme_ds_age_field'
+    );
   }
 
   return array($entity_type => $fields);
 
+}
+
+/**
+ * Theme field for age DS field
+ *
+ * @param $field
+ *   The field to be output
+ *
+ * @return 
+ *   The rendered field
+ *
+ * @see hook_ds_fields_info()
+ */
+function theme_ds_age_field($field) {
+  
+  // initialise output
+  $output = '';
+  
+  // look for DOB field
+  if (isset($field['entity']->field_dob[LANGUAGE_NONE][0]['value'])) {
+    
+    $dob = strtotime($field['entity']->field_dob[LANGUAGE_NONE][0]['value']);
+    $now = time();
+    $output = sprintf("%d", floor(abs($now-$dob)/60/60/24/365));
+    
+  }
+
+  return $output;
+  
 }
 
 /******************************************************************************
