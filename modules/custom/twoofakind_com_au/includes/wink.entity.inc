@@ -5,8 +5,129 @@
  * wink entity information and functions
  */
 
+/**
+ * Required constants
+ */
+
+if (!defined('TWOOFAKIND_PATH_WINK')) {
+  define('TWOOFAKIND_PATH_WINK', 'wink');
+  define('TWOOFAKIND_TITLE_WINK', 'Wink at %s');
+  define('TWOOFAKIND_MSG_WINK', 'Winked at %s');
+}
+
 /******************************************************************************
- * Entity functions
+ * Menu functions
+ ******************************************************************************/
+
+/**
+ * Add wink menu items
+ *
+ * @param $items
+ *   Menu items array
+ * 
+ * @see hook_menu()
+ */
+function _wink_menu(&$items) {
+
+  $items[TWOOFAKIND_PATH_WINK . '/%/%user'] = array(
+    'title'            => 'Wink',
+    'description'      => 'Wink at this user',
+    'page callback'    => '_wink_wink',
+    'page arguments'   => array(1,2),
+    'access callback'  => 'user_access',
+    'access arguments' => array('access user profiles'),
+    'type'             => MENU_CALLBACK,
+    'file'             => 'includes/wink.entity.inc'
+  );
+}
+
+/**
+ * Create a wink
+ *
+ * @param $wink_uid
+ *   The uid of the user being wink-ed at
+ * 
+ * @return
+ *   The entity or FALSE
+ */
+function _wink_wink($type = 'ajax', $wink_user = FALSE) {
+
+  // defaults
+  $link = '';
+  $redirect = '<front>';
+  $message = 'Wink failed';
+
+  // if js is enabled and this is an ajax request
+  if ($type == 'ajax') {
+    
+    // did we find a user?
+    if ($wink_user) {
+
+      // we did, create wink record
+      // remove wink link
+      // also send a notification
+      
+      // create wink
+      if (wink_create($wink_user->uid) !== FALSE) {
+
+        // all went well
+
+        // build response message
+        $message = sprintf(TWOOFAKIND_MSG_WINK, $wink_user->name);
+
+      }
+      
+    }
+    else {
+      
+      // we didn't find one
+      // send an error response back
+      
+      // create a message and wrap it in a span
+      $message = 'User not found';
+      
+    }
+
+    // ajax response
+    _twoofakind_com_au_user_ajax_response($wink_user, 'wink', $message);
+    
+  }
+  else {
+    
+    // js is not enabled. this is a fallback response
+    
+    // did we find a user?
+    if ($wink_user) {
+      
+      // create wink
+      if (wink_create($wink_user->uid)) {
+        
+        // all good
+        
+        // message
+        $message = sprintf(TWOOFAKIND_MSG_WINK, $wink_user->name);
+        
+        // redirect
+        $redirect = urlencode('profile/' . $wink_user->name);
+        
+      }
+      
+    }
+    else {
+
+      // message
+      $message = 'User not found';
+      
+    }
+    
+    // set message and redirect
+    _twoofakind_com_au_user_nojs_response($message, $redirect);
+    return;
+  }
+}
+
+/******************************************************************************
+ * Load functions
  ******************************************************************************/
 
 /**
@@ -65,6 +186,43 @@ function wink_load_all($conditions = array(), $reset = FALSE) {
   return wink_load_multiple(FALSE, $conditions, $reset);
 }
 
+/******************************************************************************
+ * CRUD functions
+ ******************************************************************************/
+
+/**
+ * Create a wink
+ *
+ * @param $wink_uid
+ *   The uid of the user being wink-ed at
+ * 
+ * @return
+ *   The entity or FALSE
+ */
+function wink_create($wink_uid) {
+
+  global $user;
+
+  // no need to check if wink exists
+  // wink away
+  
+  $container = array(
+    'uid' => $user->uid,
+    'wink_uid' => $wink_uid
+  );
+  $entity = entity_create('wink', $container);
+  if($entity) {
+    entity_get_controller('wink')->save($entity);
+    return $entity;
+  }  
+  return FALSE;
+  
+}
+
+/******************************************************************************
+ * Count functions
+ ******************************************************************************/
+
 /**
  * Count un-viewed winks when logged in user is winker
  * 
@@ -119,4 +277,94 @@ function wink_count_unviewed_winks($field_uid = 'uid') {
   }
   
   return 0;
+}
+
+/******************************************************************************
+ * Callback functions
+ ******************************************************************************/
+
+/**
+ * Entity uri callback.
+ */
+function wink_uri($wink) {
+  return array(
+    'path' => 'user/' . $wink->wink_uid,
+  );
+}
+
+/******************************************************************************
+ * Display Suite functions
+ ******************************************************************************/
+
+/**
+ * Theme field for wink DS field
+ *
+ * @param $field
+ *   The field to be output
+ *
+ * @return 
+ *   The rendered field
+ *
+ * @see hook_ds_fields_info()
+ */
+function theme_ds_wink_field($field) {
+  
+  // initialise output
+  $output = '';
+  
+  // entity id
+  if (isset($field['properties']['entity_id_key']) && isset($field['entity']->{$field['properties']['entity_id_key']})) {
+    $entity_id = $field['entity']->{$field['properties']['entity_id_key']};
+  } else {
+    $entity_id = FALSE;
+  }
+  
+  // no id no link
+  if (empty($entity_id)) {
+    return;
+  }
+
+  // Put together text for link
+  if (isset($field['properties']['entity_render_key']) && isset($field['entity']->{$field['properties']['entity_render_key']})) {
+    $output = sprintf(TWOOFAKIND_TITLE_WINK, '');
+  } else {
+    $output = FALSE;
+  }
+
+  // no output no link
+  if (empty($output)) {
+    return;
+  }
+  
+  // path
+  if (isset($field['properties']['wink_path'])) {
+    $wink_path = $field['properties']['wink_path'];
+  } else {
+    $wink_path = FALSE;
+  }
+  
+  // no path no link
+  if (empty($wink_path)) {
+    return;
+  }
+  
+  // finalise path
+  $path = $wink_path . '/' . $entity_id;
+  
+  // options
+  $options = array(
+    'attributes' => array(
+      'title' => sprintf(TWOOFAKIND_TITLE_WINK, $field['entity']->{$field['properties']['entity_render_key']}),
+      'class' => array('use-ajax')
+    )
+  );
+
+  // put it all together
+  $output = l($output, $path, $options);
+  
+  // wrap it in a div
+  $output = "<div id=\"wink-$entity_id\">$output</div>";
+
+  return $output;
+  
 }

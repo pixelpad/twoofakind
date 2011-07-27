@@ -22,7 +22,7 @@ function twoofakind_com_au_views_data() {
   _twoofakind_com_au_views_data_recent_views($data);
   
   // winks
-//  _twoofakind_com_au_views_data_winks($data);
+  _twoofakind_com_au_views_data_winks($data);
   
   return $data;
 }
@@ -374,19 +374,10 @@ function _twoofakind_com_au_views_data_recent_views(&$data) {
  */
 function _twoofakind_com_au_views_data_winks(&$data) {
   
-  // winks
-  $data['winks'] = array(
-    'table' => array(
-      'group' => t('Wink'),
-      'base' => array(
-        'field' => 'wid',
-        'title' => t('Wink'),
-        'help' => t('Winks between users'),
-        'weight' => 101,
-      ),
-    ),
+  // common fields
+  $data_common = array(
+    'table' => array(),
     'wid' => array(
-      'group' => t('Wink'),
       'title' => t('Wid'),
       'help' => t('The Wink ID'),
       'field' => array(
@@ -395,51 +386,14 @@ function _twoofakind_com_au_views_data_winks(&$data) {
       ),
     ),
     'uid' => array(
-      'group' => t('Wink'),
-      'title' => t('Uid of Winker'),
-      'help' => t('User id of the Winker'),
-      'relationship' => array(
-        'base' => 'users',
-        'field' => 'uid',
-        'left_field' => 'uid',
-        'left_table' => 'users',
-        'handler' => 'views_handler_relationship',
-        'label' => t('Winker'),
-      ),
-    ),
-    'uid_current' => array(
-      'real field' => 'uid',
-      'group' => t('Wink'),
-      'title' => t('Winker is logged in user'),
-      'help' => t('Filter results so the current user is the Winker'),
-      'filter' => array(
-        'handler' => 'views_handler_filter_user_current',
-      ),
+      'title' => t('Uid of wink-er'),
+      'help' => t('User id of person winking')
     ),
     'wink_uid' => array(
-      'group' => t('Wink'),
-      'title' => t('User id of Wink recipient'),
-      'help' => t('User id of Wink recipient'),
-      'relationship' => array(
-        'base' => 'users',
-        'field' => 'wink_uid',
-        'left_field' => 'uid',
-        'left_table' => 'users',
-        'handler' => 'views_handler_relationship',
-        'label' => t('Wink recipient'),
-      ),
-    ),
-    'wink_uid_current' => array(
-      'real field' => 'wink_uid',
-      'group' => t('Wink'),
-      'title' => t('Wink recipient is logged in user'),
-      'help' => t('Filter results so that only the current user is the Wink recipient'),
-      'filter' => array(
-        'handler' => 'views_handler_filter_user_current',
-      ),
+      'title' => t('User id of Wink-ee'),
+      'help' => t('User id of person being winked at'),
     ),
     'created' => array(
-      'group' => t('Wink'),
       'title' => t('Created'),
       'help' => t('The date this Wink was created.'),
       'field' => array(
@@ -454,7 +408,6 @@ function _twoofakind_com_au_views_data_winks(&$data) {
       ),
     ),
     'viewed' => array(
-      'group' => t('Wink'),
       'title' => t('Viewed by Wink recipient'),
       'help' => t('Has this Wink been viewed by the Wink recipient?'),
       'field' => array(
@@ -472,6 +425,44 @@ function _twoofakind_com_au_views_data_winks(&$data) {
         'handler' => 'views_handler_sort',
       ),
     )
+  );
+  
+  // winks
+  $data['winks'] = $data_common;
+  $data['winks']['table']['group'] = t('Wink-er');
+  $data['winks']['table']['join'] = array(
+    'users' => array(
+      'left_field' => 'uid',
+      'field' => 'wink_uid',
+      'table' => 'winks'
+    )
+  );
+  $data['winks']['uid_current'] = array(
+    'real field' => 'uid',
+    'title' => t('Wink-er is logged in user'),
+    'help' => t('Filter results so the current user is the Wink-er'),
+    'filter' => array(
+      'handler' => 'views_handler_filter_user_current',
+    ),
+  );
+  
+  // winks received
+  $data['winks_received'] = $data_common;
+  $data['winks_received']['table']['group'] = t('Wink-ee');
+  $data['winks_received']['table']['join'] = array(
+    'users' => array(
+      'left_field' => 'uid',
+      'field' => 'uid',
+      'table' => 'winks'
+    )
+  );
+  $data['winks_received']['uid_current'] = array(
+    'real field' => 'wink_uid',
+    'title' => t('Wink-ee is logged in user'),
+    'help' => t('Filter results so the current user is the Wink-ee'),
+    'filter' => array(
+      'handler' => 'views_handler_filter_user_current',
+    ),
   );
   
 }

@@ -79,11 +79,11 @@ function _favourite_favourite($type = 'ajax', $favourite_user = FALSE) {
     // did we find a user?
     if ($favourite_user) {
 
-      // we did, remove favourite record
-      // send a favourite link back in place of the unfavourite link
+      // we did, add favourite record
+      // send an unfavourite link back in place of the favourite link
       // also send a notification
       
-      // remove favourite
+      // create favourite
       if (favourite_create($favourite_user->uid) !== FALSE) {
 
         // all went well
@@ -118,7 +118,7 @@ function _favourite_favourite($type = 'ajax', $favourite_user = FALSE) {
     // did we find a user?
     if ($favourite_user) {
       
-      // remove favourite
+      // create favourite
       if (favourite_create($favourite_user->uid)) {
         
         // all good
@@ -182,7 +182,7 @@ function _favourite_unfavourite($type = 'ajax', $favourite_user = FALSE) {
         // build response message
         $message = sprintf(TWOOFAKIND_MSG_UNFAVOURITE, $favourite_user->name);
         
-        // build unfavourite link
+        // build favourite link
         $link = _twoofakind_com_au_user_ajax_link($favourite_user, TWOOFAKIND_PATH_FAVOURITE, TWOOFAKIND_TITLE_FAVOURITE);
 
       }

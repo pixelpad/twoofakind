@@ -25,7 +25,11 @@ function twoofakind_com_au_menu() {
   
   $items = array();
 
+  // favourites
   _favourite_menu($items);
+  
+  // winks
+  _wink_menu($items);
 
   return $items;
 }
@@ -72,7 +76,7 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
       $data['subject'] .= " ($count)";
       _twoofakind_com_au_subject_more($data);
     }
-    elseif ($block->delta == 'winks-block_winked_at') {
+    elseif ($block->delta == 'winks-block') {
       
       // winked at
 
@@ -82,7 +86,7 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
 //      $data['subject'] .= " ($count)";
       _twoofakind_com_au_subject_more($data);
     }
-    elseif ($block->delta == 'winks_received-block_w_rec') {
+    elseif ($block->delta == 'winks_received-block') {
       
       // winks received
       
@@ -523,7 +527,7 @@ function twoofakind_com_au_entity_info() {
       'id' => 'wid',
     ),
     'label callback' => 'entity_class_label',
-    'uri callback' => 'entity_class_uri',
+    'uri callback' => 'wink_uri',
     'static cache' => TRUE
   );
   $return['recent_view'] = array(
@@ -594,41 +598,30 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
   // user fields
   if ($entity_type == 'user') {
     
+    // favourites
     $fields['favourite'] = array(
-
-      // title: title of the field
       'title' => t('Favourite'),
-
-      // type: type of field
-      // - DS_FIELD_TYPE_THEME      : calls a theming function.
-      // - DS_FIELD_TYPE_FUNCTION   : calls a custom function.
-      // - DS_FIELD_TYPE_CODE       : calls ds_render_code_field().
-      // - DS_FIELD_TYPE_BLOCK      : calls ds_render_block_field().
-      // - DS_FIELD_TYPE_PREPROCESS : calls nothing, just takes a key from the
-      //                              variable field that is passed on.
-      // - DS_FIELD_TYPE_IGNORE     : calls nothing, use this if you simple want
-      //                              to drag and drop. The field itself will have
-      //                              a theme function.
       'field_type' => DS_FIELD_TYPE_FUNCTION,
-
-      // ui_limit : only used for the manage display screen so
-      // you can limit fields to show based on bundles or view modes
-      // the values are always in the form of $bundle|$view_mode
-      // You may use * to select all.
-      // Make sure you use the machine name.
       'ui_limit' => array('user|full', 'user|user_list', 'user|user_list_block'),
-
-      // file: an optional file in which the function resides.
-      // Only for DS_FIELD_TYPE_FUNCTION.
       'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/favourite.entity.inc',
-
-      // function: only for DS_FIELD_TYPE_FUNCTION.
       'function' => 'theme_ds_favourite_field',
-
-      // properties: can have different keys.
       'properties' => array(
         'favourite_path' => TWOOFAKIND_PATH_FAVOURITE . '/nojs',
         'unfavourite_path' => TWOOFAKIND_PATH_UNFAVOURITE . '/nojs',
+        'entity_id_key' => 'uid',
+        'entity_render_key' => 'name',
+      )
+    );
+    
+    // winks
+    $fields['wink'] = array(
+      'title' => t('Wink'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|user_list', 'user|user_list_block'),
+      'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/wink.entity.inc',
+      'function' => 'theme_ds_wink_field',
+      'properties' => array(
+        'wink_path' => TWOOFAKIND_PATH_FAVOURITE . '/nojs',
         'entity_id_key' => 'uid',
         'entity_render_key' => 'name',
       )
@@ -703,7 +696,7 @@ function _twoofakind_com_au_user_ajax_link($user, $path, $title) {
 /**
  * Simple ajax response wrapper
  */
-function _twoofakind_com_au_user_ajax_response($user, $entity_type, $message, $link) {
+function _twoofakind_com_au_user_ajax_response($user, $entity_type, $message, $link = '') {
 
   // wrap message in span
   $message = "<span class=\"ajax-message\">$message</span>";
