@@ -1,20 +1,5 @@
 (function ($) {
 
-  /* Interactive blocks
-   * NOTE : This is not working currently
-  -------------------------------------------------------------- */
-  Drupal.behaviors.subaruFormOverlabels = {
-    attach: function (context, settings) {
-      $('h4.interactive:not(.js-processed)', context).each(function () {
-        $(this).addClass('js-processed');
-        $(this).bind('click', function(e) {
-          var open_id = $(this).attr('id').match(/open\-([0-9][a-z][A-Z]\-)/g);
-          console.log(open_id);
-        });
-      });
-    }
-  }
-
   /* Matches view exposed filter form
    * NOTE : If you switch themes this won't work
    * This is due to the poor theme that we have chosen :(
@@ -59,16 +44,6 @@
           matchesForm.toggle();
         }
       });
-    }
-  }
-
-  Drupal.behaviors.subaruFormOverlabels = {
-    attach: function (context, settings) {
-      if (jQuery().overlabel) {
-//        $("form#views-exposed-form-matches-page-matches label").overlabel();
-//        $("form#views-exposed-form-matches-page-matches input[type=text]").hide();
-//        $("input#edit-city").overlabel();
-      }
     }
   }
 
