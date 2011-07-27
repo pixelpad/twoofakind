@@ -64,7 +64,7 @@ div#SearchOptions {
   margin: -20px 30px 0 0;
 }
 
-div#matches_form {
+div.region-sidebar-right div#matches_form {
   display: none;
   background: none repeat scroll 0 0 #2C2C2C;
 /*  position: absolute;
@@ -84,32 +84,36 @@ div#matches_form {
   border: 1px solid #F4F5F6;
 }
 
+body.not-logged-in div.region-sidebar-right div#matches_form {
+  display: block;
+}
+
 /* hide the first one */
-div#matches_form div#edit-name-wrapper {
+div.region-sidebar-right div#matches_form div#edit-name-wrapper {
   display: none;
 }
 
-div#matches_form input.form-text {
+div.region-sidebar-right div#matches_form input.form-text {
   width: 260px;
 }
 
-div#matches_form label {
+div.region-sidebar-right div#matches_form label {
   color: #CACACA;
 }
 
-html.js fieldset.collapsible .fieldset-legend {
+div.region-sidebar-right html.js fieldset.collapsible .fieldset-legend {
   background-image: url("../images/arrowdown.gif");
   width: 260px;
   overflow: hidden;
   background-position: 2px 8px;
 }
 
-html.js fieldset.collapsible.collapsed .fieldset-legend {
+html.js div.region-sidebar-right fieldset.collapsible.collapsed .fieldset-legend {
   background-image: url("../images/arrowright.gif");
   background-position: 5px 5px;
 }
 
-html.js fieldset.collapsible .fieldset-legend a {
+html.js div.region-sidebar-right fieldset.collapsible .fieldset-legend a {
   border-bottom: none;
   display: block;
   margin-left: -10px;
@@ -117,26 +121,26 @@ html.js fieldset.collapsible .fieldset-legend a {
   width: 254px;
 }
 
-html.js fieldset.collapsible.collapsed .fieldset-legend a {
+html.js div.region-sidebar-right fieldset.collapsible.collapsed .fieldset-legend a {
   border-bottom: 1px dotted #CACACA;
 }
 
-.fieldset-legend span.summary {
+div.region-sidebar-right .fieldset-legend span.summary {
   display: none;
 }
 
-div#matches_form button.btn,
-div#matches_form button.btn span {
+div.region-sidebar-right div#matches_form button.btn,
+div.region-sidebar-right div#matches_form button.btn span {
   background-image: url("../images/button-sprite-dark.gif");
 }
 
-div#matches_form button#edit-submit-user-search,
-div#matches_form div.views-reset-button {
+div.region-sidebar-right div#matches_form button#edit-submit-user-search,
+div.region-sidebar-right div#matches_form div.views-reset-button {
   float: left;
 }
 
 /* This is purely here for the above floated buttons */
-div#matches_form div.views-exposed-widgets {
+div.region-sidebar-right div#matches_form div.views-exposed-widgets {
   overflow: visible;
 }
 

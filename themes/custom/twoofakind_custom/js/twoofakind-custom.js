@@ -51,7 +51,7 @@
       });
       
       /* grab the mactehs exposed filters form */
-      var matchesForm = $('div#matches_form:not(.js-processed)', context);
+      var matchesForm = $('div.region-sidebar-right div#matches_form:not(.js-processed)', context);
       
       /* make the more options link open and close the search box */
       $('div#SearchOptions a').bind({
