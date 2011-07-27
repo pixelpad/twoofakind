@@ -6,7 +6,7 @@
  */
 
 /******************************************************************************
- * Entity functions
+ * Load functions
  ******************************************************************************/
 
 /**
@@ -65,6 +65,49 @@ function match_load_all($conditions = array(), $reset = FALSE) {
   return match_load_multiple(FALSE, $conditions, $reset);
 }
 
+/******************************************************************************
+ * CRUD functions
+ ******************************************************************************/
+
+/**
+ * Create a match
+ *
+ * @param $match_uid
+ *   The uid of the user being match-ed
+ * 
+ * @return
+ *   The entity or FALSE
+ */
+function match_create($match_uid) {
+
+  global $user;
+
+  // double check that a match doesn't already exist
+  $match_id = match_is_match($match_uid);
+  if ($match_id !== FALSE) {
+    
+    // load the entity and return it
+    $entity = match_load($match_id);
+    return $entity;
+  }
+  
+  $container = array(
+    'uid' => $user->uid,
+    'match_uid' => $match_uid
+  );
+  $entity = entity_create('match', $container);
+  if($entity) {
+    entity_get_controller('match')->save($entity);
+    return $entity;
+  }  
+  return FALSE;
+  
+}
+
+/******************************************************************************
+ * Count functions
+ ******************************************************************************/
+
 /**
  * Count un-viewed matches when logged in user is matcher
  * 
@@ -120,4 +163,54 @@ function match_count_unviewed_matches($field_viewed = 'viewed_uid') {
   }
   
   return 0;
+}
+
+/******************************************************************************
+ * Callback functions
+ ******************************************************************************/
+
+/**
+ * Entity uri callback.
+ */
+function match_uri($match) {
+  return array(
+    'path' => 'user/' . $match->match_uid,
+  );
+}
+
+/******************************************************************************
+ * Utility functions
+ ******************************************************************************/
+
+/**
+ * Has this user been matched
+ * 
+ * @param $match_uid
+ *   User id to check
+ * 
+ * @return
+ *   Return Id of first match returned or FALSE
+ */
+function match_is_match($match_uid) {
+  
+  global $user;
+  
+  // set up the query   
+  $query = new EntityFieldQuery();
+  // we only want matches
+  $query->entityCondition('entity_type', 'match', '=');
+
+  // match match_uid and current uid
+  $query->propertyCondition('uid', $user->uid, '=');
+  $query->propertyCondition('match_uid', $match_uid, '=');
+  
+  // execute
+  $result = $query->execute();
+
+  // return result
+  if (isset($result['match']) && count($result['match'])) {
+    return key($result['match']);
+  }
+  
+  return FALSE;
 }

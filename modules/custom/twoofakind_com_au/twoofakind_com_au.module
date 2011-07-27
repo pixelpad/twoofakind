@@ -60,7 +60,7 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
     // add any count information to the subject
     // and make the subject a link to the page
     
-    if ($block->delta == 'matches-block_my_matches') {
+    if ($block->delta == 'matches-block') {
       
       // my matches
       
@@ -68,7 +68,7 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
       $data['subject'] .= " ($count)";
       _twoofakind_com_au_subject_more($data);
     }
-    elseif ($block->delta == 'match_me-block_match_me') {
+    elseif ($block->delta == 'match_me-block') {
       
       // match me
       
@@ -514,7 +514,7 @@ function twoofakind_com_au_entity_info() {
       'id' => 'mid',
     ),
     'label callback' => 'entity_class_label',
-    'uri callback' => 'entity_class_uri',
+    'uri callback' => 'match_uri',
     'static cache' => TRUE
   );
   $return['wink'] = array(
@@ -545,7 +545,7 @@ function twoofakind_com_au_entity_info() {
   );
   $return['favourite'] = array(
     'label' => t('Favourite'),
-    'controller class' => 'EntityAPIController',
+    'controller class' => 'FavouriteController',
     'base table' => 'favourites',
     'fieldable' => FALSE,
     'exportable' => FALSE,
