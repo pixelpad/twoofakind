@@ -13,6 +13,7 @@ module_load_include('inc', 'twoofakind_com_au', 'includes/match.entity');
 module_load_include('inc', 'twoofakind_com_au', 'includes/wink.entity');
 module_load_include('inc', 'twoofakind_com_au', 'includes/recent_view.entity');
 module_load_include('inc', 'twoofakind_com_au', 'includes/favourite.entity');
+module_load_include('inc', 'twoofakind_com_au', 'twoofakind_com_au.admin');
 
 /******************************************************************************
  * Menu functions
@@ -30,6 +31,9 @@ function twoofakind_com_au_menu() {
   
   // winks
   _wink_menu($items);
+  
+  // admin
+  _twoofakind_com_au_admin_menu($items);
 
   return $items;
 }
