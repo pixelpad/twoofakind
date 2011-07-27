@@ -11,10 +11,10 @@
 
 if (!defined('TWOOFAKIND_PATH_FEATURED_USER')) {
   define('TWOOFAKIND_PATH_FEATURED_USER', 'feature_user');
-  define('TWOOFAKIND_TITLE_FEATURED_USER', 'Featured user %s');
+  define('TWOOFAKIND_TITLE_FEATURED_USER', 'Feature %s');
   define('TWOOFAKIND_MSG_FEATURED_USER', '%s has been Featured');
   define('TWOOFAKIND_PATH_UNFEATURED_USER', 'unfeature_user');
-  define('TWOOFAKIND_TITLE_UNFEATURED_USER', 'UnFeatured user %s');
+  define('TWOOFAKIND_TITLE_UNFEATURED_USER', 'UnFeature %s');
   define('TWOOFAKIND_MSG_UNFEATURED_USER', '%s has been UnFeatured');
 }
 
@@ -424,6 +424,10 @@ function featured_user_is_featured_user($featured_user_uid) {
  * @see hook_ds_fields_info()
  */
 function theme_ds_featured_user_field($field) {
+  
+  if (!user_access('administer users')) {
+    return '';
+  }
   
   // initialise output
   $output = '';

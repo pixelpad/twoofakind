@@ -660,7 +660,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
       'function' => 'theme_ds_featured_user_field',
       'properties' => array(
         'feature_user_path' => TWOOFAKIND_PATH_FEATURED_USER . '/nojs',
-        'unfeature_user_path' => TWOOFAKIND_PATH_FEATURED_USER . '/nojs',
+        'unfeature_user_path' => TWOOFAKIND_PATH_UNFEATURED_USER . '/nojs',
         'entity_id_key' => 'uid',
         'entity_render_key' => 'name',
       )
