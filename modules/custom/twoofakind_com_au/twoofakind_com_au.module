@@ -659,8 +659,8 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
       'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/featured_user.entity.inc',
       'function' => 'theme_ds_featured_user_field',
       'properties' => array(
-        'feature_user_path' => TWOOFAKIND_PATH_FEATURE_USER . '/nojs',
-        'unfeature_user_path' => TWOOFAKIND_PATH_UNFEATURE_USER . '/nojs',
+        'feature_user_path' => TWOOFAKIND_PATH_FEATURED_USER . '/nojs',
+        'unfeature_user_path' => TWOOFAKIND_PATH_FEATURED_USER . '/nojs',
         'entity_id_key' => 'uid',
         'entity_render_key' => 'name',
       )
