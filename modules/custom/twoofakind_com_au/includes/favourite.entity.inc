@@ -6,7 +6,7 @@
  */
 
 /******************************************************************************
- * Entity functions
+ * Load functions
  ******************************************************************************/
 
 /**
@@ -20,19 +20,19 @@
  *   A boolean indicating that the internal cache should be reset.
  * 
  * @return
- *   An array of favourite objects, indexed by wid or FALSE if no favourites found
+ *   An array of favourite objects, indexed by fid or FALSE if no favourites found
  * 
  * @see entity_load()
  */
-function favourite_load($wid, $conditions = array(), $reset = FALSE) {
-  $favourite = favourite_load_multiple(array($wid), $conditions, $reset);
+function favourite_load($fid, $conditions = array(), $reset = FALSE) {
+  $favourite = favourite_load_multiple(array($fid), $conditions, $reset);
   return reset($favourite);
 }
 
 /**
  * Load multiple favourites
  *
- * @param $wids
+ * @param $fids
  *   An array of favourite IDs.
  * @param $conditions
  *   An array of conditions to favourite against the {favourite} table.
@@ -40,12 +40,12 @@ function favourite_load($wid, $conditions = array(), $reset = FALSE) {
  *   A boolean indicating that the internal cache should be reset.
  * 
  * @return
- *   An array of favourite objects, indexed by wid or FALSE if no favourites found
+ *   An array of favourite objects, indexed by fid or FALSE if no favourites found
  *
  * @see entity_load()
  */
-function favourite_load_multiple($wids = array(), $conditions = array(), $reset = FALSE) {
-  return entity_load('favourite', $wids, $conditions, $reset);
+function favourite_load_multiple($fids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('favourite', $fids, $conditions, $reset);
 }
 
 /**
@@ -64,6 +64,72 @@ function favourite_load_multiple($wids = array(), $conditions = array(), $reset 
 function favourite_load_all($conditions = array(), $reset = FALSE) {
   return favourite_load_multiple(FALSE, $conditions, $reset);
 }
+
+/******************************************************************************
+ * CRUD functions
+ ******************************************************************************/
+
+/**
+ * Create a favourite
+ *
+ * @param $favourite_uid
+ *   The uid of the user being favourite-ed
+ * 
+ * @return
+ *   The entity or FALSE
+ */
+function favourite_create($favourite_uid) {
+
+  global $user;
+
+  // double check that a favourite doesn't already exist
+  $favourite_id = favourite_is_favourite($favourite_uid);
+  if ($favourite_id !== FALSE) {
+    
+    // load the entity and return it
+    $entity = favourite_load($favourite_id);
+    return $entity;
+  }
+  
+  $container = array(
+    'uid' => $user->uid,
+    'favourite_uid' => $favourite_uid
+  );
+  $entity = entity_create('favourite', $container);
+  if($entity) {
+    entity_get_controller('favourite')->save($entity);
+    return $entity;
+  }  
+  return FALSE;
+  
+}
+
+/**
+ * Remove a favourite
+ *
+ * @param $favourite_uid
+ *   The uid of the user being unfavourite-ed
+ * 
+ * @return
+ *   The entity or FALSE
+ */
+function favourite_delete($favourite_uid) {
+  
+  // look to see if favourite exists
+  // and thereby grabbing the id
+  $favourite_id = favourite_is_favourite($favourite_uid);
+  if ($favourite_id !== FALSE) {
+    // delete
+    return entity_delete('favourite', $favourite_id);
+  }
+
+  return FALSE;
+  
+}
+
+/******************************************************************************
+ * Count functions
+ ******************************************************************************/
 
 /**
  * Count un-viewed favourites when logged in user is favourite-er
@@ -119,4 +185,140 @@ function favourite_count_unviewed_favourites($field_uid = 'uid') {
   }
   
   return 0;
+}
+
+/******************************************************************************
+ * Callback functions
+ ******************************************************************************/
+
+/**
+ * Entity uri callback.
+ */
+function favourite_uri($favourite) {
+  return array(
+    'path' => 'user/' . $favourite->favourite_uid,
+  );
+}
+
+/******************************************************************************
+ * Utility functions
+ ******************************************************************************/
+
+/**
+ * Has this user been favourited
+ * 
+ * @param $favourite_uid
+ *   User id to check
+ * 
+ * @return
+ *   Return Id of first favourite returned or FALSE
+ */
+function favourite_is_favourite($favourite_uid) {
+  
+  global $user;
+  
+  // set up the query   
+  $query = new EntityFieldQuery();
+  // we only want favourites
+  $query->entityCondition('entity_type', 'favourite', '=');
+
+  // match favourite_uid and current uid
+  $query->propertyCondition('uid', $user->uid, '=');
+  $query->propertyCondition('favourite_uid', $favourite_uid, '=');
+  
+  // execute
+  $result = $query->execute();
+
+  // return result
+  if (isset($result['favourite']) && count($result['favourite'])) {
+    return key($result['favourite']);
+  }
+  
+  return FALSE;
+}
+
+/******************************************************************************
+ * Display Suite functions
+ ******************************************************************************/
+
+/**
+ * Theme field for favourite DS field
+ *
+ * @param $field
+ *   The field to be output
+ *
+ * @return 
+ *   The rendered field
+ *
+ * @see hook_ds_fields_info()
+ */
+function theme_ds_favourite_field($field) {
+  
+  // initialise output
+  $output = '';
+  
+  // entity id
+  if (isset($field['properties']['entity_id_key']) && isset($field['entity']->{$field['properties']['entity_id_key']})) {
+    $entity_id = $field['entity']->{$field['properties']['entity_id_key']};
+  } else {
+    $entity_id = FALSE;
+  }
+  
+  // no id no link
+  if (empty($entity_id)) {
+    return;
+  }
+  
+  // work out if this person has already been favourited
+  if (favourite_is_favourite($entity_id)) {
+    $link_text = TWOOFAKIND_TITLE_UNFAVOURITE;
+    $path_key = 'unfavourite_path';
+  } else {
+    $link_text = TWOOFAKIND_TITLE_FAVOURITE;
+    $path_key = 'favourite_path';
+  }
+
+  // Put together text for link
+  if (isset($field['properties']['entity_render_key']) && isset($field['entity']->{$field['properties']['entity_render_key']})) {
+    $output = sprintf($link_text, '');
+  } else {
+    $output = FALSE;
+  }
+
+  // no output no link
+  if (empty($output)) {
+    return;
+  }
+  
+  // path
+  if (isset($field['properties'][$path_key])) {
+    $favourite_path = $field['properties'][$path_key];
+  } else {
+    $favourite_path = FALSE;
+  }
+  
+  // no path no link
+  if (empty($favourite_path)) {
+    return;
+  }
+  
+  // finalise path
+  $path = $favourite_path . '/' . $entity_id;
+  
+  // options
+  $options = array(
+    'attributes' => array(
+      'title' => sprintf($link_text, $field['entity']->{$field['properties']['entity_render_key']}),
+      'class' => array('use-ajax')
+    )
+  );
+
+  // put it all together
+  $output = l($output, $path, $options);
+  
+  // wrap it in a div
+  $output = "<div id=\"favourite-$entity_id\">$output</div>";
+
+  return $output;
+  
 }

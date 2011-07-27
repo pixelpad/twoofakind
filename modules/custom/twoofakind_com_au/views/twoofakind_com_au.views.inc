@@ -5,13 +5,140 @@
  * Exposing matches to views
  */
 
-
 /**
  * Implements hook_views_data()
  */
 function twoofakind_com_au_views_data() { 
 
   $data = array();
+  
+  // favourites
+  _twoofakind_com_au_views_data_favourites($data);
+  
+  // matches
+//  _twoofakind_com_au_views_data_matches($data);
+  
+  // recent views
+//  _twoofakind_com_au_views_data_recent_views($data);
+  
+  // winks
+//  _twoofakind_com_au_views_data_winks($data);
+  
+  return $data;
+}
+
+/**
+ * Expose favourites table to views
+ *
+ * @param $data
+ *   data array to be given to views
+ * 
+ * @see hook_views_data()
+ */
+function _twoofakind_com_au_views_data_favourites(&$data) {
+  
+  // common fields
+  $data_common = array(
+    'table' => array(),
+    'fid' => array(
+      'title' => t('Fid'),
+      'help' => t('The Favourite ID'),
+      'field' => array(
+        'handler' => 'views_handler_field_node',
+        'click sortable' => TRUE,
+      ),
+    ),
+    'uid' => array(
+      'title' => t('Uid of favourite-er'),
+      'help' => t('User id of person marking the other as a favourite')
+    ),
+    'favourite_uid' => array(
+      'title' => t('User id of Favourite-ee'),
+      'help' => t('User id of person being marked as favourite'),
+    ),
+    'created' => array(
+      'title' => t('Created'),
+      'help' => t('The date this Favourite was created.'),
+      'field' => array(
+        'handler' => 'views_handler_field_date',
+        'click sortable' => TRUE,
+      ),
+      'sort' => array(
+        'handler' => 'views_handler_sort_date',
+      ),
+      'filter' => array(
+        'handler' => 'views_handler_filter_date',
+      ),
+    ),
+    'viewed' => array(
+      'title' => t('Viewed by Favourite recipient'),
+      'help' => t('Has this Favourite been viewed by the Favourite recipient?'),
+      'field' => array(
+        'handler' => 'views_handler_field_boolean',
+        'click sortable' => TRUE,
+      ),
+      'filter' => array(
+        'handler' => 'views_handler_filter_boolean_operator',
+        'label' => t('Viewed by Favourite recipient'),
+        'type' => 'yes-no',
+        // use boolean_field = 1 instead of boolean_field <> 0 in WHERE statment
+        'use equal' => TRUE,
+      ),
+      'sort' => array(
+        'handler' => 'views_handler_sort',
+      ),
+    )
+  );
+  
+  // favourites
+  $data['favourites'] = $data_common;
+  $data['favourites']['table']['group'] = t('Favourite-er');
+  $data['favourites']['table']['join'] = array(
+    'users' => array(
+      'left_field' => 'uid',
+      'field' => 'favourite_uid',
+      'table' => 'favourites'
+    )
+  );
+  $data['favourites']['uid_current'] = array(
+    'real field' => 'uid',
+    'title' => t('Favourite-er is logged in user'),
+    'help' => t('Filter results so the current user is the Favourite-er'),
+    'filter' => array(
+      'handler' => 'views_handler_filter_user_current',
+    ),
+  );
+  
+  // favourites received
+  $data['favourites_received'] = $data_common;
+  $data['favourites_received']['table']['group'] = t('Favourite-ee');
+  $data['favourites_received']['table']['join'] = array(
+    'users' => array(
+      'left_field' => 'uid',
+      'field' => 'uid',
+      'table' => 'favourites'
+    )
+  );
+  $data['favourites_received']['uid_current'] = array(
+    'real field' => 'favourite_uid',
+    'title' => t('Favourite-ee is logged in user'),
+    'help' => t('Filter results so the current user is the Favourite-ee'),
+    'filter' => array(
+      'handler' => 'views_handler_filter_user_current',
+    ),
+  );
+  
+}
+
+/**
+ * Expose matches table to views
+ *
+ * @param $data
+ *   data array to be given to views
+ * 
+ * @see hook_views_data()
+ */
+function _twoofakind_com_au_views_data_matches(&$data) {
   
   // matches
   $data['matches'] = array(
@@ -131,106 +258,18 @@ function twoofakind_com_au_views_data() {
       ),
     )
   );
+  
+}
 
-  // winks
-  $data['winks'] = array(
-    'table' => array(
-      'group' => t('Wink'),
-      'base' => array(
-        'field' => 'wid',
-        'title' => t('Wink'),
-        'help' => t('Winks between users'),
-        'weight' => 101,
-      ),
-    ),
-    'wid' => array(
-      'group' => t('Wink'),
-      'title' => t('Wid'),
-      'help' => t('The Wink ID'),
-      'field' => array(
-        'handler' => 'views_handler_field_node',
-        'click sortable' => TRUE,
-      ),
-    ),
-    'uid' => array(
-      'group' => t('Wink'),
-      'title' => t('Uid of Winker'),
-      'help' => t('User id of the Winker'),
-      'relationship' => array(
-        'base' => 'users',
-        'field' => 'uid',
-        'left_field' => 'uid',
-        'left_table' => 'users',
-        'handler' => 'views_handler_relationship',
-        'label' => t('Winker'),
-      ),
-    ),
-    'uid_current' => array(
-      'real field' => 'uid',
-      'group' => t('Wink'),
-      'title' => t('Winker is logged in user'),
-      'help' => t('Filter results so the current user is the Winker'),
-      'filter' => array(
-        'handler' => 'views_handler_filter_user_current',
-      ),
-    ),
-    'wink_uid' => array(
-      'group' => t('Wink'),
-      'title' => t('User id of Wink recipient'),
-      'help' => t('User id of Wink recipient'),
-      'relationship' => array(
-        'base' => 'users',
-        'field' => 'wink_uid',
-        'left_field' => 'uid',
-        'left_table' => 'users',
-        'handler' => 'views_handler_relationship',
-        'label' => t('Wink recipient'),
-      ),
-    ),
-    'wink_uid_current' => array(
-      'real field' => 'wink_uid',
-      'group' => t('Wink'),
-      'title' => t('Wink recipient is logged in user'),
-      'help' => t('Filter results so that only the current user is the Wink recipient'),
-      'filter' => array(
-        'handler' => 'views_handler_filter_user_current',
-      ),
-    ),
-    'created' => array(
-      'group' => t('Wink'),
-      'title' => t('Created'),
-      'help' => t('The date this Wink was created.'),
-      'field' => array(
-        'handler' => 'views_handler_field_date',
-        'click sortable' => TRUE,
-      ),
-      'sort' => array(
-        'handler' => 'views_handler_sort_date',
-      ),
-      'filter' => array(
-        'handler' => 'views_handler_filter_date',
-      ),
-    ),
-    'viewed' => array(
-      'group' => t('Wink'),
-      'title' => t('Viewed by Wink recipient'),
-      'help' => t('Has this Wink been viewed by the Wink recipient?'),
-      'field' => array(
-        'handler' => 'views_handler_field_boolean',
-        'click sortable' => TRUE,
-      ),
-      'filter' => array(
-        'handler' => 'views_handler_filter_boolean_operator',
-        'label' => t('Viewed by Wink recipient'),
-        'type' => 'yes-no',
-        // use boolean_field = 1 instead of boolean_field <> 0 in WHERE statment
-        'use equal' => TRUE,
-      ),
-      'sort' => array(
-        'handler' => 'views_handler_sort',
-      ),
-    )
-  );
+/**
+ * Expose recent views table to views
+ *
+ * @param $data
+ *   data array to be given to views
+ * 
+ * @see hook_views_data()
+ */
+function _twoofakind_com_au_views_data_recent_views(&$data) {
   
   // recent_views
   $data['recent_views'] = array(
@@ -332,74 +371,86 @@ function twoofakind_com_au_views_data() {
     )
   );
   
-  // favourites
-  $data['favourites'] = array(
+}
+
+/**
+ * Expose winks table to views
+ *
+ * @param $data
+ *   data array to be given to views
+ * 
+ * @see hook_views_data()
+ */
+function _twoofakind_com_au_views_data_winks(&$data) {
+  
+  // winks
+  $data['winks'] = array(
     'table' => array(
-      'group' => t('Favourite'),
+      'group' => t('Wink'),
       'base' => array(
-        'field' => 'fid',
-        'title' => t('Favourite'),
-        'help' => t('Users marking each other as favourites'),
-        'weight' => 103,
+        'field' => 'wid',
+        'title' => t('Wink'),
+        'help' => t('Winks between users'),
+        'weight' => 101,
       ),
     ),
-    'fid' => array(
-      'group' => t('Favourite'),
-      'title' => t('Fid'),
-      'help' => t('The Favourite ID'),
+    'wid' => array(
+      'group' => t('Wink'),
+      'title' => t('Wid'),
+      'help' => t('The Wink ID'),
       'field' => array(
         'handler' => 'views_handler_field_node',
         'click sortable' => TRUE,
       ),
     ),
     'uid' => array(
-      'group' => t('Favourite'),
-      'title' => t('Uid of favourite-er'),
-      'help' => t('User id of person marking the other as a favourite'),
+      'group' => t('Wink'),
+      'title' => t('Uid of Winker'),
+      'help' => t('User id of the Winker'),
       'relationship' => array(
         'base' => 'users',
         'field' => 'uid',
         'left_field' => 'uid',
         'left_table' => 'users',
         'handler' => 'views_handler_relationship',
-        'label' => t('Favourite-er'),
+        'label' => t('Winker'),
       ),
     ),
     'uid_current' => array(
       'real field' => 'uid',
-      'group' => t('Favourite'),
-      'title' => t('Favourite-er is logged in user'),
-      'help' => t('Filter results so the current user is the Favourite-er'),
+      'group' => t('Wink'),
+      'title' => t('Winker is logged in user'),
+      'help' => t('Filter results so the current user is the Winker'),
       'filter' => array(
         'handler' => 'views_handler_filter_user_current',
       ),
     ),
-    'favourite_uid' => array(
-      'group' => t('Favourite'),
-      'title' => t('User id of Favourite recipient'),
-      'help' => t('User id of person being marked as favourite'),
+    'wink_uid' => array(
+      'group' => t('Wink'),
+      'title' => t('User id of Wink recipient'),
+      'help' => t('User id of Wink recipient'),
       'relationship' => array(
         'base' => 'users',
-        'field' => 'favourite_uid',
+        'field' => 'wink_uid',
         'left_field' => 'uid',
         'left_table' => 'users',
         'handler' => 'views_handler_relationship',
-        'label' => t('Favourite recipient'),
+        'label' => t('Wink recipient'),
       ),
     ),
-    'favourite_uid_current' => array(
-      'real field' => 'favourite_uid',
-      'group' => t('Favourite'),
-      'title' => t('Favourite recipient is logged in user'),
-      'help' => t('Filter results so that only the current user is the Favourite recipient'),
+    'wink_uid_current' => array(
+      'real field' => 'wink_uid',
+      'group' => t('Wink'),
+      'title' => t('Wink recipient is logged in user'),
+      'help' => t('Filter results so that only the current user is the Wink recipient'),
       'filter' => array(
         'handler' => 'views_handler_filter_user_current',
       ),
     ),
     'created' => array(
-      'group' => t('Favourite'),
+      'group' => t('Wink'),
       'title' => t('Created'),
-      'help' => t('The date this Favourite was created.'),
+      'help' => t('The date this Wink was created.'),
       'field' => array(
         'handler' => 'views_handler_field_date',
         'click sortable' => TRUE,
@@ -412,16 +463,16 @@ function twoofakind_com_au_views_data() {
       ),
     ),
     'viewed' => array(
-      'group' => t('Favourite'),
-      'title' => t('Viewed by Favourite recipient'),
-      'help' => t('Has this Favourite been viewed by the Favourite recipient?'),
+      'group' => t('Wink'),
+      'title' => t('Viewed by Wink recipient'),
+      'help' => t('Has this Wink been viewed by the Wink recipient?'),
       'field' => array(
         'handler' => 'views_handler_field_boolean',
         'click sortable' => TRUE,
       ),
       'filter' => array(
         'handler' => 'views_handler_filter_boolean_operator',
-        'label' => t('Viewed by Favourite recipient'),
+        'label' => t('Viewed by Wink recipient'),
         'type' => 'yes-no',
         // use boolean_field = 1 instead of boolean_field <> 0 in WHERE statment
         'use equal' => TRUE,
@@ -432,5 +483,4 @@ function twoofakind_com_au_views_data() {
     )
   );
   
-  return $data;
 }

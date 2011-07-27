@@ -5,10 +5,251 @@
  * Custom site mods for two of a kind
  */
 
+/**
+ * Required constants
+ */
+
+define('TWOOFAKIND_PATH_FAVOURITE', 'favourite');
+define('TWOOFAKIND_TITLE_FAVOURITE', 'Favourite %s');
+define('TWOOFAKIND_MSG_FAVOURITE', '%s has been Favourited');
+define('TWOOFAKIND_PATH_UNFAVOURITE', 'unfavourite');
+define('TWOOFAKIND_TITLE_UNFAVOURITE', 'UnFavourite %s');
+define('TWOOFAKIND_MSG_UNFAVOURITE', '%s has been UnFavourited');
+
+/**
+ * Required includes
+ */
+
 module_load_include('inc', 'twoofakind_com_au', 'includes/match.entity');
 module_load_include('inc', 'twoofakind_com_au', 'includes/wink.entity');
 module_load_include('inc', 'twoofakind_com_au', 'includes/recent_view.entity');
 module_load_include('inc', 'twoofakind_com_au', 'includes/favourite.entity');
+
+/******************************************************************************
+ * Menu functions
+ ******************************************************************************/
+
+/**
+ * Implements hook_menu().
+ */
+function twoofakind_com_au_menu() {
+  
+  $items = array();
+
+  $items[TWOOFAKIND_PATH_FAVOURITE . '/%/%user'] = array(
+    'title'            => 'Favourite',
+    'description'      => 'Favourite this user',
+    'page callback'    => 'twoofakind_com_au_favourite',
+    'page arguments'   => array(1,2),
+    'access callback'  => 'user_access',
+    'access arguments' => array('access user profiles'),
+    'type'             => MENU_CALLBACK
+  );
+  $items[TWOOFAKIND_PATH_UNFAVOURITE . '/%/%user'] = array(
+    'title'            => 'UnFavourite',
+    'description'      => 'UnFavourite this user',
+    'page callback'    => 'twoofakind_com_au_unfavourite',
+    'page arguments'   => array(1,2),
+    'access callback'  => 'user_access',
+    'access arguments' => array('access user profiles'),
+    'type'             => MENU_CALLBACK
+  );
+
+  return $items;
+}
+
+/**
+ * Create a favourite
+ * 
+ * @todo
+ *   This and the unfavourite function should be refactored and merged
+ *
+ * @param $favourite_uid
+ *   The uid of the user being favourite-ed
+ * 
+ * @return
+ *   The entity or FALSE
+ */
+function twoofakind_com_au_favourite($type = 'ajax', $favourite_user = FALSE) {
+
+  // defaults
+  $link = '';
+  $redirect = '<front>';
+  $message = 'Favourite failed';
+
+  // if js is enabled and this is an ajax request
+  if ($type == 'ajax') {
+    
+    // did we find a user?
+    if ($favourite_user) {
+
+      // we did, remove favourite record
+      // send a favourite link back in place of the unfavourite link
+      // also send a notification
+      
+      // remove favourite
+      if (favourite_create($favourite_user->uid) !== FALSE) {
+
+        // all went well
+
+        // build response message
+        $message = sprintf(TWOOFAKIND_MSG_FAVOURITE, $favourite_user->name);
+        
+        // build unfavourite link
+        $link = _twoofakind_com_au_user_ajax_link($favourite_user, TWOOFAKIND_PATH_UNFAVOURITE, TWOOFAKIND_TITLE_UNFAVOURITE);
+
+      }
+      
+    }
+    else {
+      
+      // we didn't find one
+      // send an error response back
+      
+      // create a message and wrap it in a span
+      $message = 'User not found';
+      
+    }
+
+    // ajax response
+    _twoofakind_com_au_user_ajax_response($favourite_user, 'favourite', $message, $link);
+    
+  }
+  else {
+    
+    // js is not enabled. this is a fallback response
+    
+    // did we find a user?
+    if ($favourite_user) {
+      
+      // remove favourite
+      if (favourite_create($favourite_user->uid)) {
+        
+        // all good
+        
+        // message
+        $message = sprintf(TWOOFAKIND_MSG_FAVOURITE, $favourite_user->name);
+        
+        // redirect
+        $redirect = urlencode('profile/' . $favourite_user->name);
+        
+      }
+      
+    }
+    else {
+
+      // message
+      $message = 'User not found';
+      
+    }
+    
+    // set message and redirect
+    _twoofakind_com_au_user_nojs_response($message, $redirect);
+    return;
+  }
+}
+
+/**
+ * Remove a favourite
+ * 
+ * @todo
+ *   This and the favourite function should be refactored and merged
+ *
+ * @param $favourite_uid
+ *   The uid of the user being unfavourite-ed
+ * 
+ * @return
+ *   The entity or FALSE
+ */
+function twoofakind_com_au_unfavourite($type = 'ajax', $favourite_user = FALSE) {
+
+  // defaults
+  $link = '';
+  $redirect = '<front>';
+  $message = 'UnFavourite failed';
+  
+  // if js is enabled and this is an ajax request
+  if ($type == 'ajax') {
+    
+    // did we find a user?
+    if ($favourite_user) {
+
+      // we did, remove favourite record
+      // send a favourite link back in place of the unfavourite link
+      // also send a notification
+      
+      // remove favourite
+      if (favourite_delete($favourite_user->uid) !== FALSE) {
+
+        // all went well
+
+        // build response message
+        $message = sprintf(TWOOFAKIND_MSG_UNFAVOURITE, $favourite_user->name);
+        
+        // build unfavourite link
+        $link = _twoofakind_com_au_user_ajax_link($favourite_user, TWOOFAKIND_PATH_FAVOURITE, TWOOFAKIND_TITLE_FAVOURITE);
+
+      }
+      
+    }
+    else {
+      
+      // we didn't find one
+      // send an error response back
+      
+      // create a message and wrap it in a span
+      $message = 'User not found';
+      
+    }
+
+    // ajax response
+    _twoofakind_com_au_user_ajax_response($favourite_user, 'favourite', $message, $link);
+    
+  }
+  else {
+    
+    // js is not enabled. this is a fallback response
+    
+    // did we find a user?
+    if ($favourite_user) {
+      
+      // remove favourite
+      if (favourite_delete($favourite_user->uid)) {
+        
+        // all good
+        
+        // message
+        $message = sprintf(TWOOFAKIND_MSG_UNFAVOURITE, $favourite_user->name);
+        
+        // redirect
+        $redirect = urlencode('profile/' . $favourite_user->name);
+        
+      }
+      
+    }
+    else {
+
+      // message
+      $message = 'User not found';
+      
+    }
+    
+    // set message and redirect
+    _twoofakind_com_au_user_nojs_response($message, $redirect);
+    return;
+  }
+}
+
+/******************************************************************************
+ * Menu functions
+ ******************************************************************************/
+
+/**
+ * Implements hook_init().
+ */
+function twoofakind_com_au_init() {
+  drupal_add_js(drupal_get_path('module', 'twoofakind_com_au') . '/js/twoofakind_com_au.js', 'file');
+}
 
 /******************************************************************************
  * Block functions
@@ -59,7 +300,7 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
       $data['subject'] .= " ($count)";
       _twoofakind_com_au_subject_more($data);
     }
-    elseif ($block->delta == 'favourites-block_fav') {
+    elseif ($block->delta == 'favourites-block') {
       
       // favourites
       
@@ -69,7 +310,7 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
 //      $data['subject'] .= " ($count)";
       _twoofakind_com_au_subject_more($data);
     }
-    elseif ($block->delta == 'favourites_received-block_fr') {
+    elseif ($block->delta == 'favourites_received-block') {
       
       // favourites received
       
@@ -483,11 +724,7 @@ function twoofakind_com_au_entity_info() {
     ),
     'label callback' => 'entity_class_label',
     'uri callback' => 'entity_class_uri',
-    'static cache' => TRUE,
-//    'bundles' => array(),
-//    'bundle keys' => array(
-//      'bundle' => 'name',
-//    ),
+    'static cache' => TRUE
   );
   $return['wink'] = array(
     'label' => t('Wink'),
@@ -500,11 +737,7 @@ function twoofakind_com_au_entity_info() {
     ),
     'label callback' => 'entity_class_label',
     'uri callback' => 'entity_class_uri',
-    'static cache' => TRUE,
-//    'bundles' => array(),
-//    'bundle keys' => array(
-//      'bundle' => 'name',
-//    ),
+    'static cache' => TRUE
   );
   $return['recent_view'] = array(
     'label' => t('Recent View'),
@@ -517,15 +750,11 @@ function twoofakind_com_au_entity_info() {
     ),
     'label callback' => 'entity_class_label',
     'uri callback' => 'entity_class_uri',
-    'static cache' => TRUE,
-//    'bundles' => array(),
-//    'bundle keys' => array(
-//      'bundle' => 'name',
-//    ),
+    'static cache' => TRUE
   );
   $return['favourite'] = array(
     'label' => t('Favourite'),
-    'controller class' => 'FavouriteController',
+    'controller class' => 'EntityAPIController',
     'base table' => 'favourites',
     'fieldable' => FALSE,
     'exportable' => FALSE,
@@ -533,14 +762,78 @@ function twoofakind_com_au_entity_info() {
       'id' => 'fid',
     ),
     'label callback' => 'entity_class_label',
-    'uri callback' => 'entity_class_uri',
-    'static cache' => TRUE,
-//    'bundles' => array(),
-//    'bundle keys' => array(
-//      'bundle' => 'name',
-//    ),
+    'uri callback' => 'favourite_uri',
+    'static cache' => TRUE
   );
   return $return;
+}
+
+/******************************************************************************
+ * Display Suite functions
+ ******************************************************************************/
+
+/**
+ * Implements hook_ds_fields_info
+ *
+ * @param $entity_type
+ *   The name of the entity which we are requesting fields for, e.g. 'node'.
+ *
+ * @return $fields
+ *   A collection of fields which keys are the entity type name and values
+ *   a collection fields.
+ *
+ * @see ds_get_fields()
+ */
+function twoofakind_com_au_ds_fields_info($entity_type) {
+
+  $fields = array();
+
+  // user fields
+  if ($entity_type == 'user') {
+    
+    $fields['favourite'] = array(
+
+      // title: title of the field
+      'title' => t('Favourite'),
+
+      // type: type of field
+      // - DS_FIELD_TYPE_THEME      : calls a theming function.
+      // - DS_FIELD_TYPE_FUNCTION   : calls a custom function.
+      // - DS_FIELD_TYPE_CODE       : calls ds_render_code_field().
+      // - DS_FIELD_TYPE_BLOCK      : calls ds_render_block_field().
+      // - DS_FIELD_TYPE_PREPROCESS : calls nothing, just takes a key from the
+      //                              variable field that is passed on.
+      // - DS_FIELD_TYPE_IGNORE     : calls nothing, use this if you simple want
+      //                              to drag and drop. The field itself will have
+      //                              a theme function.
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+
+      // ui_limit : only used for the manage display screen so
+      // you can limit fields to show based on bundles or view modes
+      // the values are always in the form of $bundle|$view_mode
+      // You may use * to select all.
+      // Make sure you use the machine name.
+      'ui_limit' => array('user|full', 'user|user_list', 'user|user_list_block'),
+
+      // file: an optional file in which the function resides.
+      // Only for DS_FIELD_TYPE_FUNCTION.
+      'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/favourite.entity.inc',
+
+      // function: only for DS_FIELD_TYPE_FUNCTION.
+      'function' => 'theme_ds_favourite_field',
+
+      // properties: can have different keys.
+      'properties' => array(
+        'favourite_path' => TWOOFAKIND_PATH_FAVOURITE . '/nojs',
+        'unfavourite_path' => TWOOFAKIND_PATH_UNFAVOURITE . '/nojs',
+        'entity_id_key' => 'uid',
+        'entity_render_key' => 'name',
+      )
+    );
+  }
+
+  return array($entity_type => $fields);
+
 }
 
 /******************************************************************************
@@ -581,4 +874,55 @@ function _twoofakind_com_au_subject_more(&$data) {
     );
     $data['subject'] = l($data['subject'], $view_path, $options);
   }
+}
+
+/**
+ * Simple ajax link wrapper
+ */
+function _twoofakind_com_au_user_ajax_link($user, $path, $title) {
+
+  // path
+  $path = $path . '/nojs/' . $user->uid;
+
+  // options
+  $options = array(
+    'attributes' => array(
+      'title' => sprintf($title, $user->name),
+      'class' => array('use-ajax')
+    )
+  );
+
+  // create link
+  return l(sprintf($title, ''), $path, $options);
+  
+}
+
+/**
+ * Simple ajax response wrapper
+ */
+function _twoofakind_com_au_user_ajax_response($user, $entity_type, $message, $link) {
+
+  // wrap message in span
+  $message = "<span class=\"ajax-message\">$message</span>";
+
+  // wrap it all in a div
+  $output = "<div id=\"$entity_type-{$user->uid}\">$link $message</div>";
+
+  // send it back
+  $commands = array();
+  $commands[] = ajax_command_replace("#$entity_type-{$user->uid}", $output);
+  $page = array('#type' => 'ajax', '#commands' => $commands);
+  ajax_deliver($page);
+  
+}
+
+/**
+ * Simple ajax response wrapper
+ */
+function _twoofakind_com_au_user_nojs_response($message, $redirect) {
+ 
+  // set message and redirect
+  drupal_set_message($message, 'error');
+  drupal_goto($redirect);
+  
 }
