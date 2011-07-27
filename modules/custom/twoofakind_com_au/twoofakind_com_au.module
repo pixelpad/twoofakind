@@ -627,6 +627,19 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
       )
     );
     
+    // pvt message
+    $fields['privatemsg'] = array(
+      'title' => t('Private Message'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
+      'function' => 'theme_ds_privatemsg_field',
+      'properties' => array(
+        'privatemsg_path' => 'messages/new',
+        'entity_id_key' => 'uid',
+        'entity_render_key' => 'name',
+      )
+    );
+    
     // age
     $fields['age'] = array(
       'title' => t('Age'),
@@ -664,6 +677,78 @@ function theme_ds_age_field($field) {
     $output = sprintf("%d", floor(abs($now-$dob)/60/60/24/365));
     
   }
+
+  return $output;
+  
+}
+
+/**
+ * Theme field for private msg DS field
+ *
+ * @param $field
+ *   The field to be output
+ *
+ * @return 
+ *   The rendered field
+ *
+ * @see hook_ds_fields_info()
+ */
+function theme_ds_privatemsg_field($field) {
+  
+  // initialise output
+  $output = '';
+  
+  // entity id
+  if (isset($field['properties']['entity_id_key']) && isset($field['entity']->{$field['properties']['entity_id_key']})) {
+    $entity_id = $field['entity']->{$field['properties']['entity_id_key']};
+  } else {
+    $entity_id = FALSE;
+  }
+  
+  // no id no link
+  if (empty($entity_id)) {
+    return;
+  }
+  
+  // Put together text for link
+  if (isset($field['properties']['entity_render_key']) && isset($field['entity']->{$field['properties']['entity_render_key']})) {
+    $render = $field['entity']->{$field['properties']['entity_render_key']};
+  } else {
+    $render = FALSE;
+  }
+  
+  // no output no link
+  if (empty($render)) {
+    return;
+  }
+  
+   // path
+  if (isset($field['properties']['privatemsg_path'])) {
+    $privatemsg_path = $field['properties']['privatemsg_path'];
+  } else {
+    $privatemsg_path = FALSE;
+  }
+  
+  // no path no link
+  if (empty($privatemsg_path)) {
+    return;
+  }
+  
+  // finalise path
+  $path = $privatemsg_path . '/' . $entity_id;
+  
+  // options
+  $options = array(
+    'attributes' => array(
+      'title' => 'Send a message to ' . $render
+    )
+  );
+
+  // put it all together
+  $output = l('Message', $path, $options);
+  
+  // wrap it in a div
+  $output = "<div id=\"message-$entity_id\">$output</div>";
 
   return $output;
   
