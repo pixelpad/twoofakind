@@ -215,6 +215,47 @@ function twoofakind_com_au_schema() {
     'primary key' => array('fid'),
   );
   
+  // featured
+  $schema['featured_users'] = array (
+    'description' => 'Table for featured users',
+    'fields' => array(
+      'fid' => array(
+        'description' => 'Primary key for featured',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the person featuring',
+      ),
+      'featured_user_uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the person who was featured',
+      ),
+      'created' => array(
+        'mysql_type' => 'timestamp',
+        'pgsql_type' => 'timestamp without time zone',
+        'type' => 'timestamp',
+        'not null' => TRUE,
+        'description' => 'Date the featured was created',
+      )
+    ),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'featured_user_uid' => array('featured_user_uid'),
+    ),
+    'foreign keys' => array(
+      'uid' => array('users' => 'uid'),
+      'featured_user_uid' => array('users' => 'uid'),
+    ), 
+    'primary key' => array('fid'),
+  );
+  
   return $schema;
 }
 
@@ -368,5 +409,20 @@ function twoofakind_com_au_update_7004() {
     'default' => '0',
     'description' => 'Whether or not this favourite\'ing has been acknowledged / viewed by the person being favourited',
   ));
+  
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * This update adds the featured table
+ */
+function twoofakind_com_au_update_7005() {
+  
+  // grab the schema
+  $schema = twoofakind_com_au_schema();
+  
+  // add wink table
+  db_create_table('featured_users', $schema['featured_users']);
   
 }

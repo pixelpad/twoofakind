@@ -15,6 +15,9 @@ function twoofakind_com_au_views_data() {
   // favourites
   _twoofakind_com_au_views_data_favourites($data);
   
+  // featured users
+  _twoofakind_com_au_views_data_featured_users($data);
+  
   // matches
   _twoofakind_com_au_views_data_matches($data);
   
@@ -126,6 +129,70 @@ function _twoofakind_com_au_views_data_favourites(&$data) {
     'filter' => array(
       'handler' => 'views_handler_filter_user_current',
     ),
+  );
+  
+}
+
+/**
+ * Expose featured users table to views
+ *
+ * @param $data
+ *   data array to be given to views
+ * 
+ * @see hook_views_data()
+ */
+function _twoofakind_com_au_views_data_featured_users(&$data) {
+  
+  // common fields
+  $data['featured_users'] = array(
+    'table' => array(
+      'group' => t('Featured User'),
+      'join' => array(
+        'users' => array(
+          'left_field' => 'uid',
+          'field' => 'featured_user_uid',
+          'table' => 'featured_users'
+        )
+      )
+    ),
+    'fid' => array(
+      'title' => t('Fid'),
+      'help' => t('The Featured user ID'),
+      'field' => array(
+        'handler' => 'views_handler_field_node',
+        'click sortable' => TRUE,
+      ),
+    ),
+    'uid' => array(
+      'title' => t('Uid of Feature-er'),
+      'help' => t('User id of person marking the other as a featured_user')
+    ),
+    'featured_user_uid' => array(
+      'title' => t('User id of Featured user'),
+      'help' => t('User id of person being marked as featured_user'),
+      'relationship' => array(
+        'base' => 'users',
+        'field' => 'featured_user_uid',
+        'left_field' => 'uid',
+        'left_table' => 'users',
+        'handler' => 'views_handler_relationship',
+        'label' => t('Featured user'),
+      ),
+    ),
+    'created' => array(
+      'title' => t('Created'),
+      'help' => t('The date this Featured user record was created.'),
+      'field' => array(
+        'handler' => 'views_handler_field_date',
+        'click sortable' => TRUE,
+      ),
+      'sort' => array(
+        'handler' => 'views_handler_sort_date',
+      ),
+      'filter' => array(
+        'handler' => 'views_handler_filter_date',
+      ),
+    )
   );
   
 }

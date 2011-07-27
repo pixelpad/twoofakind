@@ -13,6 +13,7 @@ module_load_include('inc', 'twoofakind_com_au', 'includes/match.entity');
 module_load_include('inc', 'twoofakind_com_au', 'includes/wink.entity');
 module_load_include('inc', 'twoofakind_com_au', 'includes/recent_view.entity');
 module_load_include('inc', 'twoofakind_com_au', 'includes/favourite.entity');
+module_load_include('inc', 'twoofakind_com_au', 'includes/featured_user.entity');
 module_load_include('inc', 'twoofakind_com_au', 'twoofakind_com_au.admin');
 
 /******************************************************************************
@@ -28,6 +29,9 @@ function twoofakind_com_au_menu() {
 
   // favourites
   _favourite_menu($items);
+  
+  // featured
+  _featured_user_menu($items);
   
   // winks
   _wink_menu($items);
@@ -577,6 +581,19 @@ function twoofakind_com_au_entity_info() {
     'uri callback' => 'favourite_uri',
     'static cache' => TRUE
   );
+  $return['featured_user'] = array(
+    'label' => t('Featured user'),
+    'controller class' => 'FeaturedUserController',
+    'base table' => 'featured_users',
+    'fieldable' => FALSE,
+    'exportable' => FALSE,
+    'entity keys' => array(
+      'id' => 'fid',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'featured_user_uri',
+    'static cache' => TRUE
+  );
   return $return;
 }
 
@@ -629,6 +646,21 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
       'properties' => array(
         'favourite_path' => TWOOFAKIND_PATH_FAVOURITE . '/nojs',
         'unfavourite_path' => TWOOFAKIND_PATH_UNFAVOURITE . '/nojs',
+        'entity_id_key' => 'uid',
+        'entity_render_key' => 'name',
+      )
+    );
+    
+    // featured users
+    $fields['featured_user'] = array(
+      'title' => t('Featured User'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
+      'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/featured_user.entity.inc',
+      'function' => 'theme_ds_featured_user_field',
+      'properties' => array(
+        'feature_user_path' => TWOOFAKIND_PATH_FEATURE_USER . '/nojs',
+        'unfeature_user_path' => TWOOFAKIND_PATH_UNFEATURE_USER . '/nojs',
         'entity_id_key' => 'uid',
         'entity_render_key' => 'name',
       )

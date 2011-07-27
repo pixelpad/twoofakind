@@ -25,3 +25,8 @@ class FavouriteController extends EntityAPIController{
     
   
 }
+
+class FeaturedUserController extends EntityAPIController{
+    
+  
+}
