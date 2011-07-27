@@ -1,0 +1,11 @@
+/* 
+    Document   : twoofakind_com_au
+    Created on : Jul 28, 2011, 2:50:57 AM
+    Author     : Mike Kelly
+    Description:
+        Required styles for this module
+*/
+
+div.region-sidebar-right div.view {
+  display: none;
+}

@@ -43,6 +43,7 @@ function twoofakind_com_au_menu() {
  */
 function twoofakind_com_au_init() {
   drupal_add_js(drupal_get_path('module', 'twoofakind_com_au') . '/js/twoofakind_com_au.js', 'file');
+  drupal_add_css(drupal_get_path('module', 'twoofakind_com_au') . '/css/twoofakind_com_au.css', 'file');
 }
 
 /******************************************************************************
@@ -136,6 +137,12 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
 
       _twoofakind_com_au_subject_more($data);
     }
+    
+    // add the down arrow to all these views
+    if ($block->region == 'sidebar_right') {
+      _twoofakind_com_au_block_expand($data);
+    }
+
   }
   
 }
@@ -267,6 +274,10 @@ function _twoofakind_com_au_block_recent_messages() {
   );
   $block['content'] .= l(t('more'), 'messages', $options);
   $block['content'] .= '</div>';
+  
+  // add a wrapper
+  $block['content'] = '<div class="view">' . $block['content'] . '</div>';
+  
   return $block;
 
 }
@@ -765,7 +776,7 @@ function theme_ds_privatemsg_field($field) {
  ******************************************************************************/
 
 /**
- * 
+ * Turns the block subject in to a link that is directed to the more link href
  */
 function _twoofakind_com_au_subject_more(&$data) {
   
@@ -797,6 +808,31 @@ function _twoofakind_com_au_subject_more(&$data) {
       )
     );
     $data['subject'] = l($data['subject'], $view_path, $options);
+  }
+}
+
+/**
+ * Adds an expansion link to the subject
+ */
+function _twoofakind_com_au_block_expand(&$data) {
+  
+  // grab view information
+  if (isset($data['content']['#views_contextual_links_info']['views_ui']['view_name'])) {
+
+    // grab the view name and display
+    $view_name = $data['content']['#views_contextual_links_info']['views_ui']['view_name'];
+    
+    // convert it to a div class
+    $view_div_class = 'view-' . $view_name;
+    $view_div_class = str_replace('_', '-', $view_div_class);
+
+    $options = array(
+      'attributes' => array(
+        'title' => 'Click to expand',
+        'class' => 'block-expand'
+      )
+    );
+    $data['subject'] .= l('expand', $view_div_class, $options);
   }
 }
 
