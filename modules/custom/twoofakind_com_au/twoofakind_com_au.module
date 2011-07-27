@@ -602,7 +602,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
     $fields['favourite'] = array(
       'title' => t('Favourite'),
       'field_type' => DS_FIELD_TYPE_FUNCTION,
-      'ui_limit' => array('user|full', 'user|user_list', 'user|user_list_block'),
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
       'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/favourite.entity.inc',
       'function' => 'theme_ds_favourite_field',
       'properties' => array(
@@ -617,7 +617,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
     $fields['wink'] = array(
       'title' => t('Wink'),
       'field_type' => DS_FIELD_TYPE_FUNCTION,
-      'ui_limit' => array('user|full', 'user|user_list', 'user|user_list_block'),
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
       'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/wink.entity.inc',
       'function' => 'theme_ds_wink_field',
       'properties' => array(
@@ -631,7 +631,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
     $fields['age'] = array(
       'title' => t('Age'),
       'field_type' => DS_FIELD_TYPE_FUNCTION,
-      'ui_limit' => array('user|full', 'user|user_list', 'user|user_list_block'),
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
       'function' => 'theme_ds_age_field'
     );
   }
