@@ -556,6 +556,22 @@ function twoofakind_com_au_entity_info() {
 }
 
 /******************************************************************************
+ * User functions
+ ******************************************************************************/
+
+/**
+ * Implements hook_user_view().
+ */
+function twoofakind_com_au_user_view($account, $view_mode, $langcode) {
+
+  // Add a recent view record
+  if ($view_mode == 'full') {
+    recent_view_create($account->uid);
+  }
+  
+}
+
+/******************************************************************************
  * Display Suite functions
  ******************************************************************************/
 
