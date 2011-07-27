@@ -6,7 +6,7 @@
  */
 
 /******************************************************************************
- * Entity functions
+ * Load functions
  ******************************************************************************/
 
 /**
@@ -20,19 +20,19 @@
  *   A boolean indicating that the internal cache should be reset.
  * 
  * @return
- *   An array of recent_view objects, indexed by wid or FALSE if no recent_views found
+ *   An array of recent_view objects, indexed by vid or FALSE if no recent_views found
  * 
  * @see entity_load()
  */
-function recent_view_load($wid, $conditions = array(), $reset = FALSE) {
-  $recent_view = recent_view_load_multiple(array($wid), $conditions, $reset);
+function recent_view_load($vid, $conditions = array(), $reset = FALSE) {
+  $recent_view = recent_view_load_multiple(array($vid), $conditions, $reset);
   return reset($recent_view);
 }
 
 /**
  * Load multiple recent_views
  *
- * @param $wids
+ * @param $vids
  *   An array of recent_view IDs.
  * @param $conditions
  *   An array of conditions to recent_view against the {recent_view} table.
@@ -40,12 +40,12 @@ function recent_view_load($wid, $conditions = array(), $reset = FALSE) {
  *   A boolean indicating that the internal cache should be reset.
  * 
  * @return
- *   An array of recent_view objects, indexed by wid or FALSE if no recent_views found
+ *   An array of recent_view objects, indexed by vid or FALSE if no recent_views found
  *
  * @see entity_load()
  */
-function recent_view_load_multiple($wids = array(), $conditions = array(), $reset = FALSE) {
-  return entity_load('recent_view', $wids, $conditions, $reset);
+function recent_view_load_multiple($vids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('recent_view', $vids, $conditions, $reset);
 }
 
 /**
@@ -64,6 +64,43 @@ function recent_view_load_multiple($wids = array(), $conditions = array(), $rese
 function recent_view_load_all($conditions = array(), $reset = FALSE) {
   return recent_view_load_multiple(FALSE, $conditions, $reset);
 }
+
+/******************************************************************************
+ * CRUD functions
+ ******************************************************************************/
+
+/**
+ * Create a recent_view
+ *
+ * @param $recent_view_uid
+ *   The uid of the user being view-ed
+ * 
+ * @return
+ *   The entity or FALSE
+ */
+function recent_view_create($recent_view_uid) {
+
+  global $user;
+  
+  // no need to check if one exists or not
+  // can view as many times as they like
+  
+  $container = array(
+    'uid' => $user->uid,
+    'recent_view_uid' => $recent_view_uid
+  );
+  $entity = entity_create('recent_view', $container);
+  if($entity) {
+    entity_get_controller('recent_view')->save($entity);
+    return $entity;
+  }  
+  return FALSE;
+  
+}
+
+/******************************************************************************
+ * Count functions
+ ******************************************************************************/
 
 /**
  * Count un-viewed recent_views when logged in user is recent_viewer
@@ -119,4 +156,17 @@ function recent_view_count_unviewed_recent_views($field_uid = 'uid') {
   }
   
   return 0;
+}
+
+/******************************************************************************
+ * Callback functions
+ ******************************************************************************/
+
+/**
+ * Entity uri callback.
+ */
+function recent_view_uri($recent_view) {
+  return array(
+    'path' => 'user/' . $recent_view->recent_view_uid,
+  );
 }

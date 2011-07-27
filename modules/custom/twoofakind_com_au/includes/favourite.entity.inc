@@ -5,6 +5,237 @@
  * favourite entity information and functions
  */
 
+/**
+ * Required constants
+ */
+
+if (!defined('TWOOFAKIND_PATH_FAVOURITE')) {
+  define('TWOOFAKIND_PATH_FAVOURITE', 'favourite');
+  define('TWOOFAKIND_TITLE_FAVOURITE', 'Favourite %s');
+  define('TWOOFAKIND_MSG_FAVOURITE', '%s has been Favourited');
+  define('TWOOFAKIND_PATH_UNFAVOURITE', 'unfavourite');
+  define('TWOOFAKIND_TITLE_UNFAVOURITE', 'UnFavourite %s');
+  define('TWOOFAKIND_MSG_UNFAVOURITE', '%s has been UnFavourited');
+}
+
+/******************************************************************************
+ * Menu functions
+ ******************************************************************************/
+
+/**
+ * Add favourite menu items
+ *
+ * @param $items
+ *   Menu items array
+ * 
+ * @see hook_menu()
+ */
+function _favourite_menu(&$items) {
+
+  $items[TWOOFAKIND_PATH_FAVOURITE . '/%/%user'] = array(
+    'title'            => 'Favourite',
+    'description'      => 'Favourite this user',
+    'page callback'    => '_favourite_favourite',
+    'page arguments'   => array(1,2),
+    'access callback'  => 'user_access',
+    'access arguments' => array('access user profiles'),
+    'type'             => MENU_CALLBACK,
+    'file'             => 'includes/favourite.entity.inc'
+  );
+  $items[TWOOFAKIND_PATH_UNFAVOURITE . '/%/%user'] = array(
+    'title'            => 'UnFavourite',
+    'description'      => 'UnFavourite this user',
+    'page callback'    => '_favourite_unfavourite',
+    'page arguments'   => array(1,2),
+    'access callback'  => 'user_access',
+    'access arguments' => array('access user profiles'),
+    'type'             => MENU_CALLBACK,
+    'file'             => 'includes/favourite.entity.inc'
+  );
+}
+
+/**
+ * Create a favourite
+ * 
+ * @todo
+ *   This and the unfavourite function should be refactored and merged
+ *
+ * @param $favourite_uid
+ *   The uid of the user being favourite-ed
+ * 
+ * @return
+ *   The entity or FALSE
+ */
+function _favourite_favourite($type = 'ajax', $favourite_user = FALSE) {
+
+  // defaults
+  $link = '';
+  $redirect = '<front>';
+  $message = 'Favourite failed';
+
+  // if js is enabled and this is an ajax request
+  if ($type == 'ajax') {
+    
+    // did we find a user?
+    if ($favourite_user) {
+
+      // we did, remove favourite record
+      // send a favourite link back in place of the unfavourite link
+      // also send a notification
+      
+      // remove favourite
+      if (favourite_create($favourite_user->uid) !== FALSE) {
+
+        // all went well
+
+        // build response message
+        $message = sprintf(TWOOFAKIND_MSG_FAVOURITE, $favourite_user->name);
+        
+        // build unfavourite link
+        $link = _twoofakind_com_au_user_ajax_link($favourite_user, TWOOFAKIND_PATH_UNFAVOURITE, TWOOFAKIND_TITLE_UNFAVOURITE);
+
+      }
+      
+    }
+    else {
+      
+      // we didn't find one
+      // send an error response back
+      
+      // create a message and wrap it in a span
+      $message = 'User not found';
+      
+    }
+
+    // ajax response
+    _twoofakind_com_au_user_ajax_response($favourite_user, 'favourite', $message, $link);
+    
+  }
+  else {
+    
+    // js is not enabled. this is a fallback response
+    
+    // did we find a user?
+    if ($favourite_user) {
+      
+      // remove favourite
+      if (favourite_create($favourite_user->uid)) {
+        
+        // all good
+        
+        // message
+        $message = sprintf(TWOOFAKIND_MSG_FAVOURITE, $favourite_user->name);
+        
+        // redirect
+        $redirect = urlencode('profile/' . $favourite_user->name);
+        
+      }
+      
+    }
+    else {
+
+      // message
+      $message = 'User not found';
+      
+    }
+    
+    // set message and redirect
+    _twoofakind_com_au_user_nojs_response($message, $redirect);
+    return;
+  }
+}
+
+/**
+ * Remove a favourite
+ * 
+ * @todo
+ *   This and the favourite function should be refactored and merged
+ *
+ * @param $favourite_uid
+ *   The uid of the user being unfavourite-ed
+ * 
+ * @return
+ *   The entity or FALSE
+ */
+function _favourite_unfavourite($type = 'ajax', $favourite_user = FALSE) {
+
+  // defaults
+  $link = '';
+  $redirect = '<front>';
+  $message = 'UnFavourite failed';
+  
+  // if js is enabled and this is an ajax request
+  if ($type == 'ajax') {
+    
+    // did we find a user?
+    if ($favourite_user) {
+
+      // we did, remove favourite record
+      // send a favourite link back in place of the unfavourite link
+      // also send a notification
+      
+      // remove favourite
+      if (favourite_delete($favourite_user->uid) !== FALSE) {
+
+        // all went well
+
+        // build response message
+        $message = sprintf(TWOOFAKIND_MSG_UNFAVOURITE, $favourite_user->name);
+        
+        // build unfavourite link
+        $link = _twoofakind_com_au_user_ajax_link($favourite_user, TWOOFAKIND_PATH_FAVOURITE, TWOOFAKIND_TITLE_FAVOURITE);
+
+      }
+      
+    }
+    else {
+      
+      // we didn't find one
+      // send an error response back
+      
+      // create a message and wrap it in a span
+      $message = 'User not found';
+      
+    }
+
+    // ajax response
+    _twoofakind_com_au_user_ajax_response($favourite_user, 'favourite', $message, $link);
+    
+  }
+  else {
+    
+    // js is not enabled. this is a fallback response
+    
+    // did we find a user?
+    if ($favourite_user) {
+      
+      // remove favourite
+      if (favourite_delete($favourite_user->uid)) {
+        
+        // all good
+        
+        // message
+        $message = sprintf(TWOOFAKIND_MSG_UNFAVOURITE, $favourite_user->name);
+        
+        // redirect
+        $redirect = urlencode('profile/' . $favourite_user->name);
+        
+      }
+      
+    }
+    else {
+
+      // message
+      $message = 'User not found';
+      
+    }
+    
+    // set message and redirect
+    _twoofakind_com_au_user_nojs_response($message, $redirect);
+    return;
+  }
+}
+
 /******************************************************************************
  * Load functions
  ******************************************************************************/

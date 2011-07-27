@@ -19,7 +19,7 @@ function twoofakind_com_au_views_data() {
 //  _twoofakind_com_au_views_data_matches($data);
   
   // recent views
-//  _twoofakind_com_au_views_data_recent_views($data);
+  _twoofakind_com_au_views_data_recent_views($data);
   
   // winks
 //  _twoofakind_com_au_views_data_winks($data);
@@ -271,19 +271,10 @@ function _twoofakind_com_au_views_data_matches(&$data) {
  */
 function _twoofakind_com_au_views_data_recent_views(&$data) {
   
-  // recent_views
-  $data['recent_views'] = array(
-    'table' => array(
-      'group' => t('Recent View'),
-      'base' => array(
-        'field' => 'vid',
-        'title' => t('Recent View'),
-        'help' => t('Recent views of one user to another'),
-        'weight' => 102,
-      ),
-    ),
+  // common fields
+  $data_common = array(
+    'table' => array(),
     'vid' => array(
-      'group' => t('Recent View'),
       'title' => t('Vid'),
       'help' => t('The Recent View ID'),
       'field' => array(
@@ -292,53 +283,16 @@ function _twoofakind_com_au_views_data_recent_views(&$data) {
       ),
     ),
     'uid' => array(
-      'group' => t('Recent View'),
-      'title' => t('Uid of Recent Viewer'),
-      'help' => t('User id of the Recent Viewer'),
-      'relationship' => array(
-        'base' => 'users',
-        'field' => 'uid',
-        'left_field' => 'uid',
-        'left_table' => 'users',
-        'handler' => 'views_handler_relationship',
-        'label' => t('Recent Viewer'),
-      ),
-    ),
-    'uid_current' => array(
-      'real field' => 'uid',
-      'group' => t('Recent View'),
-      'title' => t('Recent Viewer is logged in user'),
-      'help' => t('Filter results so the current user is the Recent Viewer'),
-      'filter' => array(
-        'handler' => 'views_handler_filter_user_current',
-      ),
+      'title' => t('Uid of Viewer'),
+      'help' => t('User id of person viewing')
     ),
     'recent_view_uid' => array(
-      'group' => t('Recent View'),
-      'title' => t('User id of user recently viewed'),
-      'help' => t('User id of user recently viewed'),
-      'relationship' => array(
-        'base' => 'users',
-        'field' => 'recent_view_uid',
-        'left_field' => 'uid',
-        'left_table' => 'users',
-        'handler' => 'views_handler_relationship',
-        'label' => t('Recently Viewed'),
-      ),
-    ),
-    'recent_view_uid_current' => array(
-      'real field' => 'recent_view_uid',
-      'group' => t('Recent View'),
-      'title' => t('User recently viewed is logged in user'),
-      'help' => t('Filter results so that only the current user is the user recently viewed'),
-      'filter' => array(
-        'handler' => 'views_handler_filter_user_current',
-      ),
+      'title' => t('User id of View-ee'),
+      'help' => t('User id of person being viewed'),
     ),
     'created' => array(
-      'group' => t('Recent View'),
       'title' => t('Created'),
-      'help' => t('The date the user was viewed.'),
+      'help' => t('The date this user was viewed.'),
       'field' => array(
         'handler' => 'views_handler_field_date',
         'click sortable' => TRUE,
@@ -351,16 +305,15 @@ function _twoofakind_com_au_views_data_recent_views(&$data) {
       ),
     ),
     'viewed' => array(
-      'group' => t('Recent View'),
-      'title' => t('Viewed by Recently Viewed'),
-      'help' => t('Has this Recent View been viewed / acknolowedged by the user recently viewed?'),
+      'title' => t('Noticed by View-ee'),
+      'help' => t('The View-ee has noticed they have been viewed'),
       'field' => array(
         'handler' => 'views_handler_field_boolean',
         'click sortable' => TRUE,
       ),
       'filter' => array(
         'handler' => 'views_handler_filter_boolean_operator',
-        'label' => t('Viewed by user recently viewed'),
+        'label' => t('Noticed by View-ee'),
         'type' => 'yes-no',
         // use boolean_field = 1 instead of boolean_field <> 0 in WHERE statment
         'use equal' => TRUE,
@@ -369,6 +322,44 @@ function _twoofakind_com_au_views_data_recent_views(&$data) {
         'handler' => 'views_handler_sort',
       ),
     )
+  );
+  
+  // recent views
+  $data['recent_views'] = $data_common;
+  $data['recent_views']['table']['group'] = t('View-er');
+  $data['recent_views']['table']['join'] = array(
+    'users' => array(
+      'left_field' => 'uid',
+      'field' => 'recent_view_uid',
+      'table' => 'recent_views'
+    )
+  );
+  $data['recent_views']['uid_current'] = array(
+    'real field' => 'uid',
+    'title' => t('View-er is logged in user'),
+    'help' => t('Filter results so the current user is the View-er'),
+    'filter' => array(
+      'handler' => 'views_handler_filter_user_current',
+    ),
+  );
+  
+  // recent_views received
+  $data['recent_views_received'] = $data_common;
+  $data['recent_views_received']['table']['group'] = t('View-ee');
+  $data['recent_views_received']['table']['join'] = array(
+    'users' => array(
+      'left_field' => 'uid',
+      'field' => 'uid',
+      'table' => 'recent_views'
+    )
+  );
+  $data['recent_views_received']['uid_current'] = array(
+    'real field' => 'recent_view_uid',
+    'title' => t('View-ee is logged in user'),
+    'help' => t('Filter results so the current user is the View-ee'),
+    'filter' => array(
+      'handler' => 'views_handler_filter_user_current',
+    ),
   );
   
 }
