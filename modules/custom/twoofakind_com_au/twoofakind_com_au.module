@@ -68,7 +68,7 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
       $data['subject'] .= " ($count)";
       _twoofakind_com_au_subject_more($data);
     }
-    elseif ($block->delta == 'match_me-block') {
+    elseif ($block->delta == 'matches_me-block') {
       
       // match me
       
