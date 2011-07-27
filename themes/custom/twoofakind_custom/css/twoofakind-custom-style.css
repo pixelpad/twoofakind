@@ -164,3 +164,12 @@ div.bef-select-all-none ul.bef-tree li {
 div#edit-field-self-summary-value-wrapper {
   margin-top: 10px;
 }
+
+/* Footer
+-------------------------------------------------------------- */
+
+.logoMark { 	/* logo symbol in footer */
+	width: 95px;
+	height: 90px;
+	background: transparent url("../images/logo.mini_version.png") no-repeat 0 0;
+}	
