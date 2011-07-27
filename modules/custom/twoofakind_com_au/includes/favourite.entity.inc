@@ -511,13 +511,13 @@ function theme_ds_favourite_field($field) {
 
   // Put together text for link
   if (isset($field['properties']['entity_render_key']) && isset($field['entity']->{$field['properties']['entity_render_key']})) {
-    $output = sprintf($link_text, '');
+    $render = $field['entity']->{$field['properties']['entity_render_key']};
   } else {
-    $output = FALSE;
+    $render = FALSE;
   }
 
   // no output no link
-  if (empty($output)) {
+  if (empty($render)) {
     return;
   }
   
@@ -539,13 +539,13 @@ function theme_ds_favourite_field($field) {
   // options
   $options = array(
     'attributes' => array(
-      'title' => sprintf($link_text, $field['entity']->{$field['properties']['entity_render_key']}),
+      'title' => sprintf($link_text, $render),
       'class' => array('use-ajax')
     )
   );
 
   // put it all together
-  $output = l($output, $path, $options);
+  $output = l(sprintf($link_text, ''), $path, $options);
   
   // wrap it in a div
   $output = "<div id=\"favourite-$entity_id\">$output</div>";

@@ -326,13 +326,13 @@ function theme_ds_wink_field($field) {
 
   // Put together text for link
   if (isset($field['properties']['entity_render_key']) && isset($field['entity']->{$field['properties']['entity_render_key']})) {
-    $output = 'Wink';
+    $render = $field['entity']->{$field['properties']['entity_render_key']};
   } else {
-    $output = FALSE;
+    $render = FALSE;
   }
 
   // no output no link
-  if (empty($output)) {
+  if (empty($render)) {
     return;
   }
   
@@ -354,13 +354,13 @@ function theme_ds_wink_field($field) {
   // options
   $options = array(
     'attributes' => array(
-      'title' => sprintf(TWOOFAKIND_TITLE_WINK, $field['entity']->{$field['properties']['entity_render_key']}),
+      'title' => sprintf(TWOOFAKIND_TITLE_WINK, $render),
       'class' => array('use-ajax')
     )
   );
 
   // put it all together
-  $output = l($output, $path, $options);
+  $output = l('Wink', $path, $options);
   
   // wrap it in a div
   $output = "<div id=\"wink-$entity_id\">$output</div>";
