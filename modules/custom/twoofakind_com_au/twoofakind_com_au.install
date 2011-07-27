@@ -36,12 +36,14 @@ function twoofakind_com_au_schema() {
       'created' => array(
         'mysql_type' => 'timestamp',
         'pgsql_type' => 'timestamp without time zone',
+        'type' => 'timestamp',
         'not null' => TRUE,
         'description' => 'Date the match was created',
       ),
       'viewed_uid' => array(
         'mysql_type' => 'boolean',
         'pgsql_type' => 'boolean',
+        'type' => 'boolean',
         'not null' => TRUE,
         'default' => '0',
         'description' => 'Whether or not this match has been viewed by the matcher',
@@ -49,6 +51,7 @@ function twoofakind_com_au_schema() {
       'viewed_match_uid' => array(
         'mysql_type' => 'boolean',
         'pgsql_type' => 'boolean',
+        'type' => 'boolean',
         'not null' => TRUE,
         'default' => '0',
         'description' => 'Whether or not this match has been viewed by the matchee',
@@ -90,12 +93,14 @@ function twoofakind_com_au_schema() {
       'created' => array(
         'mysql_type' => 'timestamp',
         'pgsql_type' => 'timestamp without time zone',
+        'type' => 'timestamp',
         'not null' => TRUE,
         'description' => 'Date the wink was created',
       ),
       'viewed' => array(
         'mysql_type' => 'boolean',
         'pgsql_type' => 'boolean',
+        'type' => 'boolean',
         'not null' => TRUE,
         'default' => '0',
         'description' => 'Whether or not this wink has been viewed',
@@ -137,12 +142,14 @@ function twoofakind_com_au_schema() {
       'created' => array(
         'mysql_type' => 'timestamp',
         'pgsql_type' => 'timestamp without time zone',
+        'type' => 'timestamp',
         'not null' => TRUE,
         'description' => 'Date the user was viewed',
       ),
       'viewed' => array(
         'mysql_type' => 'boolean',
         'pgsql_type' => 'boolean',
+        'type' => 'boolean',
         'not null' => TRUE,
         'default' => '0',
         'description' => 'Whether or not this recent view has been acknowledged / viewed by the person being viewed',
@@ -184,12 +191,14 @@ function twoofakind_com_au_schema() {
       'created' => array(
         'mysql_type' => 'timestamp',
         'pgsql_type' => 'timestamp without time zone',
+        'type' => 'timestamp',
         'not null' => TRUE,
         'description' => 'Date the favourite was created',
       ),
       'viewed' => array(
         'mysql_type' => 'boolean',
         'pgsql_type' => 'boolean',
+        'type' => 'boolean',
         'not null' => TRUE,
         'default' => '0',
         'description' => 'Whether or not this favourite\'ing has been acknowledged / viewed by the person being favourited',
@@ -267,5 +276,97 @@ function twoofakind_com_au_update_7003() {
   
   // add favourites table
   db_create_table('favourites', $schema['favourites']);
+  
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * Fixing schema so that all fields have a type
+ * definition, whether they have the mysql and
+ * pgsql or not. Throws error otherwise.
+ */
+function twoofakind_com_au_update_7004() {
+  
+  // matches
+  db_change_field('matches', 'created', 'created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the match was created',
+  ));
+  
+  db_change_field('matches', 'viewed_uid', 'viewed_uid', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0',
+    'description' => 'Whether or not this match has been viewed by the matcher',
+  ));
+  
+  db_change_field('matches', 'viewed_match_uid', 'viewed_match_uid', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0',
+    'description' => 'Whether or not this match has been viewed by the matchee',
+  ));
+  
+  // winks
+  db_change_field('winks', 'created', 'created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the wink was created',
+  ));
+  
+  db_change_field('winks', 'viewed', 'viewed', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0',
+    'description' => 'Whether or not this wink has been viewed',
+  ));
+  
+  // recent_views
+  db_change_field('recent_views', 'created', 'created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the user was viewed',
+  ));
+  
+  db_change_field('recent_views', 'viewed', 'viewed', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0',
+    'description' => 'Whether or not this recent view has been acknowledged / viewed by the person being viewed',
+  ));
+  
+  // favourites
+  db_change_field('favourites', 'created', 'created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the favourite was created',
+  ));
+  
+  db_change_field('favourites', 'viewed', 'viewed', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0',
+    'description' => 'Whether or not this favourite\'ing has been acknowledged / viewed by the person being favourited',
+  ));
   
 }
