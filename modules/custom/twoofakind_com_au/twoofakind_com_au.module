@@ -748,6 +748,10 @@ function theme_ds_age_field($field) {
  */
 function theme_ds_privatemsg_field($field) {
   
+  if (!user_access('access user profiles')) {
+    return '';
+  }
+  
   // initialise output
   $output = '';
   

@@ -485,6 +485,10 @@ function favourite_is_favourite($favourite_uid) {
  */
 function theme_ds_favourite_field($field) {
   
+  if (!user_access('access user profiles')) {
+    return '';
+  }
+  
   // initialise output
   $output = '';
   

@@ -309,6 +309,10 @@ function wink_uri($wink) {
  */
 function theme_ds_wink_field($field) {
   
+  if (!user_access('access user profiles')) {
+    return '';
+  }
+  
   // initialise output
   $output = '';
   
