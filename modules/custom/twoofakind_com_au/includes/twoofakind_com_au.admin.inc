@@ -30,13 +30,13 @@ function _twoofakind_com_au_admin_menu(&$items) {
     'page callback' => 'twoofakind_com_au_admin_menu_block_page',
     'access arguments' => array('administer nodes'),
 //    'file' => drupal_get_path('module', 'system') . '/system.admin.inc',
-    'file' => 'twoofakind_com_au.admin.inc',
+    'file' => 'includes/twoofakind_com_au.admin.inc',
   );
   $common = array(
     'page callback' => '_twoofakind_com_au_admin_menu_redirect',
     'page arguments'   => array(2),
     'access arguments' => array('administer nodes'),
-    'file' => 'twoofakind_com_au.admin.inc'
+    'file' => 'includes/twoofakind_com_au.admin.inc'
   );
   // Home banner left box
   $items['admin/home_page/home_banner_left'] = array(
