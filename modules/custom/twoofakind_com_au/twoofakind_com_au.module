@@ -38,6 +38,10 @@ function twoofakind_com_au_menu() {
   // admin
   module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.admin');
   _twoofakind_com_au_admin_menu($items);
+  
+  // user
+  module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
+  _twoofakind_com_au_user_menu($items);
 
   return $items;
 }
@@ -189,6 +193,7 @@ function twoofakind_com_au_block_view($delta = '') {
       break;
     
     case 'twoofakind_profile':
+      module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
       $block = _twoofakind_com_au_block_profile();
       break;
   }
@@ -290,66 +295,6 @@ function _twoofakind_com_au_block_recent_messages() {
 
 }
 
-/**
- * Render the profile block
- * 
- * Simple block that will output picture and links
- * 
- * @return
- *   A completed block array with subject and content
- */
-function _twoofakind_com_au_block_profile() {
-  
-  global $user;
-  
-  $block = array();
-  
-  // empty subject
-  $block['subject'] = '<none>';
-  
-  // initialise content
-  $content = array();
-  
-  // grab the picture of the user
-  $content[] = theme('user_picture', array('account' => $user));
-  
-  // grab the user profile menu
-  $menu_minified = array();
-  $options = array(
-    'attributes' => array(
-      'title' => ''
-    )
-  );
-  $menu_items = menu_tree('menu-user-profile-block');
-  foreach ($menu_items as $menu_item) {
-    
-    // only process actual menu items
-    if (is_array($menu_item) && !array_key_exists('#title', $menu_item)) {
-      continue;
-    }
-    
-    if (isset($menu_item['#localized_options']['attributes']['title'])) {
-      $options['attributes']['title'] = $menu_item['#localized_options']['attributes']['title'];
-    } else {
-      $options['attributes']['title'] = $menu_item['#title'];
-    }
-    $menu_minified[] = l($menu_item['#title'], $menu_item['#href'], $options);
-  }
-  
-  // add the menu to the content
-  $content[] = theme('item_list', array(
-      'items' => $menu_minified,
-      'type' => 'ul',
-    )
-  );
-  
-  // finalise the content
-  $block['content'] = implode("\n", $content);
-  
-  return $block;
-  
-}
-
 /******************************************************************************
  * Form functions
  ******************************************************************************/
@@ -366,6 +311,7 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
       break;
     
     case 'user_profile_form':
+      module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
       _twoofakind_com_au_form_user_profile_form($form, $form_state);
       break;
   }
@@ -469,43 +415,6 @@ function _twoofakind_com_au_form_views_exposed_form(&$form, &$form_state) {
   }
 }
 
-/**
- * Alter the user profile form
- * 
- * Adding some headings and text to user profile form
- * and collapsing (by default) the pvt messages fieldset
- * 
- * @param
- *   A form
- * 
- * @param
- *   And it's for  state
- */
-function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
-  
-  // add some headings and text
-  // profile
-  $markup = array();
-  $markup[] = '<h2>Profile information<a name="profile">&nbsp;</a></h2>';
-  $markup[] = '<p>Please enter your profile information.</p>';
-  $form['profile_help'] = array(
-    '#markup' => implode("\n", $markup),
-    '#weight' => -1000
-  );
-  // match criteria
-  $markup = array();
-  $markup[] = '<h2>Match criteria<a name="match">&nbsp;</a></h2>';
-  $markup[] = '<p>Please enter your match criteria.</p>';
-  $form['match_help'] = array(
-    '#markup' => implode("\n", $markup),
-    '#weight' => 1
-  );
-  
-  // collapse the pvt messages fieldset
-  $form['privatemsg']['#collapsed'] = TRUE;
-  
-}
-
 /******************************************************************************
  * View functions
  ******************************************************************************/
@@ -603,6 +512,8 @@ function twoofakind_com_au_entity_info() {
 
 /**
  * Implements hook_user_view().
+ * 
+ * This needs to be here and not the user include
  */
 function twoofakind_com_au_user_view($account, $view_mode, $langcode) {
 

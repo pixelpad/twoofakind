@@ -2,7 +2,7 @@
 
 /**
  * @file
- * favourite entity information and functions
+ * Admin functions
  */
 
 /******************************************************************************
