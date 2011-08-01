@@ -372,7 +372,8 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
     'field_headline_value',
     'field_self_summary_value',
     'field_friend_summary_value',
-    'field_passionate_about_value'
+    'field_passionate_about_value',
+    'picture',
   );
   if (empty($user->uid)) {
     foreach ($disabled_fields as $field_name) {
