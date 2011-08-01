@@ -59,8 +59,13 @@ function twoofakind_com_au_menu() {
  * Implements hook_init().
  */
 function twoofakind_com_au_init() {
+  
+  // add required js and css
   drupal_add_js(drupal_get_path('module', 'twoofakind_com_au') . '/js/twoofakind_com_au.js', 'file');
   drupal_add_css(drupal_get_path('module', 'twoofakind_com_au') . '/css/twoofakind_com_au.css', 'file');
+  
+  // set some session variables utilised in hook_form_alter below
+  $GLOBALS['UserSearchFormProcessed'] = 0;
 }
 
 /******************************************************************************
@@ -308,7 +313,6 @@ function _twoofakind_com_au_block_recent_messages() {
  * Implementation of hook_form_alter()
  */
 function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
-  
   switch ($form_id) {
     
     case 'views_exposed_form':
@@ -351,6 +355,9 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
 
   // we need to remove some options from the form if 
   // the user is not logged in
+  // there is some JS that goes along with this
+  // stupid labels were still appearing
+  // #title_display didn't help
   $disabled_fields = array(
     'field_star_sign_value',
     'field_personality_value',
@@ -379,16 +386,44 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
   if (isset($_GET['op']) && $_GET['op'] == 'Clear') {
     // we are, don't populate from match criteria
     // and add a value to the session to indicate this
-    $_SESSION['FormClear'] = TRUE;
+    $_SESSION['UserSearchFormClear'] = TRUE;
     return;
   }
 
   // check the session for clear value
   // I'm going to retain the clear value for the remainder of the session
   // otherwise with each load match criteria will be reinstated
-  if (isset($_SESSION['FormClear'])) {
+  if (isset($_SESSION['UserSearchFormClear'])) {
     return;
   }
+  
+  // we need to store each form state in to a session variable
+  // so we can compare this form_state against the last
+  // the reason for this being that if a user empties a field
+  // or it's options we need to retain that emptiness and not
+  // reinstate match criteria values
+
+  // this is because this hook is run twice for some reason
+  // at this point I could find no other differentiator
+  // in the form_state
+//  $form_session_processed = 0;
+//  if (isset($GLOBALS['UserSearchFormProcessed']) && array_key_exists('UserSearchFormProcessed', $GLOBALS)) {
+//    $form_session_processed = $GLOBALS['UserSearchFormProcessed'];
+//  }
+//  ++$form_session_processed;
+//  $GLOBALS['UserSearchFormProcessed'] = $form_session_processed;
+//
+//  // if we're at step 1 or 2 we want to compare the values of this
+//  // form state against the session
+  $form_state_session = $form_state;
+//  if (isset($GLOBALS['UserSearchFormState'])) {
+//    $form_state_session = $_SESSION['UserSearchFormState'];
+//  }
+//  // if this is the second time the form is processing then
+//  // we want to replace the session form state with current one
+//  if ($form_session_processed == 2) {
+//    $GLOBALS['UserSearchFormState'] = $form_state;
+//  }
 
   // grab the match criteria of the currently logged in user
   // if any exist
@@ -414,7 +449,13 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
     if (array_key_exists($search_key, $form)) {
 
       // check to see if there is a value in form_state
-      if (!array_key_exists($search_key, $form_state['input']) || empty($form_state['input'][$search_key])) {
+      // we also need to make sure that the session form state
+      // value was not populated i.e. if we're going from a 
+      // value to emptiness we need to retain the emptiness
+      if (
+          (!array_key_exists($search_key, $form_state['input']) || empty($form_state['input'][$search_key]))
+          && (!array_key_exists($search_key, $form_state_session['input']) || empty($form_state_session['input'][$search_key]))
+          ) {
 
         // form_state value for this field is empty
         // look for a corresponding value in match criteria
@@ -521,6 +562,25 @@ function _twoofakind_com_au_form_views_exposed_form_people_page(&$form, &$form_s
 //      $form_state['values']['access_new'] = '';
 //    }
 //  }
+//}
+
+/******************************************************************************
+ * Theme functions
+ ******************************************************************************/
+
+
+
+//function twoofakind_com_au_theme_form($variables) {
+//  $element = $variables['element'];
+//  if (isset($element['#action'])) {
+//    $element['#attributes']['action'] = drupal_strip_dangerous_protocols($element['#action']);
+//  }
+//  element_set_attributes($element, array('method', 'id'));
+//  if (empty($element['#attributes']['accept-charset'])) {
+//    $element['#attributes']['accept-charset'] = "UTF-8";
+//  }
+//  // Anonymous DIV to satisfy XHTML compliance.
+//  return '<form' . drupal_attributes($element['#attributes']) . '><div>' . $element['#children'] . '</div></form>';
 //}
 
 /******************************************************************************
