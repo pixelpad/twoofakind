@@ -28,13 +28,18 @@
             return false;
           });
         });
-        
-        /* hide labels that should not appear */
+      });
+      
+      /* hide labels that should not appear */
+      $('body.not-logged-in div.region-sidebar-right:not(.js-processed-twice)', context).each(function () {
+        var sidebar = $(this);
+        $(this).addClass('js-processed-twice');
         $('label:not(.js-processed)', sidebar).each(function () {
           $(this).addClass('js-processed');
           var label_for = $(this).attr('for');
           var label_input = $('#'+label_for, sidebar);
-          if (label_input.length == 0) {
+          /* dodgy hack to deal with date of birth fields */
+          if (label_input.length == 0 && label_for.indexOf('birth') == -1) {
             $(this).hide();
           }
         });

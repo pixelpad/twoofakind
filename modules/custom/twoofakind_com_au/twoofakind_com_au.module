@@ -442,10 +442,16 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
     }
 
     // create the field key for the match
-    // special treatment for location
+    // special treatment for location and DOB
     if ($key == 'field_match_user_location') {
       $search_key = 'city';
-    } else {
+    }
+    elseif ($key == 'field_match_age_min' || $key == 'field_match_age_max') {
+      $search_key = 'field_date_of_birth_value';
+dsm($data);
+dsm($form_state['input'][$search_key]);
+    }
+    else {
       $search_key = str_replace('field_match', 'field', $key) . '_value';
     }
 
