@@ -6,6 +6,26 @@
  */
 
 /**
+ * Implements hook_views_data_alter()
+ */
+function twoofakind_com_au_views_data_alter(&$data) { 
+//dd($data);
+  // add a new field to the users data
+  // not to take content but simply be available as a value
+  // age
+//  $data['users']['age'] = array(
+//    'title' => t('Age'),
+//    'help' => t('Age of a user'),
+//    'handler' => 'twoofakind_handlers_field_field_age',
+//  );
+
+  // alter the date of birth table field definition
+  // modify the filter from the normal numeric to our new version
+  $data['field_data_field_date_of_birth']['field_date_of_birth_value']['filter']['handler'] = 'twoofakind_com_au_handler_filter_age';
+
+}
+
+/**
  * Implements hook_views_data()
  */
 function twoofakind_com_au_views_data() { 

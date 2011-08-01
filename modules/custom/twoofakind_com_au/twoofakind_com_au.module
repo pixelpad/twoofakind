@@ -308,33 +308,40 @@ function _twoofakind_com_au_block_recent_messages() {
  * Implementation of hook_form_alter()
  */
 function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
-
+  
   switch ($form_id) {
     
     case 'views_exposed_form':
-      _twoofakind_com_au_form_views_exposed_form($form, $form_state);
+      switch ($form['#id']) {
+        case 'views-exposed-form-user-search-page-user-search':
+          _twoofakind_com_au_form_views_exposed_form_user_search($form, $form_state);
+          break;
+        case 'views-exposed-form-people-page':
+          _twoofakind_com_au_form_views_exposed_form_people_page($form, $form_state);
+          break;
+      }
       break;
     
     case 'user_profile_form':
       module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
       _twoofakind_com_au_form_user_profile_form($form, $form_state);
       break;
+    
   }
 }
 
 /**
- * Alter the views exposed form
+ * Alter the views exposed form for user search
  * 
  * Adding users match criteria to the form
  * if no criteria has been entered manually
  * 
- * @param
+ * @param $form
  *   A form
  * 
- * @param
- *   And it's for  state
+ * @param $form_state
  */
-function _twoofakind_com_au_form_views_exposed_form(&$form, &$form_state) {
+function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_state) {
   
   global $user;
   
@@ -417,6 +424,76 @@ function _twoofakind_com_au_form_views_exposed_form(&$form, &$form_state) {
         } 
       }
     }
+  }
+}
+
+/**
+ * Alter the views exposed form for people page
+ * 
+ * Add some help text
+ * And modify some form elements
+ * And add another submit function
+ * 
+ * Modifying to checkbox and submit functions were taking too long
+ * 
+ * @param $form
+ *   A form
+ * 
+ * @param $form_state
+ *   And it's for  state
+ */
+function _twoofakind_com_au_form_views_exposed_form_people_page(&$form, &$form_state) {
+//dsm($form_state, 'Prior');
+  // add some help to the last access item
+  $form['access']['#description'] = 'e.g. -3 months, -7 days';
+  
+  // add some help to the new users item
+  $form['access_new']['#description'] = '0 = new users, blank for all users';
+  
+  // modify the new user field to a checkbox
+//  $form['access_new_checkbox'] = array(
+//    '#type' => 'checkbox',
+//    '#title' => t('New Users'),
+//    '#return_value' => 0,
+//    '#description' => t('Check to see new users only'),
+//    '#weight' => -10
+//  );
+//  $form['#info']['fitler-access_new_checkbox'] =
+//  dsm($form);
+//  if (isset($form_state['values']['access_new'])) {
+//    if () {
+//      
+//    }
+//  }
+  
+  // add your own submit function to deal with checkbox modification
+//  $form['#submit'] = array(
+//    '_twoofakind_com_au_form_views_exposed_form_people_page_submit',
+//    $form['#submit'][0]
+//  );
+//  dsm($form);
+  
+}
+
+/**
+ * Add some additional sumit processing
+ * 
+ * @param $form
+ *   A form
+ * 
+ * @param $form_state
+ *   And it's for  state
+ */
+function _twoofakind_com_au_form_views_exposed_form_people_page_submit(&$form, &$form_state) {
+
+  // modify the for state value for the new_user field
+  if (array_key_exists('access_new', $form_state['values'])) {
+//dsm($form_state, 'Post');
+//    if ($form_state['values']['access_new'] == 1) {
+//      $form_state['values']['access_new'] = 0;
+//    } else {
+//      $form_state['values']['access_new'] = '';
+//    }
   }
 }
 
