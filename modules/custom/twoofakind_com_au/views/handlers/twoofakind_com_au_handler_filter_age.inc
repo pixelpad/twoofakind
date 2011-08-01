@@ -12,8 +12,11 @@ class twoofakind_com_au_handler_filter_age extends views_handler_filter_numeric 
     
     $field = 'age';
     
+    // old version
+    // "DATE_FORMAT(NOW(), '%Y') - DATE_FORMAT(FROM_UNIXTIME($this->table_alias.$this->real_field), '%Y') - (DATE_FORMAT(NOW(), '00-%m-%d') < DATE_FORMAT(FROM_UNIXTIME($this->table_alias.$this->real_field), '00-%m-%d'))",
+    
     $this->field_alias = $this->query->add_field(NULL,
-      "DATE_FORMAT(NOW(), '%Y') - DATE_FORMAT(FROM_UNIXTIME($this->table_alias.$this->real_field), '%Y') - (DATE_FORMAT(NOW(), '00-%m-%d') < DATE_FORMAT(FROM_UNIXTIME($this->table_alias.$this->real_field), '00-%m-%d'))",
+      "TIMESTAMPDIFF(YEAR, $this->table_alias.$this->real_field, now())",
       $field);
 
     $info = $this->operators();
