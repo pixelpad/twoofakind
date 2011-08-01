@@ -44,6 +44,10 @@ function twoofakind_com_au_menu() {
   module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.admin');
   _twoofakind_com_au_admin_menu($items);
   
+  // page_error
+  module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.page_error');
+  _twoofakind_com_au_page_error_menu($items);
+  
   // user
   module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
   _twoofakind_com_au_user_menu($items);
