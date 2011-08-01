@@ -20,6 +20,7 @@ class twoofakind_com_au_handler_filter_age extends views_handler_filter_numeric 
       $field);
     
     // also add a group by for this field
+    // without this GROUP BY the HAVING clause will not work
     $this->query->add_groupby($this->field_alias);
 
     $info = $this->operators();
