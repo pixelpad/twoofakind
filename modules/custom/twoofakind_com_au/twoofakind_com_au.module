@@ -899,9 +899,9 @@ function theme_ds_age_field($field) {
   $output = '';
   
   // look for DOB field
-  if (isset($field['entity']->field_dob[LANGUAGE_NONE][0]['value'])) {
+  if (isset($field['entity']->field_date_of_birth[LANGUAGE_NONE][0]['value'])) {
     
-    $dob = strtotime($field['entity']->field_dob[LANGUAGE_NONE][0]['value']);
+    $dob = $field['entity']->field_date_of_birth[LANGUAGE_NONE][0]['value'];
     $now = time();
     $output = sprintf("%d", floor(abs($now-$dob)/60/60/24/365));
     
