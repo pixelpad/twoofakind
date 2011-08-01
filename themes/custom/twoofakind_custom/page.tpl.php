@@ -66,7 +66,7 @@
 						
 						<!-- Extra Menu Links -->
 						<ul id="MmOtherLinks" class="sf-menu">
-							<li><a href="/rss.xml"><span class="mmFeeds"><?php print t("Feeds") ?></span></a></li>
+							<!--<li><a href="/rss.xml"><span class="mmFeeds"><?php print t("Feeds") ?></span></a></li>-->
 							<?php if ($user->uid > 0) { ?> 
 							<li><a href="<?php print url('user/logout') ?>"><span class="mmLogin"><?php print t("LogOut") ?></span></a></li>
 							<?php } else { ?>
