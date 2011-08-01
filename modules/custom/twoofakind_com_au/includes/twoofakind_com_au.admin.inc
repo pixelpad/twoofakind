@@ -21,65 +21,68 @@ function _twoofakind_com_au_admin_menu(&$items) {
 
   // Home page editing
   // Home page main admin page
-  $items['admin/home_page'] = array(
-    'title' => 'Home page',
-    'description' => 'Administer content that appears on the home page',
-    'position' => 'right',
-    'weight' => -8,
-//    'page callback' => 'system_admin_menu_block_page',
+  $items['admin/content/boxes'] = array(
+    'title' => 'Box content',
+    'description' => 'Administer box based content e.g. home page, welcome message, access denied message, and the footer',
     'page callback' => 'twoofakind_com_au_admin_menu_block_page',
     'access arguments' => array('administer nodes'),
-//    'file' => drupal_get_path('module', 'system') . '/system.admin.inc',
     'file' => 'includes/twoofakind_com_au.admin.inc',
+    'type' => MENU_LOCAL_TASK
   );
   $common = array(
     'page callback' => '_twoofakind_com_au_admin_menu_redirect',
-    'page arguments'   => array(2),
+    'page arguments'   => array(3),
     'access arguments' => array('administer nodes'),
     'file' => 'includes/twoofakind_com_au.admin.inc'
   );
   // Home banner left box
-  $items['admin/home_page/home_banner_left'] = array(
+  $items['admin/content/boxes/home_banner_left'] = array(
     'title' => 'Home banner left',
     'description' => 'Edit the content that appears below the logo on the home page',
   );
-  $items['admin/home_page/home_banner_left'] += $common;
+  $items['admin/content/boxes/home_banner_left'] += $common;
   // Home banner right box
-  $items['admin/home_page/home_banner_right'] = array(
+  $items['admin/content/boxes/home_banner_right'] = array(
     'title' => 'Home banner right',
     'description' => 'Edit the content that appears below the search form on the home page',
   );
-  $items['admin/home_page/home_banner_right'] += $common;
+  $items['admin/content/boxes/home_banner_right'] += $common;
   // Home banner welcome box
-  $items['admin/home_page/welcome'] = array(
+  $items['admin/content/boxes/welcome'] = array(
     'title' => 'Home banner welcome',
     'description' => 'Edit the content that appears below the home banner left on the home page',
   );
-  $items['admin/home_page/welcome'] += $common;
+  $items['admin/content/boxes/welcome'] += $common;
+  // Welcome message upon login
+  $items['admin/content/boxes/login_welcome'] = array(
+    'title' => 'Initial login Welcome message',
+    'description' => 'Edit the content that is displayed to a user when they first log in',
+  );
+  $items['admin/content/boxes/login_welcome'] += $common;
   // Footer partners
-  $items['admin/home_page/footer_partners'] = array(
+  $items['admin/content/boxes/footer_partners'] = array(
     'title' => 'Footer : Partners',
     'description' => 'Edit the partners content that appears in the footer',
   );
-  $items['admin/home_page/footer_partners'] += $common;
+  $items['admin/content/boxes/footer_partners'] += $common;
   // Footer social
-  $items['admin/home_page/footer_social'] = array(
+  $items['admin/content/boxes/footer_social'] = array(
     'title' => 'Footer : Social',
     'description' => 'Edit the social links content that appears in the footer',
   );
-  $items['admin/home_page/footer_social'] += $common;
+  $items['admin/content/boxes/footer_social'] += $common;
   // Footer contact
-  $items['admin/home_page/footer_contact'] = array(
+  $items['admin/content/boxes/footer_contact'] = array(
     'title' => 'Footer : Contact',
     'description' => 'Edit the contact content that appears in the footer',
   );
-  $items['admin/home_page/footer_contact'] += $common;
+  $items['admin/content/boxes/footer_contact'] += $common;
   // Footer Copyright
-  $items['admin/home_page/footer_copyright'] = array(
+  $items['admin/content/boxes/footer_copyright'] = array(
     'title' => 'Footer : Copyright',
     'description' => 'Edit the copyright content that appears below the footer',
   );
-  $items['admin/home_page/footer_copyright'] += $common;
+  $items['admin/content/boxes/footer_copyright'] += $common;
 
 }
 
@@ -98,6 +101,10 @@ function _twoofakind_com_au_admin_menu(&$items) {
  */
 function twoofakind_com_au_admin_menu_block_page() {
   $item = menu_get_item();
+
+  // sneaky hack to allow a MENU_LOCAL_TASK tab to use system_admin_menu_block function
+  $item['tab_root'] = $item['path'];
+  
   if ($content = system_admin_menu_block($item)) {
     $output = theme('admin_block_content', array('content' => $content));
   }
@@ -117,13 +124,14 @@ function twoofakind_com_au_admin_menu_block_page() {
  */
 function _twoofakind_com_au_admin_menu_redirect($item = NULL) {
   
-  $default_destination = 'admin/home_page';
+  $default_destination = 'admin/content/boxes';
   
   switch ($item) {
     
     case 'home_banner_left' :
     case 'home_banner_right' :
     case 'welcome' :
+    case 'login_welcome' :
     case 'footer_partners' :
     case 'footer_social' :
     case 'footer_contact' :

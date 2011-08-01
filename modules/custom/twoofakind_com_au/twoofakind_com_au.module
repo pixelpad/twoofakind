@@ -484,18 +484,18 @@ function _twoofakind_com_au_form_views_exposed_form_people_page(&$form, &$form_s
  * @param $form_state
  *   And it's for  state
  */
-function _twoofakind_com_au_form_views_exposed_form_people_page_submit(&$form, &$form_state) {
+//function _twoofakind_com_au_form_views_exposed_form_people_page_submit(&$form, &$form_state) {
 
   // modify the for state value for the new_user field
-  if (array_key_exists('access_new', $form_state['values'])) {
+//  if (array_key_exists('access_new', $form_state['values'])) {
 //dsm($form_state, 'Post');
 //    if ($form_state['values']['access_new'] == 1) {
 //      $form_state['values']['access_new'] = 0;
 //    } else {
 //      $form_state['values']['access_new'] = '';
 //    }
-  }
-}
+//  }
+//}
 
 /******************************************************************************
  * View functions
@@ -647,6 +647,55 @@ function twoofakind_com_au_user_view($account, $view_mode, $langcode) {
     recent_view_create($account->uid);
   }
   
+}
+
+/**
+ * Implements hook_user_login().
+ * 
+ * This needs to be here and not the user include
+ */
+function twoofakind_com_au_user_login(&$edit, $account) {
+  
+  // if access = 0 then throw them a message telling them to complete their profile
+  if (empty($account->access)) {
+    
+    // grab welcome content from box
+    $box = boxes_block_view('welcome_login');
+    $box_title = '';
+    $box_content = '';
+    if ($box) {
+      $box_title = $box['subject'];
+      $box_content = $box['content'];
+    }
+    
+    // link to edit profile and match criteria
+    $url_edit = "user/$account->uid/edit";
+    $link_title = t('Edit your profile');
+    $link_options = array(
+      'fragment' => 'profile',
+      'attributes' => array(
+        'title' => $link_title
+      ),
+    );
+    $link_profile = l($link_title, $url_edit, $link_options);
+    $link_title = t('Edit your match criteria');
+    $link_options['fragment'] = 'match';
+    $link_options['attributes']['title'] = $link_title;
+    $link_match = l($link_title, $url_edit, $link_options);
+    
+    // build output
+    $output = array();
+    if (!empty($box_title)) {
+      $output[] = '<h2>' . $box_title . '</h2>';
+    }
+    $output[] = $box_content;
+    $output[] = '<ul>';
+    $output[] = '<li>' . $link_profile . '</li>';
+    $output[] = '<li>' . $link_match . '</li>';
+    $output[] = '</ul>';
+    
+    drupal_set_message(implode("\n", $output));
+  }
 }
 
 /******************************************************************************
