@@ -12,16 +12,34 @@
         $(this).addClass('js-processed');
         
         /* grab the input field the search will be replacing */
-        var inputSearch = $('input#edit-name', context);
+        var input_username = $('input#edit-name-search', context);
+        var dummy_text = 'Enter a username';
         
         /* send the value of this input field to the relevant field in
          * the matches exposed filters form
          */
         $('input#SearchInput', $(this)).each(function () {
-          $(this).val(inputSearch.val());
+          var input_username_val = input_username.val();
+          if (input_username_val.length > 0) {
+            $(this).val(input_username_val);
+          }
+          else {
+            $(this).val(dummy_text);
+          }
         }).bind({
           blur: function() {
-            inputSearch.val($(this).val());
+            var search_input_val = $(this).val();
+            if (search_input_val.length > 0 && search_input_val != dummy_text) {
+              input_username.val(search_input_val);
+            } else {
+              $(this).val(dummy_text);
+            }
+          },
+          focus: function() {
+            var search_input_val = $(this).val();
+            if (search_input_val == dummy_text) {
+              $(this).val('');
+            }
           }
         });
         /* make sure the search button doesn't submit this form but

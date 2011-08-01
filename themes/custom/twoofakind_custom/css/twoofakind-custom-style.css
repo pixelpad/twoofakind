@@ -94,7 +94,7 @@ body.not-logged-in div.region-sidebar-right div#matches_form {
 }
 
 /* hide the first one */
-div.region-sidebar-right div#matches_form div#edit-name-wrapper {
+div.region-sidebar-right div#matches_form div#edit-name-search-wrapper {
   display: none;
 }
 
