@@ -357,35 +357,8 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
   $form['#prefix'] = '<div id="matches_form">';
   $form['#suffix'] = '</div>';
 
-  // we need to remove some options from the form if 
-  // the user is not logged in
-  // there is some JS that goes along with this
-  // stupid labels were still appearing
-  // #title_display didn't help
-  $disabled_fields = array(
-    'field_star_sign_value',
-    'field_personality_value',
-    'field_eye_colour_value',
-    'field_hair_colour_value',
-    'field_height_value',
-    'field_body_type_value',
-//    'field_kosher_value',
-    'field_smoker_value',
-    'field_drinking_value',
-    'field_have_kids_value',
-    'field_headline_value',
-    'field_self_summary_value',
-    'field_friend_summary_value',
-    'field_passionate_about_value',
-    'picture',
-  );
-  if (empty($user->uid)) {
-    foreach ($disabled_fields as $field_name) {
-      if (array_key_exists($field_name, $form)) {
-        $form[$field_name]['#access'] = FALSE;
-      }
-    }
-  }
+  // remove some fields for anonymous users
+  _twoofakind_com_au_form_user_search_remove_field($form);
 
   // check if we're clearing
   if (isset($_GET['op']) && $_GET['op'] == 'Clear') {
@@ -503,6 +476,52 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
       }
     }
   }
+}
+
+/**
+ * Remove some fields from the search form for anon users
+ * 
+ * @param $form
+ *   A form
+ */
+function _twoofakind_com_au_form_user_search_remove_field(&$form) {
+  
+  global $user;
+
+  // if logged in don't remove
+  if ($user->uid) {
+    return;
+  }
+  
+  // we need to remove some options from the form if 
+  // the user is not logged in
+  // there is some JS that goes along with this
+  // stupid labels were still appearing
+  // #title_display didn't help
+  $disabled_fields = array(
+    'field_star_sign_value',
+    'field_personality_value',
+    'field_eye_colour_value',
+    'field_hair_colour_value',
+    'field_height_value',
+    'field_body_type_value',
+//    'field_kosher_value',
+    'field_smoker_value',
+    'field_drinking_value',
+    'field_have_kids_value',
+    'field_headline_value',
+    'field_self_summary_value',
+    'field_friend_summary_value',
+    'field_passionate_about_value',
+    'picture',
+    'reset' // and the clear button
+  );
+  foreach ($disabled_fields as $field_name) {
+    if (array_key_exists($field_name, $form)) {
+      $form[$field_name]['#access'] = FALSE;
+    }
+  }
+  
 }
 
 /**
