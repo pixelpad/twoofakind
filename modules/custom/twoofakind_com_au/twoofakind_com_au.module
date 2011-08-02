@@ -443,13 +443,13 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
 
     // create the field key for the match
     // special treatment for location and DOB
+    $min_max = NULL;
     if ($key == 'field_match_user_location') {
       $search_key = 'city';
     }
     elseif ($key == 'field_match_age_min' || $key == 'field_match_age_max') {
+      $min_max = substr($key, -3);
       $search_key = 'field_date_of_birth_value';
-dsm($data);
-dsm($form_state['input'][$search_key]);
     }
     else {
       $search_key = str_replace('field_match', 'field', $key) . '_value';
@@ -459,14 +459,9 @@ dsm($form_state['input'][$search_key]);
     // populate it with the value from the users match criteria
     if (array_key_exists($search_key, $form)) {
 
-      // check to see if there is a value in form_state
-      // we also need to make sure that the session form state
-      // value was not populated i.e. if we're going from a 
-      // value to emptiness we need to retain the emptiness
-      if (
-          (!array_key_exists($search_key, $form_state['input']) || empty($form_state['input'][$search_key]))
-          && (!array_key_exists($search_key, $form_state_session['input']) || empty($form_state_session['input'][$search_key]))
-          ) {
+      // Should we override
+      // see other function for more information
+      if (_twoofakind_com_au_form_user_search_override_field($form_state, $search_key, $min_max)) {
 
         // form_state value for this field is empty
         // look for a corresponding value in match criteria
@@ -485,7 +480,11 @@ dsm($form_state['input'][$search_key]);
           }
 
           // now plug the values in to the form_state
-          if ($data_is_text) {
+          if (isset($min_max)) {
+            $form_state['input'][$search_key][$min_max] = $data_formatted[0];
+            $form_state['view']->exposed_input[$search_key][$min_max] = $data_formatted[0];
+          }
+          elseif ($data_is_text) {
 
             // treat text data differently to the others
             $form_state['input'][$search_key] = $data_formatted[0];
@@ -493,7 +492,8 @@ dsm($form_state['input'][$search_key]);
             $form[$search_key]['#default_value'] = $data_formatted[0];
             $form[$search_key]['#value'] = $data_formatted[0];
 
-          } else {
+          } 
+          else {
             $form_state['input'][$search_key] = $data_formatted;
             $form_state['view']->exposed_input[$search_key] = $data_formatted;
             $form[$search_key]['#default_value'] = $data_formatted;
@@ -503,6 +503,50 @@ dsm($form_state['input'][$search_key]);
       }
     }
   }
+}
+
+/**
+ * A check to see if we should overwrite this value with match criteria
+ * 
+ * @param $form_state
+ *   A form state
+ * 
+ * @param $field
+ *   The field we're looking to override
+ * 
+ * @param $min_max
+ *   A special addition for BETWEEN values
+ * 
+ * @todo It would be better to do the session handling in this function as well
+ */
+function _twoofakind_com_au_form_user_search_override_field($form_state, $field_key, $min_max = NULL) {
+  
+  // if a value is set in the form state we won't replace it
+  if (array_key_exists($field_key, $form_state['input'])) {
+    // the only caveat is DOB as it populates form state with
+    // empty min and mx
+    if (is_array($form_state['input'][$field_key])) {
+      // check for min or max key
+      if (!empty($min_max) && array_key_exists($min_max, $form_state['input'][$field_key])) {
+        // this is a BETWEEN value i.e. DOB
+        // check to see if the min or max value is actually not empty
+        if (!empty($form_state['input'][$field_key][$min_max])) {
+          return FALSE;
+        }
+      }
+      // otherwise normal array of values, if not empty don't replace
+      elseif (!empty($form_state['input'][$field_key])) {
+        return FALSE;
+      }
+    }
+    // otherwise just text, again if not empty don't replace
+    elseif (!empty($form_state['input'][$field_key])) {
+      return FALSE;
+    }
+  }
+  
+  return TRUE;
+  
 }
 
 /**
