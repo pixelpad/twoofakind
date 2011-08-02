@@ -64,12 +64,17 @@ function twoofakind_com_au_menu() {
  */
 function twoofakind_com_au_init() {
   
+  global $user;
+  
   // add required js and css
   drupal_add_js(drupal_get_path('module', 'twoofakind_com_au') . '/js/twoofakind_com_au.js', 'file');
   drupal_add_css(drupal_get_path('module', 'twoofakind_com_au') . '/css/twoofakind_com_au.css', 'file');
   
   // set some session variables utilised in hook_form_alter below
-  $GLOBALS['UserSearchFormProcessed'] = 0;
+  if (!empty($user->uid)) {
+    // only for auth users
+    $GLOBALS['UserSearchFormProcessed'] = 0;
+  }
 }
 
 /******************************************************************************
@@ -374,6 +379,12 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
   if (isset($_SESSION['UserSearchFormClear'])) {
     return;
   }
+
+  // THIS HAS BEEN SHELVED FOR THE TIME BEING
+  // IT IS NOT POSSIBLE WITHOUT CREATING A NEW TABLE
+  // TO STORE THE FORM STATE BETWEEN PAGE LOADS
+  // WILL REQUIRE THE SESSION_API AND MORE WORK THAN I 
+  // HAVE TIME FOR AT THIS POINT
   
   // we need to store each form state in to a session variable
   // so we can compare this form_state against the last
@@ -384,23 +395,25 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
   // this is because this hook is run twice for some reason
   // at this point I could find no other differentiator
   // in the form_state
-//  $form_session_processed = 0;
-//  if (isset($GLOBALS['UserSearchFormProcessed']) && array_key_exists('UserSearchFormProcessed', $GLOBALS)) {
-//    $form_session_processed = $GLOBALS['UserSearchFormProcessed'];
-//  }
-//  ++$form_session_processed;
-//  $GLOBALS['UserSearchFormProcessed'] = $form_session_processed;
+//  if (!empty($user->uid)) {
+//    $form_session_processed = 0;
+//    if (isset($GLOBALS['UserSearchFormProcessed'])) {
+//      $form_session_processed = $GLOBALS['UserSearchFormProcessed'];
+//    }
+//    ++$form_session_processed;
+//    $GLOBALS['UserSearchFormProcessed'] = $form_session_processed;
 //
-//  // if we're at step 1 or 2 we want to compare the values of this
-//  // form state against the session
-  $form_state_session = $form_state;
-//  if (isset($GLOBALS['UserSearchFormState'])) {
-//    $form_state_session = $_SESSION['UserSearchFormState'];
-//  }
-//  // if this is the second time the form is processing then
-//  // we want to replace the session form state with current one
-//  if ($form_session_processed == 2) {
-//    $GLOBALS['UserSearchFormState'] = $form_state;
+//    // if we're at step 1 or 2 we want to compare the values of this
+//    // form state against the session
+//    $form_state_session = $form_state;
+//    if (isset($_SESSION['UserSearchFormState'])) {
+//      $form_state_session = $_SESSION['UserSearchFormState'];
+//    }
+//    // if this is the second time the form is processing then
+//    // we want to replace the session form state with current one
+//    if ($form_session_processed == 2) {
+//      $_SESSION['UserSearchFormState'] = $form_state;
+//    }
 //  }
 
   // grab the match criteria of the currently logged in user
@@ -454,6 +467,8 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
 
           // now plug the values in to the form_state
           if (isset($min_max)) {
+            
+            // data is DOB (or BETWEEN search) plug in to min or max
             $form_state['input'][$search_key][$min_max] = $data_formatted[0];
             $form_state['view']->exposed_input[$search_key][$min_max] = $data_formatted[0];
           }
@@ -563,7 +578,7 @@ function _twoofakind_com_au_form_user_search_override_field($form_state, $field_
       return FALSE;
     }
   }
-  
+
   return TRUE;
   
 }
