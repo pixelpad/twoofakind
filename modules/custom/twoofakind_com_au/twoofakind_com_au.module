@@ -360,6 +360,7 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
   
   // wrap the whole form in a div
   $form['#prefix'] = '<div id="matches_form">';
+  $form['#prefix'] .= '<h2 class="titile">Search</h2>';
   $form['#suffix'] = '</div>';
 
   // remove some fields for anonymous users
