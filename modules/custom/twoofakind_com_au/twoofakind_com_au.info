@@ -11,7 +11,7 @@ dependencies[] = entity
 dependencies[] = block
 dependencies[] = user
 dependencies[] = menu
-dependencies[] = box
+dependencies[] = boxes
 
 ; Views handlers
 files[] = views/handlers/twoofakind_com_au_handler_filter_age.inc
