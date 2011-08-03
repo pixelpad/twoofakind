@@ -173,7 +173,7 @@ function _twoofakind_com_au_views_data_featured_users(&$data) {
   // common fields
   $data['featured_users'] = array(
     'table' => array(
-      'group' => t('Featured User'),
+      'group' => t('Featured Users'),
       'join' => array(
         'users' => array(
           'left_field' => 'uid',
@@ -191,11 +191,11 @@ function _twoofakind_com_au_views_data_featured_users(&$data) {
       ),
     ),
     'uid' => array(
-      'title' => t('Uid of Feature-er'),
+      'title' => t('Uid of Featurer-er'),
       'help' => t('User id of person marking the other as a featured_user')
     ),
     'featured_user_uid' => array(
-      'title' => t('User id of Featured user'),
+      'title' => t('Uid of Featured user'),
       'help' => t('User id of person being marked as featured_user'),
       'relationship' => array(
         'base' => 'users',
@@ -246,11 +246,11 @@ function _twoofakind_com_au_views_data_matches(&$data) {
       ),
     ),
     'uid' => array(
-      'title' => t('Uid of match-er'),
+      'title' => t('Uid of Match-er'),
       'help' => t('User id of person making the match')
     ),
     'match_uid' => array(
-      'title' => t('User id of Match-ee'),
+      'title' => t('Uid of Match-ee'),
       'help' => t('User id of person being marked as a match'),
     ),
     'created' => array(
@@ -307,13 +307,21 @@ function _twoofakind_com_au_views_data_matches(&$data) {
   
   // matches
   $data['matches'] = $data_common;
-  $data['matches']['table']['group'] = t('Match-er');
+  $data['matches']['table']['group'] = t('Matches');
   $data['matches']['table']['join'] = array(
     'users' => array(
       'left_field' => 'uid',
       'field' => 'match_uid',
       'table' => 'matches'
     )
+  );
+  $data['matches']['match_uid']['relationship'] = array(
+    'base' => 'users',
+    'field' => 'match_uid',
+    'left_field' => 'uid',
+    'left_table' => 'users',
+    'handler' => 'views_handler_relationship',
+    'label' => t('Match-ee'),
   );
   $data['matches']['uid_current'] = array(
     'real field' => 'uid',
@@ -326,13 +334,21 @@ function _twoofakind_com_au_views_data_matches(&$data) {
   
   // matches received
   $data['matches_received'] = $data_common;
-  $data['matches_received']['table']['group'] = t('Match-ee');
+  $data['matches_received']['table']['group'] = t('Matches received');
   $data['matches_received']['table']['join'] = array(
     'users' => array(
       'left_field' => 'uid',
       'field' => 'uid',
       'table' => 'matches'
     )
+  );
+  $data['matches_received']['uid']['relationship'] = array(
+    'base' => 'users',
+    'field' => 'uid',
+    'left_field' => 'uid',
+    'left_table' => 'users',
+    'handler' => 'views_handler_relationship',
+    'label' => t('Match-er'),
   );
   $data['matches_received']['uid_current'] = array(
     'real field' => 'match_uid',
@@ -367,11 +383,11 @@ function _twoofakind_com_au_views_data_recent_views(&$data) {
       ),
     ),
     'uid' => array(
-      'title' => t('Uid of Viewer'),
+      'title' => t('Uid of View-er'),
       'help' => t('User id of person viewing')
     ),
     'recent_view_uid' => array(
-      'title' => t('User id of View-ee'),
+      'title' => t('Uid of View-ee'),
       'help' => t('User id of person being viewed'),
     ),
     'created' => array(
@@ -410,13 +426,21 @@ function _twoofakind_com_au_views_data_recent_views(&$data) {
   
   // recent views
   $data['recent_views'] = $data_common;
-  $data['recent_views']['table']['group'] = t('View-er');
+  $data['recent_views']['table']['group'] = t('Recent views');
   $data['recent_views']['table']['join'] = array(
     'users' => array(
       'left_field' => 'uid',
       'field' => 'recent_view_uid',
       'table' => 'recent_views'
     )
+  );
+  $data['recent_views']['recent_view_uid']['relationship'] = array(
+    'base' => 'users',
+    'field' => 'recent_view_uid',
+    'left_field' => 'uid',
+    'left_table' => 'users',
+    'handler' => 'views_handler_relationship',
+    'label' => t('View-ee'),
   );
   $data['recent_views']['uid_current'] = array(
     'real field' => 'uid',
@@ -429,13 +453,21 @@ function _twoofakind_com_au_views_data_recent_views(&$data) {
   
   // recent_views received
   $data['recent_views_received'] = $data_common;
-  $data['recent_views_received']['table']['group'] = t('View-ee');
+  $data['recent_views_received']['table']['group'] = t('Recent views received');
   $data['recent_views_received']['table']['join'] = array(
     'users' => array(
       'left_field' => 'uid',
       'field' => 'uid',
       'table' => 'recent_views'
     )
+  );
+  $data['recent_views_received']['uid']['relationship'] = array(
+    'base' => 'users',
+    'field' => 'uid',
+    'left_field' => 'uid',
+    'left_table' => 'users',
+    'handler' => 'views_handler_relationship',
+    'label' => t('View-er'),
   );
   $data['recent_views_received']['uid_current'] = array(
     'real field' => 'recent_view_uid',
@@ -470,11 +502,11 @@ function _twoofakind_com_au_views_data_winks(&$data) {
       ),
     ),
     'uid' => array(
-      'title' => t('Uid of wink-er'),
+      'title' => t('Uid of Wink-er'),
       'help' => t('User id of person winking')
     ),
     'wink_uid' => array(
-      'title' => t('User id of Wink-ee'),
+      'title' => t('Uid of Wink-ee'),
       'help' => t('User id of person being winked at'),
     ),
     'created' => array(
@@ -513,13 +545,21 @@ function _twoofakind_com_au_views_data_winks(&$data) {
   
   // winks
   $data['winks'] = $data_common;
-  $data['winks']['table']['group'] = t('Wink-er');
+  $data['winks']['table']['group'] = t('Winks');
   $data['winks']['table']['join'] = array(
     'users' => array(
       'left_field' => 'uid',
       'field' => 'wink_uid',
       'table' => 'winks'
     )
+  );
+  $data['winks']['wink_uid']['relationship'] = array(
+    'base' => 'users',
+    'field' => 'wink_uid',
+    'left_field' => 'uid',
+    'left_table' => 'users',
+    'handler' => 'views_handler_relationship',
+    'label' => t('Wink-ee'),
   );
   $data['winks']['uid_current'] = array(
     'real field' => 'uid',
@@ -532,13 +572,21 @@ function _twoofakind_com_au_views_data_winks(&$data) {
   
   // winks received
   $data['winks_received'] = $data_common;
-  $data['winks_received']['table']['group'] = t('Wink-ee');
+  $data['winks_received']['table']['group'] = t('Winks received');
   $data['winks_received']['table']['join'] = array(
     'users' => array(
       'left_field' => 'uid',
       'field' => 'uid',
       'table' => 'winks'
     )
+  );
+  $data['winks_received']['uid']['relationship'] = array(
+    'base' => 'users',
+    'field' => 'uid',
+    'left_field' => 'uid',
+    'left_table' => 'users',
+    'handler' => 'views_handler_relationship',
+    'label' => t('Wink-er'),
   );
   $data['winks_received']['uid_current'] = array(
     'real field' => 'wink_uid',
