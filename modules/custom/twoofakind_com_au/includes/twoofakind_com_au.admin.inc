@@ -35,6 +35,9 @@ function _twoofakind_com_au_admin_menu(&$items) {
     'access arguments' => array('administer nodes'),
     'file' => 'includes/twoofakind_com_au.admin.inc'
   );
+  
+  // home page
+  
   // Home banner left box
   $items['admin/content/boxes/home_banner_left'] = array(
     'title' => 'Home banner left',
@@ -53,12 +56,18 @@ function _twoofakind_com_au_admin_menu(&$items) {
     'description' => 'Edit the content that appears below the home banner left on the home page',
   );
   $items['admin/content/boxes/welcome'] += $common;
-  // Welcome message upon login
+
+  // Initial login
+  
+    // Welcome message upon login
   $items['admin/content/boxes/login_welcome'] = array(
     'title' => 'Initial login Welcome message',
     'description' => 'Edit the content that is displayed to a user when they first log in',
   );
   $items['admin/content/boxes/login_welcome'] += $common;
+  
+  // footer
+
   // Footer partners
   $items['admin/content/boxes/footer_partners'] = array(
     'title' => 'Footer : Partners',
@@ -83,6 +92,27 @@ function _twoofakind_com_au_admin_menu(&$items) {
     'description' => 'Edit the copyright content that appears below the footer',
   );
   $items['admin/content/boxes/footer_copyright'] += $common;
+  
+  // Edit user screen
+  
+  // Profile
+  $items['admin/content/boxes/user_edit_profile'] = array(
+    'title' => 'Profile edit screen : Profile',
+    'description' => 'Edit the content that appears above the profile section on the user edit screen',
+  );
+  $items['admin/content/boxes/user_edit_profile'] += $common;
+  // Match criteria
+  $items['admin/content/boxes/user_edit_match'] = array(
+    'title' => 'Profile edit screen : Match criteria',
+    'description' => 'Edit the content that appears above the match criteria section on the user edit screen',
+  );
+  $items['admin/content/boxes/user_edit_match'] += $common;
+  // Account details
+  $items['admin/content/boxes/user_edit_account'] = array(
+    'title' => 'Profile edit screen : Account details',
+    'description' => 'Edit the content that appears above the Account details section on the user edit screen',
+  );
+  $items['admin/content/boxes/user_edit_account'] += $common;
 
 }
 
@@ -136,6 +166,9 @@ function _twoofakind_com_au_admin_menu_redirect($item = NULL) {
     case 'footer_social' :
     case 'footer_contact' :
     case 'footer_copyright' :
+    case 'user_edit_profile' :
+    case 'user_edit_match' :
+    case 'user_edit_account' :
       $redirect = "admin/structure/block/manage/boxes/$item/configure";
       break;
 

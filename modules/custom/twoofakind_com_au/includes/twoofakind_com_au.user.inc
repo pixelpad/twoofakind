@@ -169,22 +169,53 @@ function _twoofakind_com_au_block_profile() {
 function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
   
   // add some headings and text
-  // profile
-  $markup = array();
-  $markup[] = '<h2>Profile information<a name="profile">&nbsp;</a></h2>';
-  $markup[] = '<p>Please enter your profile information.</p>';
-  $form['profile_help'] = array(
-    '#markup' => implode("\n", $markup),
-    '#weight' => -1000
+  
+  // set up some basic defaults
+  $defaults = array(
+    'user_edit_profile' => array(
+      'subject' => 'Your profile',
+      'content' => '<p>Tell us a little bit more about you.<p>',
+      'weight' => -1000
+    ),
+    'user_edit_match' => array(
+      'subject' => 'What are you looking for in a partner?',
+      'content' => '<p>Tell us a little bit more about the kind of person you would like to meet.<p>',
+      'weight' => 1
+    ),
+    'user_edit_account' => array(
+      'subject' => 'Account details',
+      'content' => '<p>Edit your username, password and all that official jazz.<p>',
+      'weight' => 2
+    )
   );
-  // match criteria
-  $markup = array();
-  $markup[] = '<h2>Match criteria<a name="match">&nbsp;</a></h2>';
-  $markup[] = '<p>Please enter your match criteria.</p>';
-  $form['match_help'] = array(
-    '#markup' => implode("\n", $markup),
-    '#weight' => 1
-  );
+  $title = '<h2><a name="%s">%s</a></h2>';
+  
+  // cycle through each of the above and insert them in to the form
+  foreach ($defaults as $delta => $data) {
+    
+    // grab box if one exists
+    $box = boxes_block_view($delta);
+    if ($box) {
+      $box_title = $box['subject'];
+      $box_content = $box['content'];
+    } else {
+      $box_title = $data['subject'];
+      $box_content = $data['content'];
+    }
+    
+    // extract the anchor
+    $anchor_parts = explode('_', $delta);
+    $anchor = end($anchor_parts);
+    
+    // put it all together
+    $markup = array();
+    $markup[] = sprintf($title, $anchor, $box_title);
+    $markup[] = $box_content;
+    $form[$delta] = array(
+      '#markup' => implode("\n", $markup),
+      '#weight' => $data['weight']
+    );
+  }
   
   // collapse the pvt messages fieldset
   $form['privatemsg']['#collapsed'] = TRUE;
