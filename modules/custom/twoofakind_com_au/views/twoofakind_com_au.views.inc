@@ -9,15 +9,6 @@
  * Implements hook_views_data_alter()
  */
 function twoofakind_com_au_views_data_alter(&$data) { 
-//dd($data);
-  // add a new field to the users data
-  // not to take content but simply be available as a value
-  // age
-//  $data['users']['age'] = array(
-//    'title' => t('Age'),
-//    'help' => t('Age of a user'),
-//    'handler' => 'twoofakind_handlers_field_field_age',
-//  );
 
   // alter the date of birth table field definition
   // modify the filter from the normal numeric to our new version
@@ -76,7 +67,7 @@ function _twoofakind_com_au_views_data_favourites(&$data) {
       'help' => t('User id of person marking the other as a favourite')
     ),
     'favourite_uid' => array(
-      'title' => t('User id of Favourite-ee'),
+      'title' => t('Uid of Favourite-ee'),
       'help' => t('User id of person being marked as favourite'),
     ),
     'created' => array(
@@ -115,13 +106,21 @@ function _twoofakind_com_au_views_data_favourites(&$data) {
   
   // favourites
   $data['favourites'] = $data_common;
-  $data['favourites']['table']['group'] = t('Favourite-er');
+  $data['favourites']['table']['group'] = t('Favourites');
   $data['favourites']['table']['join'] = array(
     'users' => array(
       'left_field' => 'uid',
       'field' => 'favourite_uid',
       'table' => 'favourites'
     )
+  );
+  $data['favourites']['favourite_uid']['relationship'] = array(
+    'base' => 'users',
+    'field' => 'favourite_uid',
+    'left_field' => 'uid',
+    'left_table' => 'users',
+    'handler' => 'views_handler_relationship',
+    'label' => t('Favourite-ee'),
   );
   $data['favourites']['uid_current'] = array(
     'real field' => 'uid',
@@ -134,13 +133,21 @@ function _twoofakind_com_au_views_data_favourites(&$data) {
   
   // favourites received
   $data['favourites_received'] = $data_common;
-  $data['favourites_received']['table']['group'] = t('Favourite-ee');
+  $data['favourites_received']['table']['group'] = t('Favourites received');
   $data['favourites_received']['table']['join'] = array(
     'users' => array(
       'left_field' => 'uid',
       'field' => 'uid',
       'table' => 'favourites'
     )
+  );
+  $data['favourites_received']['uid']['relationship'] = array(
+    'base' => 'users',
+    'field' => 'uid',
+    'left_field' => 'uid',
+    'left_table' => 'users',
+    'handler' => 'views_handler_relationship',
+    'label' => t('Favourite-er'),
   );
   $data['favourites_received']['uid_current'] = array(
     'real field' => 'favourite_uid',
