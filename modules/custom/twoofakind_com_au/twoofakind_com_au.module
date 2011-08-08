@@ -332,6 +332,9 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
         case 'views-exposed-form-people-page':
           _twoofakind_com_au_form_views_exposed_form_people_page($form, $form_state);
           break;
+        default :
+          _twoofakind_com_au_form_views_exposed_form($form, $form_state);
+          break;
       }
       break;
     
@@ -357,10 +360,23 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
 function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_state) {
   
   global $user;
+
+  // defaults
+  $title = t('Search');
+  $path = $form['#action'];
+  $options = array(
+    'attributes' => array(
+      'title' => $title
+    )
+  );
+  $link = l($title, $path, $options);
   
   // wrap the whole form in a div
   $form['#prefix'] = '<div id="matches_form">';
-  $form['#prefix'] .= '<h2 class="titile">Search</h2>';
+  // add a title that links through to search results
+  $form['#prefix'] .= '<h4 class="title">' . $link . '</h4>';
+  
+  // close the div
   $form['#suffix'] = '</div>';
 
   // remove some fields for anonymous users
@@ -633,7 +649,7 @@ function _twoofakind_com_au_form_views_exposed_form_people_page(&$form, &$form_s
 }
 
 /**
- * Add some additional sumit processing
+ * Add some additional submit processing
  * 
  * @param $form
  *   A form
@@ -653,6 +669,37 @@ function _twoofakind_com_au_form_views_exposed_form_people_page(&$form, &$form_s
 //    }
 //  }
 //}
+
+/**
+ * Alter the views exposed form for all other views
+ * 
+ * @param $form
+ *   A form
+ * 
+ * @param $form_state
+ *  A form's state
+ */
+function _twoofakind_com_au_form_views_exposed_form(&$form, &$form_state) {
+  
+  // defaults
+  $title = t('Sort your results');
+  $path = $form['#action'];
+  $options = array(
+    'attributes' => array(
+      'title' => $title
+    )
+  );
+  $link = l($title, $path, $options);
+  
+  // wrap the whole form in a div
+  $form['#prefix'] = '<div id="sort_form">';
+  // add a title that links through to search results
+  $form['#prefix'] .= '<h4 class="title">' . $link . '</h4>';
+  
+  // close the div
+  $form['#suffix'] = '</div>';
+  
+}
 
 /******************************************************************************
  * Theme functions

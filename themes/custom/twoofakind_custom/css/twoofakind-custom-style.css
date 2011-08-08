@@ -29,8 +29,17 @@ h3 a:link,
 h3 a:visited,
 div.region-sidebar-right h4 a,
 div.region-sidebar-right h4 a:link,
-div.region-sidebar-right h4 a:visited{
+div.region-sidebar-right h4 a:visited {
     color: #ed1c24;
+}
+
+div.region-sidebar-right div#matches_form h4 a,
+div.region-sidebar-right div#matches_form h4 a:link,
+div.region-sidebar-right div#matches_form h4 a:visited,
+div.region-content div#sort_form h4 a,
+div.region-content div#sort_form h4 a:link,
+div.region-content div#sort_form h4 a:visited {
+    color: #2FA694;
 }
 
 /* Overriding styles
@@ -89,8 +98,15 @@ a.block-expand.block-expanded {
 
 #Logo a {
 	background: url("../images/logo.png") no-repeat scroll 0 0 transparent;
-  height: 156px;
+  height: 126px;
   width: 410px;
+}
+
+/* two thirds area
+-------------------------------------------------------------- */
+
+.two-thirds {
+  margin-top: -20px;
 }
 
 /* Matches view exposed filter form
@@ -102,7 +118,8 @@ div#SearchOptions {
   margin: -20px 30px 0 0;
 }
 
-div.region-sidebar-right div#matches_form {
+div.region-sidebar-right div#matches_form,
+div.region-content div#sort_form {
   display: none;
   background: none repeat scroll 0 0 #2C2C2C;
 /*  position: absolute;
@@ -122,8 +139,16 @@ div.region-sidebar-right div#matches_form {
   border: 1px solid #F4F5F6;
 }
 
+/* show the search form for non-logged in users */
 body.not-logged-in div.region-sidebar-right div#matches_form {
   display: block;
+}
+
+/* differentiate sort form and matches form */
+div.region-content div#sort_form {
+  display: block;
+  width: auto;
+  margin: 0px 0px 10px 0px;
 }
 
 /* hide the first one */
@@ -168,13 +193,35 @@ div.region-sidebar-right .fieldset-legend span.summary {
 }
 
 div.region-sidebar-right div#matches_form button.btn,
-div.region-sidebar-right div#matches_form button.btn span {
+div.region-sidebar-right div#matches_form button.btn span,
+div.region-content div#sort_form button.btn,
+div.region-content div#sort_form button.btn span {
   background-image: url("../images/button-sprite-dark.gif");
 }
 
 div.region-sidebar-right div#matches_form button#edit-submit-user-search,
-div.region-sidebar-right div#matches_form div.views-reset-button {
+div.region-content div#sort_form button#edit-submit-user-search,
+div.region-sidebar-right div#matches_form div.views-reset-button,
+div.region-content div#sort_form div.views-reset-button,
+div.region-content div#sort_form div.form-type-select {
   float: left;
+}
+
+div.region-content div#sort_form div.form-type-select {
+  line-height: 40px;
+  margin-right: 20px;
+}
+
+div.region-content div#sort_form div.form-type-select label {
+  display: none;
+}
+
+div.region-content div#sort_form button.btn {
+  margin-top: 0;
+}
+
+div.region-content div#sort_form div.views-reset-button {
+  
 }
 
 /* This is purely here for the above floated buttons */
