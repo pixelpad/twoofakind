@@ -1015,6 +1015,13 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
 }
 
 /**
+ * Implements hook_ds_fields_info_alter
+ */
+//function twoofakind_com_au_ds_fields_info_alter(&$fields, $entity_type) {
+//dd($fields);
+//}
+
+/**
  * Theme field for age DS field
  *
  * @param $field

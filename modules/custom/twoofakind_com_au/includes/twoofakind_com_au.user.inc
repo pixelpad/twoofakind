@@ -105,10 +105,12 @@ function _twoofakind_com_au_block_profile() {
   $block = array();
   
   // empty subject
-  $block['subject'] = '<none>';
+  $block['subject'] = $user->name;
   
   // initialise content
-  $content = array();
+  $content = array(
+    '<div class="block-user-profile">'
+  );
   
   // grab the picture of the user
   $content[] = theme('user_picture', array('account' => $user));
@@ -140,8 +142,14 @@ function _twoofakind_com_au_block_profile() {
   $content[] = theme('item_list', array(
       'items' => $menu_minified,
       'type' => 'ul',
+      'attrobutes' => array(
+        'class' => 'menu'
+      )
     )
   );
+  
+  // close surrounding div
+  $content[] = '</div>';
   
   // finalise the content
   $block['content'] = implode("\n", $content);

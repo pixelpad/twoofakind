@@ -23,9 +23,15 @@
         $('a.block-expand:not(.js-processed)', sidebar).each(function () {
           $(this).addClass('js-processed');
           var expand_link = $(this);
+          var expand_block = $('div#' + $(this).attr('href').substr(1), sidebar);
+          /* check if block is expanded or not and apply link class accordingly */
+          if (expand_block.css('display') != 'none') {
+            expand_link.toggleClass('block-expanded');
+          }
+          /* bind click function to the block */
           $(this).bind('click', function(e) {
             /* this could be improved, i.e. improve animation */
-            $('div#' + $(this).attr('href').substr(1), sidebar).fadeToggle(500, 'swing', function() {
+            expand_block.fadeToggle(500, 'swing', function() {
               expand_link.toggleClass('block-expanded');
             });
 
