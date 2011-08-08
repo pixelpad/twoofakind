@@ -36,6 +36,10 @@ projects[email][version] = "1.0-beta1"
 ;projects[entity][subdir] = "contrib"
 ;projects[entity][version] = "1.0-beta8"
 
+projects[fast_404][subdir] = "contrib"
+projects[fast_404][version] = "1.0"
+projects[fast_404][patches][] = "http://drupal.org/files/issues/1200876-fast_404-imagecache-styles.patch"
+
 projects[features][subdir] = "contrib"
 ;projects[features][version] = "1.x-dev"
 
