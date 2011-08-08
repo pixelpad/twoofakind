@@ -192,6 +192,9 @@ div#SearchOptions {
   float: right;
   margin: -20px 30px 0 0;
 }
+body.not-logged-in div#SearchOptions {
+  display: none;
+}
 
 /* Profile block
 -------------------------------------------------------------- */
@@ -248,6 +251,9 @@ div.region-sidebar-right div#matches_form div#edit-name-search-wrapper {
 
 div.region-sidebar-right div#matches_form div.less-options {
   float: right;
+}
+body.not-logged-in div.region-sidebar-right div#matches_form div.less-options {
+  display: none;
 }
 
 div.region-sidebar-right div#matches_form input.form-text {
