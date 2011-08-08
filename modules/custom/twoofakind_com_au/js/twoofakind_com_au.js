@@ -38,6 +38,18 @@
             return false;
           });
         });
+
+        /* show less options link */
+        $('div#matches_form', sidebar).each(function() {
+          var matches_form = $(this);
+          $('div.less-options a', matches_form).bind({
+            click: function () {
+              matches_form.fadeToggle();
+              return false;
+            }
+          });
+        });
+        
       });
       
       /* hide labels that should not appear */
@@ -54,6 +66,7 @@
           }
         });
       });
+      
     }
   }
 

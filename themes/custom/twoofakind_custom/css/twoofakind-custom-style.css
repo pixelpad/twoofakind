@@ -42,6 +42,11 @@ div.region-content div#sort_form h4 a:visited {
     color: #2FA694;
 }
 
+div.more-link a,
+li.node-readmore a {
+  color: #ed1c24;
+}
+
 /* Overriding styles
 -------------------------------------------------------------- */
 
@@ -241,6 +246,10 @@ div.region-sidebar-right div#matches_form div#edit-name-search-wrapper {
   display: none;
 }
 
+div.region-sidebar-right div#matches_form div.less-options {
+  float: right;
+}
+
 div.region-sidebar-right div#matches_form input.form-text {
   width: 260px;
 }
@@ -370,7 +379,6 @@ div.region-sidebar-right div.more-link a {
 div.region-sidebar-right div.more-link,
 div.region-sidebar-right div.more-link a {
 	text-align: right;
-  color: #ed1c24;
 }
 
 /* profile list */
@@ -461,6 +469,25 @@ div.views-page-users div.views-row div.group-footer {
 div.views-page-users div.views-row div.group-footer div.field {
 	float: right;
   margin-left: 10px;
+}
+
+/* Comments
+-------------------------------------------------------------- */
+
+div.comment {
+  overflow: hidden;
+  float: none !important;
+}
+
+div.comment div.content {
+  margin-left: 55px;
+}
+
+/* Featured question Comments
+-------------------------------------------------------------- */
+
+div.view-questions.view-display-id-block div.more-link {
+  margin-top: -55px;
 }
 
 /* Footer

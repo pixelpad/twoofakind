@@ -322,6 +322,10 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
       _twoofakind_com_au_form_user_profile_form($form, $form_state);
       break;
     
+    case 'comment_node_question_form':
+      _twoofakind_com_au_form_comment_form($form, $form_state);
+      break;
+    
   }
 }
 
@@ -341,19 +345,32 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
   global $user;
 
   // defaults
+  // title link
   $title = t('Search');
-  $path = $form['#action'];
+  $path = substr($form['#action'], 1);
   $options = array(
     'attributes' => array(
       'title' => $title
-    )
+    ),
+    'alias' => TRUE
   );
-  $link = l($title, $path, $options);
+  $link_title = l($title, $path, $options);
+  // show less options link
+  $title = t('Less search options');
+  $options = array(
+    'attributes' => array(
+      'title' => $title
+    ),
+    'alias' => TRUE
+  );
+  $link_less_options = l($title, $path, $options);
   
   // wrap the whole form in a div
   $form['#prefix'] = '<div id="matches_form">';
+  // add a show less options link
+  $form['#prefix'] .= '<div class="less-options">' . $link_less_options . '</div>';
   // add a title that links through to search results
-  $form['#prefix'] .= '<h4 class="title">' . $link . '</h4>';
+  $form['#prefix'] .= '<h4 class="title">' . $link_title . '</h4>';
   
   // close the div
   $form['#suffix'] = '</div>';
@@ -662,11 +679,12 @@ function _twoofakind_com_au_form_views_exposed_form(&$form, &$form_state) {
   
   // defaults
   $title = t('Sort your results');
-  $path = $form['#action'];
+  $path = substr($form['#action'], 1);
   $options = array(
     'attributes' => array(
       'title' => $title
-    )
+    ),
+    'alias' => TRUE
   );
   $link = l($title, $path, $options);
   
@@ -677,6 +695,30 @@ function _twoofakind_com_au_form_views_exposed_form(&$form, &$form_state) {
   
   // close the div
   $form['#suffix'] = '</div>';
+  
+}
+
+/**
+ * Alter the comment form for question
+ * 
+ * @param $form
+ *   A form
+ * 
+ * @param $form_state
+ *  A form's state
+ */
+function _twoofakind_com_au_form_comment_form(&$form, &$form_state) {
+  
+  // only for questions
+  if ($form['#node']->type == 'question') {
+    
+    // hide name field
+    $form['author']['_author']['#type'] = 'hidden';
+    
+    // change submit to Answer
+    $form['actions']['submit']['#value'] = 'Respond';
+    
+  }
   
 }
 

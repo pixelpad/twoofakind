@@ -59,7 +59,7 @@
       /* make the more options link open and close the search box */
       $('div#SearchOptions a').bind({
         click: function () {
-          matchesForm.toggle();
+          matchesForm.fadeToggle();
         }
       });
     }
