@@ -18,6 +18,21 @@ a:focus,
 a:active {
 }
 
+h1 a,
+h1 a:link,
+h1 a:visited,
+h2 a,
+h2 a:link,
+h2 a:visited,
+h3 a,
+h3 a:link,
+h3 a:visited,
+h4 a,
+h4 a:link,
+h4 a:visited {
+    color: #ed1c24;
+}
+
 /* Overriding styles
 -------------------------------------------------------------- */
 
@@ -35,12 +50,14 @@ a:active {
 
 #Logo {
     float: left;
-    margin: -40px 0 24px 60px;
+    margin: -70px 0 24px 10px;
     position: absolute;
 }
 
 #Logo a {
-	background: url("../images/logo.png") no-repeat scroll 0 0 transparent
+	background: url("../images/logo.png") no-repeat scroll 0 0 transparent;
+  height: 156px;
+  width: 410px;
 }
 
 /* Interactive blocks
