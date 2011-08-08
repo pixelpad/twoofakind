@@ -94,23 +94,6 @@ a.block-expand.block-expanded {
   width: 410px;
 }
 
-/* Interactive blocks
--------------------------------------------------------------- */
-/* Put the background image back in when things are working better */
-h4.title.interactive {
-/*  background: transparent url(../images/arrow.down.png) top right no-repeat;*/
-}
-/* Hide these later when JS issues have been sorted */
-div.sideNavWrapper {
-/*  display: none;*/
-}
-
-/* exposed filters */
-.views-exposed-form .views-exposed-widget {
-  float: none;
-  padding: 0;
-}
-
 /* Matches view exposed filter form
 -------------------------------------------------------------- */
 
