@@ -45,13 +45,12 @@ div.region-sidebar-right h4 a:visited{
 	min-width: 200px;
 }
 
-
 /*
  * Modifying the expand link for expandable blocks
  */
 div.region-sidebar-right h4.title {
   border-bottom: 1px dotted #2C2C2C;
-  margin-bottom: 10px;
+  margin-top: 10px;
   padding-bottom: 10px;
   position: relative;
 }
@@ -202,6 +201,91 @@ div.bef-select-all-none ul.bef-tree li {
 
 div#edit-field-self-summary-value-wrapper {
   margin-top: 10px;
+}
+
+/* Profile list in blocks in right sidebar
+-------------------------------------------------------------- */
+
+div.region-sidebar-right div.item-list {
+	
+}
+
+/* reinstating menu styles */
+div.region-sidebar-right div.item-list ul.menu {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	border: none;
+	text-align:left; /* LTR */
+}
+div.region-sidebar-right div.item-list ul.menu li,
+div.region-sidebar-right div.more-link {
+ 	font-size: 14px;
+	/*background: none;*/
+	padding: 0;
+	margin: 0;
+	background: transparent url("../images/side-navigation-repeat.gif") repeat-y 0 0;
+	list-style-type: none;
+	list-style-image: none;
+	text-align: right;
+	color: #000000;
+}
+div.region-sidebar-right div.item-list ul.menu li a,
+div.region-sidebar-right div.more-link a {
+	font-size: 14px;
+	display: block;
+	padding: 0.5em 5px 0.5em 25px;
+	margin: 0;	
+	border-bottom: 1px dotted #DBDBDC;
+	text-decoration: none;
+	text-shadow: #fff 1px 1px 0px;
+	text-align: left;
+}
+
+/* more link */
+div.region-sidebar-right div.more-link,
+div.region-sidebar-right div.more-link a {
+	text-align: right;
+  color: #ed1c24;
+}
+
+/* profile list */
+div.region-sidebar-right ul.menu li.views-row {
+	
+}
+div.region-sidebar-right ul.menu li.views-row div.group-left {
+	width: 75px;
+}
+div.region-sidebar-right ul.menu li.views-row div.group-left div.field-name-ds-user-picture {
+	
+}
+div.region-sidebar-right ul.menu li.views-row div.group-left div.field-name-ds-user-picture div.field-item {
+	
+}
+div.region-sidebar-right ul.menu li.views-row div.group-left div.field-name-ds-user-picture div.field-item a {
+	
+}
+div.region-sidebar-right ul.menu li.views-row div.group-right {
+	width: 195px;
+}
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-name {
+	
+}
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-name div.field-item {
+	
+}
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-name div.field-item a {
+	padding-left: 10px;
+  line-height: 54px;
+}
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-field-sex {
+	margin-top: -20px;
+}
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-field-sex div.field-item {
+	
+}
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-field-sex div.field-item a {
+	
 }
 
 /* Footer
