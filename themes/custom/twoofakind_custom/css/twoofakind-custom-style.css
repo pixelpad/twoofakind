@@ -27,9 +27,9 @@ h2 a:visited,
 h3 a,
 h3 a:link,
 h3 a:visited,
-h4 a,
-h4 a:link,
-h4 a:visited {
+div.region-sidebar-right h4 a,
+div.region-sidebar-right h4 a:link,
+div.region-sidebar-right h4 a:visited{
     color: #ed1c24;
 }
 
@@ -43,6 +43,40 @@ h4 a:visited {
 
 #MmBody {
 	min-width: 200px;
+}
+
+
+/*
+ * Modifying the expand link for expandable blocks
+ */
+div.region-sidebar-right h4.title {
+  border-bottom: 1px dotted #2C2C2C;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  position: relative;
+}
+
+a.block-expand {
+  font-size: 1px;
+  text-indent: -1000px;
+  overflow: hidden;
+  background: url("../images/block.arrow.sprite.png") no-repeat scroll 0 0 transparent;
+  display: block;
+  width: 30px;
+  height: 20px;
+  writing-mode: lr-tb;
+  -webkit-transform: rotate(0deg);	
+  -moz-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+  position: absolute;
+  top: 5px;
+  right: 0;
+}
+
+a.block-expand.block-expanded {
+  background-position: 0 -30px;
 }
 
 /* Logo

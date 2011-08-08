@@ -85,7 +85,7 @@ function twoofakind_com_au_init() {
  * Implements hook_block_view_alter().
  */
 function twoofakind_com_au_block_view_alter(&$data, $block) {
-  
+
   // modify view blocks that have a subject
   if ($block->module == 'views' && !empty($data['subject'])) {
 
@@ -168,12 +168,12 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
 
       _twoofakind_com_au_subject_more($data);
     }
-    
-    // add the down arrow to all these views
-    if ($block->region == 'sidebar_right') {
-      _twoofakind_com_au_block_expand($data);
-    }
 
+  }
+  
+  // add the down arrow to all blocks in ride hand side
+  if ($block->region == 'sidebar_right') {
+    _twoofakind_com_au_block_expand($data, $block);
   }
   
 }
@@ -1115,26 +1115,39 @@ function _twoofakind_com_au_subject_more(&$data) {
 /**
  * Adds an expansion link to the subject
  */
-function _twoofakind_com_au_block_expand(&$data) {
+function _twoofakind_com_au_block_expand(&$data, $block) {
   
-  // grab view information
-  if (isset($data['content']['#views_contextual_links_info']['views_ui']['view_name'])) {
-
-    // grab the view name and display
-    $view_name = $data['content']['#views_contextual_links_info']['views_ui']['view_name'];
-    
-    // convert it to a div class
-    $view_div_class = 'view-' . $view_name;
-    $view_div_class = str_replace('_', '-', $view_div_class);
-
-    $options = array(
-      'attributes' => array(
-        'title' => 'Click to expand',
-        'class' => 'block-expand'
-      )
-    );
-    $data['subject'] .= l('expand', $view_div_class, $options);
+  // if the block has no subject then do nothing
+  if (!isset($data['subject']) || empty($data['subject']) || $data['subject'] == '<none>') {
+    return;
   }
+  
+  // grab the delta of the block
+  // modify it so it resembles other CSS ID's / classes
+  $block_delta_id = 'block-' . str_replace('_', '-', $block->delta);
+  $block_div_replacement = '<div id="' . $block_delta_id . '"';
+  
+  // make sure the content includes this div ID
+  if (is_array($data['content']) && isset($data['content']['#markup'])) {
+    // handle views
+    // content is still an array
+    $data['content']['#markup'] = substr_replace($data['content']['#markup'], $block_div_replacement, 0, 4);
+  }
+  else {
+    // handle normal blocks
+    // content already text
+    $data['content'] = substr_replace($data['content'], $block_div_replacement, 0, 4);
+  }
+
+  // build the expand link and throw it in to the title
+  $options = array(
+    'attributes' => array(
+      'title' => 'Click to expand',
+      'class' => 'block-expand block-open'
+    ),
+    'html' => TRUE
+  );
+  $data['subject'] .= l('&raquo;', $block_delta_id, $options);
 }
 
 /**

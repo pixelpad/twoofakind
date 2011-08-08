@@ -13,7 +13,7 @@
   
   /* Show and hide the blocks
   -------------------------------------------------------------- */
-  Drupal.behaviors.sideBarProcesing = {
+  Drupal.behaviors.sideBarProcessing = {
     attach: function (context, settings) {
       $('div.region-sidebar-right:not(.js-processed)', context).each(function () {
         $(this).addClass('js-processed');
@@ -22,8 +22,12 @@
         /* block expansion */
         $('a.block-expand:not(.js-processed)', sidebar).each(function () {
           $(this).addClass('js-processed');
+          var expand_link = $(this);
           $(this).bind('click', function(e) {
-            $('div.' + $(this).attr('href').substr(1), sidebar).fadeToggle();
+            /* this could be improved, i.e. improve animation */
+            $('div#' + $(this).attr('href').substr(1), sidebar).fadeToggle(500, 'swing', function() {
+              expand_link.toggleClass('block-expanded');
+            });
 
             return false;
           });
