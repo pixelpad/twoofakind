@@ -86,93 +86,72 @@ function twoofakind_com_au_init() {
  */
 function twoofakind_com_au_block_view_alter(&$data, $block) {
 
-  // modify view blocks that have a subject
-  if ($block->module == 'views' && !empty($data['subject'])) {
-
-    // add any count information to the subject
-    // and make the subject a link to the page
-    
-    if ($block->delta == 'matches-block') {
-      
-      // my matches
-      
-      $count = match_count_matcher_unviewed_matches();
-      $data['subject'] .= " ($count)";
-      _twoofakind_com_au_subject_more($data);
-    }
-    elseif ($block->delta == 'matches_me-block') {
-      
-      // match me
-      
-      $count = match_count_matchee_unviewed_matches();
-      $data['subject'] .= " ($count)";
-      _twoofakind_com_au_subject_more($data);
-    }
-    elseif ($block->delta == 'winks-block') {
-      
-      // winked at
-
-      // don't need count for this one
-      // however, this is how it would be done
-//      $count = wink_count_winker_unviewed_winks();
-//      $data['subject'] .= " ($count)";
-      _twoofakind_com_au_subject_more($data);
-    }
-    elseif ($block->delta == 'winks_received-block') {
-      
-      // winks received
-      
-      $count = wink_count_winkee_unviewed_winks();
-      $data['subject'] .= " ($count)";
-      _twoofakind_com_au_subject_more($data);
-    }
-    elseif ($block->delta == 'favourites-block') {
-      
-      // favourites
-      
-      // don't need count for this one
-      // however, this is how it would be done
-//      $count = favourite_count_favouriteer_unviewed_favourites();
-//      $data['subject'] .= " ($count)";
-      _twoofakind_com_au_subject_more($data);
-    }
-    elseif ($block->delta == 'favourites_received-block') {
-      
-      // favourites received
-      
-      $count = favourite_count_favouriteee_unviewed_favourites();
-      $data['subject'] .= " ($count)";
-      _twoofakind_com_au_subject_more($data);
-    }
-    elseif ($block->delta == 'recent_views-block') {
-      
-      // recently viewed
-      
-      // don't need count for this one
-      // however, this is how it would be done
-//      $count = recent_view_count_recent_viewer_unviewed_recent_views();
-//      $data['subject'] .= " ($count)";
-      _twoofakind_com_au_subject_more($data);
-    }
-    elseif ($block->delta == 'recent_views_received-block') {
-      
-      // recently viewed received
-
-      $count = recent_view_count_recent_viewee_unviewed_recent_views();
-      $data['subject'] .= " ($count)";
-      _twoofakind_com_au_subject_more($data);
-    }
-    elseif ($block->delta == 'users_online-block') {
-      
-      // who's online
-
-      _twoofakind_com_au_subject_more($data);
-    }
-
-  }
-  
-  // add the down arrow to all blocks in ride hand side
+  // sidebar management
   if ($block->region == 'sidebar_right') {
+    // modify view blocks that have a subject
+    if ($block->module == 'views' && !empty($data['subject'])) {
+      // add any count information to the subject
+      // and make the subject a link to the page
+      if ($block->delta == 'matches-block') {
+        // my matches
+        $count = match_count_matcher_unviewed_matches();
+        $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'matches_me-block') {
+        // match me
+        $count = match_count_matchee_unviewed_matches();
+        $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'winks-block') {
+        // winked at
+        // don't need count for this one
+        // however, this is how it would be done
+  //      $count = wink_count_winker_unviewed_winks();
+  //      $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'winks_received-block') {
+        // winks received
+        $count = wink_count_winkee_unviewed_winks();
+        $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'favourites-block') {
+        // favourites
+        // don't need count for this one
+        // however, this is how it would be done
+  //      $count = favourite_count_favouriteer_unviewed_favourites();
+  //      $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'favourites_received-block') {
+        // favourites received
+        $count = favourite_count_favouriteee_unviewed_favourites();
+        $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'recent_views-block') {
+        // recently viewed
+        // don't need count for this one
+        // however, this is how it would be done
+  //      $count = recent_view_count_recent_viewer_unviewed_recent_views();
+  //      $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'recent_views_received-block') {
+        // recently viewed received
+        $count = recent_view_count_recent_viewee_unviewed_recent_views();
+        $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'users_online-block') {
+        // who's online
+        _twoofakind_com_au_subject_more($data);
+      }
+    }
+    // add the down arrow to all blocks in ride hand side
     _twoofakind_com_au_block_expand($data, $block);
   }
   

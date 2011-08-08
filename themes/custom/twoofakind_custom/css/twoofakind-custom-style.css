@@ -116,6 +116,69 @@ a.block-expand.block-expanded {
   margin-top: -25px;
 }
 
+/* Implementing button styles to links
+-------------------------------------------------------------- */
+
+a.btn {
+	display: block;
+  width: auto;
+  position: relative;
+	cursor: pointer;
+	overflow: visible; /* removes extra side padding in IE */
+	border: 0; 
+	padding: 0;
+	outline: none;
+	margin-left: -6px; /* corrects for shadow to make left edge look aligned */
+	padding: 0 35px 0 0; 
+	margin-right:5px; 
+	font-size: 1em; 
+	text-align: center; 
+	background: transparent url("../images/button-sprite.gif") no-repeat right -92px;}
+	
+a.btn span {
+	position: relative;
+	display: block; 
+	white-space: nowrap;
+	padding: 13px 0 0 35px; 
+	height: 29px; 
+	background: transparent url("../images/button-sprite.gif") no-repeat left top; 
+	color: #a2a2a2;
+	line-height: 1.2;
+	text-shadow: #000 -1px -1px 0px;
+}
+	
+a.btn:hover { background-position: right -138px;} /* extra class used for sucky browsers (stupid IE) */
+	
+a.btn:hover span {
+	background-position: 0 -46px;
+	color: #fff;
+	text-shadow: #333 -1px -1px 1px;
+}
+
+/* Menu : Major user actions
+-------------------------------------------------------------- */
+
+div#block-menu-user-major-actions {
+  overflow: hidden;
+}
+
+div#block-menu-user-major-actions ul {
+  list-style: none inside;
+  margin: 0px 0px 0px 5px;
+  padding: 0px;
+}
+
+div#block-menu-user-major-actions ul li {
+  list-style: none inside;
+  margin: 0px;
+  padding: 0px;
+}
+
+div#block-menu-user-major-actions ul li a {
+  width: 250px;
+  float: left;
+}
+
 /* Search block modifications
 -------------------------------------------------------------- */
 
@@ -132,28 +195,9 @@ div#block-twoofakind-profile {
   overflow: hidden;
 }
 
-div#block-twoofakind-profile div.user-picture {
-  float: left;
-}
-
-div#block-twoofakind-profile div.user-picture a {
-  
-}
-
-div#block-twoofakind-profile div.user-picture a img {
-  
-}
-
+div#block-twoofakind-profile div.user-picture,
 div#block-twoofakind-profile div.item-list {
   float: left;
-}
-
-div#block-twoofakind-profile div.item-list ul {
-  
-}
-
-div#block-twoofakind-profile div.item-list ul li {
-  
 }
 
 /* Matches view exposed filter form
@@ -261,10 +305,6 @@ div.region-content div#sort_form button.btn {
   margin-top: 0;
 }
 
-div.region-content div#sort_form div.views-reset-button {
-  
-}
-
 /* This is purely here for the above floated buttons */
 div.region-sidebar-right div#matches_form div.views-exposed-widgets {
   overflow: visible;
@@ -293,10 +333,6 @@ div#edit-field-self-summary-value-wrapper {
 
 /* Profile list in blocks in right sidebar
 -------------------------------------------------------------- */
-
-div.region-sidebar-right div.item-list {
-	
-}
 
 /* reinstating menu styles */
 div.region-sidebar-right div.item-list ul.menu {
@@ -338,29 +374,11 @@ div.region-sidebar-right div.more-link a {
 }
 
 /* profile list */
-div.region-sidebar-right ul.menu li.views-row {
-	
-}
 div.region-sidebar-right ul.menu li.views-row div.group-left {
 	width: 75px;
 }
-div.region-sidebar-right ul.menu li.views-row div.group-left div.field-name-ds-user-picture {
-	
-}
-div.region-sidebar-right ul.menu li.views-row div.group-left div.field-name-ds-user-picture div.field-item {
-	
-}
-div.region-sidebar-right ul.menu li.views-row div.group-left div.field-name-ds-user-picture div.field-item a {
-	
-}
 div.region-sidebar-right ul.menu li.views-row div.group-right {
 	width: 195px;
-}
-div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-name {
-	
-}
-div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-name div.field-item {
-	
 }
 div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-name div.field-item a {
 	padding-left: 10px;
@@ -369,31 +387,14 @@ div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-nam
 div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-age {
 	margin-top: -20px;
 }
-div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-age div.field-item {
-	
-}
-div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-age div.field-item a {
-	
-}
 div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-field-sex {
 	margin-top: -18px;
   padding-right: 20px;
 }
-div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-field-sex div.field-item {
-	
-}
-div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-field-sex div.field-item a {
-	
-}
 
 /* (Full) Profile list content area
 -------------------------------------------------------------- */
-/* view */
-/*div.region-content div.view {
-  
-  background: url("../images/side-navigation-top.gif") no-repeat scroll 0 0 transparent;
-  padding: 15px 0 0 0;
-}*/
+
 div.views-page-users div.view-content {
   background: url("../images/side-navigation-top.gif") no-repeat scroll 0 0 transparent;
   padding: 35px 0 0 0;
@@ -429,43 +430,15 @@ div.views-page-users div.views-row div.group-header div.field-name-name {
   line-height: 20px;
   padding-right: 10px;
 }
-div.views-page-users div.views-row div.group-header div.field-name-name div.field-item {
-	
-}
-div.views-page-users div.views-row div.group-header div.field-name-name div.field-item h2 {
-	
-}
-div.views-page-users div.views-row div.group-header div.field-name-name div.field-item h2 a {
-	
-}
 /* row : header : headline */
-div.views-page-users div.views-row div.group-header div.field-name-field-headline {
-	
-}
 div.views-page-users div.views-row div.group-header div.field-name-field-headline div.field-item {
   font-size: 1.3em;
   line-height: 25px;
-}
-div.views-page-users div.views-row div.group-header div.field-name-field-headline div.field-item h3 {
-	
 }
 /* row : left */
 div.views-page-users div.views-row div.group-left {
 	width: 110px;
   height: 110px;
-}
-/* row : left : picture */
-div.views-page-users div.views-row div.group-left div.field-name-ds-user-picture {
-	
-}
-div.views-page-users div.views-row div.group-left div.field-name-ds-user-picture div.field-item {
-	
-}
-div.views-page-users div.views-row div.group-left div.field-name-ds-user-picture div.field-item a {
-	
-}
-div.views-page-users div.views-row div.group-left div.field-name-ds-user-picture div.field-item a img {
-	
 }
 /* row : middle */
 div.views-page-users div.views-row div.group-middle {
@@ -475,45 +448,10 @@ div.views-page-users div.views-row div.group-middle {
 div.views-page-users div.views-row div.group-middle div.field-item {
 	font-weight: bold;
 }
-/* row : middle : age */
-div.views-page-users div.views-row div.group-middle div.field-name-age {
-	
-}
-div.views-page-users div.views-row div.group-middle div.field-name-age div.field-item {
-	
-}
-/* row : middle : sex */
-div.views-page-users div.views-row div.group-middle div.field-name-field-sex {
-	
-}
-div.views-page-users div.views-row div.group-middle div.field-name-field-sex div.field-item {
-	
-}
-/* row : middle : location */
-div.views-page-users div.views-row div.group-middle div.field-name-field-location {
-	
-}
-div.views-page-users div.views-row div.group-middle div.field-name-field-location div.field-item {
-	
-}
-/* row : middle : relationship status */
-div.views-page-users div.views-row div.group-middle div.field-name-field-relation-status {
-	
-}
-div.views-page-users div.views-row div.group-middle div.fiediv.field-name-field-relation-statusld-name-ds-user-picture div.field-item {
-	
-}
 /* row : right */
 div.views-page-users div.views-row div.group-right {
 	float: none;
   width: auto;
-}
-/* row : right : summary */
-div.views-page-users div.views-row div.group-right div.field-name-field-self-summary {
-	
-}
-div.views-page-users div.views-row div.group-right div.field-name-field-self-summary div.field-item {
-	
 }
 /* row : footer */
 div.views-page-users div.views-row div.group-footer {
@@ -524,16 +462,6 @@ div.views-page-users div.views-row div.group-footer div.field {
 	float: right;
   margin-left: 10px;
 }
-/* row : footer : favourite */
-div.views-page-users div.views-row div.group-footer div.field-name-favourite {
-	
-}
-div.views-page-users div.views-row div.group-footer div.field-name-favourite div.field-item {
-	
-}
-div.views-page-users div.views-row div.group-footer div.field-name-favourite div.field-item a {
-	
-}
 
 /* Footer
 -------------------------------------------------------------- */
@@ -542,4 +470,4 @@ div.views-page-users div.views-row div.group-footer div.field-name-favourite div
 	width: 95px;
 	height: 90px;
 	background: transparent url("../images/logo.mini_version.png") no-repeat 0 0;
-}	
+}
