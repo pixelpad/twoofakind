@@ -245,8 +245,8 @@
 		
 		<!-- Copyright/legal text -->
 		<div id="Copyright">
-			<p><?php print render($page['footer']); ?></p>
-		</div>		
+			<?php print render($page['footer']); ?>
+		</div>
 	</div>
 </div>
 <?php //print $closure; ?>

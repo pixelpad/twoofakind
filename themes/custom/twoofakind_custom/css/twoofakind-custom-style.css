@@ -175,7 +175,7 @@ div#block-menu-user-major-actions ul li {
 }
 
 div#block-menu-user-major-actions ul li a {
-  width: 250px;
+  width: 240px;
   float: left;
 }
 
@@ -466,8 +466,36 @@ div.views-page-users div.views-row div.group-footer div.field {
 /* Footer
 -------------------------------------------------------------- */
 
-.logoMark { 	/* logo symbol in footer */
+/* logo symbol in footer */
+.logoMark {
 	width: 95px;
 	height: 90px;
 	background: transparent url("../images/logo.mini_version.png") no-repeat 0 0;
+}
+
+/* copyright */
+div.region-footer {
+  overflow: hidden;
+}
+
+div.region-footer div.boxes-box {
+  float: left;
+}
+
+div.region-footer div#block-menu-footer-other ul,
+div.region-footer div#block-menu-footer-other ul li {
+  list-style: none outside;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+div.region-footer div#block-menu-footer-other ul li {
+  float: left;
+  margin-top: -2px;
+}
+
+div.region-footer div#block-menu-footer-other ul li a {
+  font-size: 0.9em;
+  padding-left: 10px;
 }
