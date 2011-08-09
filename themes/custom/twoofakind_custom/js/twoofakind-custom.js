@@ -62,6 +62,15 @@
           matchesForm.fadeToggle();
         }
       });
+      
+      /* make the home page login button reveal the login slider */
+      $('div.region-home-banner-1 a[href="/user/login"]').bind({
+        click: function() {
+          $('#ContentPanel').slideToggle(800,'easeOutQuart');	// show/hide the content area
+          $.scrollTo('#ContentPanel');
+          return false;
+        }
+      });
     }
   }
 
