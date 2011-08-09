@@ -262,6 +262,7 @@ div.region-sidebar-right div#matches_form input.form-text {
 
 div.region-sidebar-right div#matches_form label {
   color: #CACACA;
+  margin-top: 5px;
 }
 
 div.region-sidebar-right html.js fieldset.collapsible .fieldset-legend {
@@ -273,7 +274,11 @@ div.region-sidebar-right html.js fieldset.collapsible .fieldset-legend {
 
 html.js div.region-sidebar-right fieldset.collapsible.collapsed .fieldset-legend {
   background-image: url("../images/arrowright.gif");
-  background-position: 5px 5px;
+  background-position: 5px 5px; 
+}
+
+html.js div.region-sidebar-right fieldset.collapsed {
+  margin-bottom: 5px;
 }
 
 html.js div.region-sidebar-right fieldset.collapsible .fieldset-legend a {
@@ -340,10 +345,6 @@ div.bef-select-all-none ul.bef-tree {
 
 div.bef-select-all-none ul.bef-tree li {
   background: none repeat scroll 0 0 transparent;
-}
-
-div#edit-field-self-summary-value-wrapper {
-  margin-top: 10px;
 }
 
 /* Profile list in blocks in right sidebar
