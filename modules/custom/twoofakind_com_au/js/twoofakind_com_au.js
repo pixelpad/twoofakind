@@ -28,8 +28,8 @@
           if (expand_block.css('display') != 'none') {
             expand_link.toggleClass('block-expanded');
           }
-          /* bind click function to the block */
-          $(this).bind('click', function(e) {
+          /* bind click function to the link */
+          expand_link.bind('click', function(e) {
             /* this could be improved, i.e. improve animation */
             expand_block.fadeToggle(500, 'swing', function() {
               expand_link.toggleClass('block-expanded');
@@ -39,7 +39,7 @@
           });
         });
 
-        /* show less options link */
+        /* "show less options" link functionality */
         $('div#matches_form', sidebar).each(function() {
           var matches_form = $(this);
           $('div.less-options a', matches_form).bind({
@@ -65,6 +65,14 @@
             $(this).hide();
           }
         });
+      });
+      
+      /* make the terms and conditions link in registration pop up */
+      $('label a[href*="terms"]').bind({
+        click: function () {
+          window.open($(this).attr('href'), 'termsConditions');
+          return false;
+        }
       });
       
     }
