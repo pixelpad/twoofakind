@@ -19,8 +19,7 @@
  */
 function _twoofakind_com_au_admin_menu(&$items) {
 
-  // Home page editing
-  // Home page main admin page
+  // Box editing page / tab
   $items['admin/content/boxes'] = array(
     'title' => 'Box content',
     'description' => 'Administer box based content e.g. home page, welcome message, access denied message, and the footer',

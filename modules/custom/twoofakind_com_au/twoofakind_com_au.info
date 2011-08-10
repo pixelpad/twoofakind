@@ -13,6 +13,7 @@ dependencies[] = user
 dependencies[] = menu
 dependencies[] = boxes
 dependencies[] = terms_of_use
+dependencies[] = nodequeue
 
 ; Views handlers
 files[] = views/handlers/twoofakind_com_au_handler_filter_age.inc

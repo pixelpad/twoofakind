@@ -44,6 +44,10 @@ function twoofakind_com_au_menu() {
   module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.admin');
   _twoofakind_com_au_admin_menu($items);
   
+  // nodequeue
+  module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.nodequeue');
+  _twoofakind_com_au_nodequeue_menu($items);
+  
   // page_error
   module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.page_error');
   _twoofakind_com_au_page_error_menu($items);
@@ -53,6 +57,37 @@ function twoofakind_com_au_menu() {
   _twoofakind_com_au_user_menu($items);
 
   return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function twoofakind_com_au_menu_alter(&$items) {
+  
+  // change nodequeue tab title
+  if (isset($items['node/%node/nodequeue'])) {
+    $items['node/%node/nodequeue']['title arguments']['@tab'] = 'Slideshow';
+  }
+  // people
+  if (isset($items['admin/people'])) {
+    $items['admin/people']['page callback'] = '_twoofakind_com_au_menu_redirect';
+    $items['admin/people']['type'] = MENU_CALLBACK;
+  }
+  
+}
+
+/**
+ * Redirect to the right places
+ *
+ * @param $items
+ *   Menu items array
+ * 
+ * @see hook_menu()
+ */
+function _twoofakind_com_au_menu_redirect() {
+  
+  drupal_goto('admin/people/custom');
+  
 }
 
 /******************************************************************************
