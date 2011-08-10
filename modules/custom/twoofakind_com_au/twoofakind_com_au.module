@@ -978,6 +978,100 @@ function twoofakind_com_au_user_login(&$edit, $account) {
 }
 
 /******************************************************************************
+ * Field functions
+ ******************************************************************************/
+
+/**
+ * Implements hook_field_formatter_info
+ * 
+ * @see hook_field_formatter_info_alter()
+ * @see hook_field_formatter_view()
+ * @see hook_field_formatter_prepare_view()
+ */
+function twoofakind_com_au_field_formatter_info() {
+  return array(
+    'text_wrapper' => array(
+      'label' => t('Wrapper'),
+      'field types' => array('text'),
+      'settings' => array('wrapper' => '', 'class' => ''),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function twoofakind_com_au_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $element = array();
+
+  if ($display['type'] == 'text_wrapper') {
+    $element['wrapper'] = array(
+      '#title' => t('Wrapper'),
+      '#type' => 'textfield',
+      '#size' => 20,
+      '#description' => 'Eg: h1, h2, p',
+      '#default_value' => $settings['wrapper'],
+      '#required' => FALSE,
+    );
+    $element['class'] = array(
+      '#title' => t('Class'),
+      '#type' => 'textfield',
+      '#size' => 20,
+      '#description' => 'Put a class on the wrapper. Eg: block-title',
+      '#default_value' => $settings['class'],
+      '#required' => FALSE,
+    );
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function twoofakind_com_au_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $summary = '';
+
+  if ($display['type'] == 'text_wrapper') {
+    $summary = t('Wrapper') . ': ' . $settings['wrapper'];
+    $summary .= '<br />';
+    $summary .= t('Class') . ': ' . $settings['class'];
+  }
+
+  return $summary;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function twoofakind_com_au_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  if ($display['type'] == 'text_wrapper') {
+    foreach ($items as $delta => $item) {
+      $content = strip_tags($item['value']);
+      if (!empty($display['settings']['wrapper'])) {
+        $content = '<' . check_plain($display['settings']['wrapper']) . '%s>' . $content . '</' . check_plain($display['settings']['wrapper']) . '>';
+        $class = '';
+        if (!empty($display['settings']['class'])) {
+          $class = ' class="' . $display['settings']['class'] . '"';
+        }
+        $content = sprintf($content, $class);
+      }
+      $element[$delta] = array('#markup' => $content);
+    }
+  }
+
+  return $element;
+}
+
+/******************************************************************************
  * Display Suite functions
  ******************************************************************************/
 
@@ -1069,13 +1163,6 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
   return array($entity_type => $fields);
 
 }
-
-/**
- * Implements hook_ds_fields_info_alter
- */
-//function twoofakind_com_au_ds_fields_info_alter(&$fields, $entity_type) {
-//dd($fields);
-//}
 
 /**
  * Theme field for age DS field
