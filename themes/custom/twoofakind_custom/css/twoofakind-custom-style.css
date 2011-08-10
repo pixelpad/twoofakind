@@ -497,6 +497,146 @@ div.view-questions.view-display-id-block div.more-link {
   margin-top: -55px;
 }
 
+
+/* Profile
+-------------------------------------------------------------- */
+
+div.user-profile div.group-header {
+  overflow: visible;
+}
+
+div.user-profile div.group-header div.group_actions {
+  float: right;
+  margin-top: -55px;
+}
+
+div.user-profile div.group-header div.group_actions div.field {
+  float: right;
+  margin-left: 10px;
+}
+
+div.user-profile div.group-header div.group_actions div.field div.field-item {
+  text-align: right;
+}
+
+div.user-profile div.group-header div.group_actions div.field div.field-item a {
+  
+}
+
+div.user-profile div.group-header div.group_basics_one,
+div.user-profile div.group-header div.group_basics_two {
+  margin-top: -35px;
+}
+
+div.user-profile div.group-header div.group_basics_one div.field,
+div.user-profile div.group-header div.group_basics_two div.field {
+  float: left;
+  margin-right: 10px;
+}
+
+div.user-profile div.group-header div.group_basics_one div.field div.field-item,
+div.user-profile div.group-header div.group_basics_two div.field div.field-item {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+div.user-profile div.group-header div.group_basics_two {
+  
+}
+
+div.user-profile div.group-header div.group_basics_two div.field {
+  
+}
+
+div.user-profile div.group-header div.group_basics_two div.field div.field-item {
+  
+}
+
+div.user-profile div.group-header div.field-name-ds-user-picture {
+  clear: left;
+  width: 235px;
+  height: 235px;
+}
+
+div.user-profile div.group-header div.field-name-ds-user-picture div.field-item {
+  padding-right: 15px;
+}
+
+div.user-profile div.group-header div.field-name-ds-user-picture div.field-item a {
+  
+}
+
+div.user-profile div.group-header div.field-name-ds-user-picture div.field-item a img {
+  
+}
+
+div.user-profile div.group-left {
+  clear: left;
+  width: 235px;
+}
+
+div.user-profile div.group-left fieldset.fieldset {
+  
+}
+
+div.user-profile div.group-left fieldset.fieldset legend {
+  
+}
+
+div.user-profile div.group-left fieldset.fieldset legend span {
+  
+}
+
+div.user-profile div.group-left fieldset.fieldset div.fieldset-wrapper {
+  
+}
+
+div.user-profile div.group-left fieldset.fieldset div.fieldset-wrapper div.field {
+  
+}
+
+div.user-profile div.group-left fieldset.fieldset div.fieldset-wrapper div.field-label {
+  
+}
+
+div.user-profile div.group-left fieldset.fieldset div.fieldset-wrapper div.field-items {
+  
+}
+
+div.user-profile div.group-left fieldset.fieldset div.fieldset-wrapper div.field-item {
+  
+}
+
+div.user-profile div.group-right {
+  margin-top: -235px;
+  width: 340px;
+}
+
+div.user-profile div.group-right div.field {
+  
+}
+
+div.user-profile div.group-right div.field-label {
+  
+}
+
+div.user-profile div.group-right div.field-items {
+  
+}
+
+div.user-profile div.group-right div.field-item {
+  
+}
+
+div.user-profile div.group-right div.field.field-name-field-images {
+  margin-top: 15px;
+}
+
+div.user-profile div.group-right div.field.field-name-field-images div.field-item {
+  padding-right: 5px;
+  float: left;
+}
+
 /* Footer
 -------------------------------------------------------------- */
 
