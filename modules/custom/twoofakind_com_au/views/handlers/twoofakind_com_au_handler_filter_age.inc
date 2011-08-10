@@ -4,7 +4,7 @@
  * Converts a date to an age value and then builds upon numeric
  * filter
  */
-class twoofakind_com_au_handler_filter_age extends views_handler_filter_numeric {
+class twoofakind_com_au_handler_filter_datetime_age extends views_handler_filter_numeric {
   
   function query() {
     
@@ -15,9 +15,7 @@ class twoofakind_com_au_handler_filter_age extends views_handler_filter_numeric 
     // old version
     // "DATE_FORMAT(NOW(), '%Y') - DATE_FORMAT(FROM_UNIXTIME($this->table_alias.$this->real_field), '%Y') - (DATE_FORMAT(NOW(), '00-%m-%d') < DATE_FORMAT(FROM_UNIXTIME($this->table_alias.$this->real_field), '00-%m-%d'))",
     
-    $this->field_alias = $this->query->add_field(NULL,
-      "TIMESTAMPDIFF(YEAR, FROM_UNIXTIME($this->table_alias.$this->real_field), now())",
-      $field);
+    $this->__queryAddAgeField($field);
     
     // also add a group by for this field
     // without this GROUP BY the HAVING clause will not work
@@ -27,6 +25,14 @@ class twoofakind_com_au_handler_filter_age extends views_handler_filter_numeric 
     if (!empty($info[$this->operator]['method'])) {
       $this->{$info[$this->operator]['method']}($field);
     }
+  }
+  
+  function __queryAddAgeField($fieldName = 'age') {
+    
+    $this->field_alias = $this->query->add_field(NULL,
+      "TIMESTAMPDIFF(YEAR, FROM_UNIXTIME($this->table_alias.$this->real_field), now())",
+      $fieldName);
+    
   }
   
   function op_between($field) {
@@ -51,6 +57,22 @@ class twoofakind_com_au_handler_filter_age extends views_handler_filter_numeric 
     }
 
     $this->query->add_having($this->options['group'], $field, NULL, $operator);
+  }
+  
+}
+
+/**
+ * Converts a date to an age value and then builds upon numeric
+ * filter
+ */
+class twoofakind_com_au_handler_filter_date_age extends twoofakind_com_au_handler_filter_datetime_age {
+  
+  function __queryAddAgeField($fieldName = 'age') {
+    
+    $this->field_alias = $this->query->add_field(NULL,
+      "TIMESTAMPDIFF(YEAR, STR_TO_DATE($this->table_alias.$this->real_field,'%Y-%m-%d'), now())",
+      $fieldName);
+    
   }
   
 }

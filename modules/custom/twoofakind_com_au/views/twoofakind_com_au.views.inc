@@ -12,7 +12,7 @@ function twoofakind_com_au_views_data_alter(&$data) {
 
   // alter the date of birth table field definition
   // modify the filter from the normal numeric to our new version
-  $data['field_data_field_date_of_birth']['field_date_of_birth_value']['filter']['handler'] = 'twoofakind_com_au_handler_filter_age';
+  $data['field_data_field_date_of_birth']['field_date_of_birth_value']['filter']['handler'] = 'twoofakind_com_au_handler_filter_datetime_age';
 
 }
 
