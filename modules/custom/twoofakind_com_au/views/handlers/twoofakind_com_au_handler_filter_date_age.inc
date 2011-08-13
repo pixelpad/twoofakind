@@ -1,12 +1,12 @@
 <?php
 
-module_load_include('inc', 'twoofakind_com_au', 'views/handlers/twoofakind_com_au_handler_filter_datetime_age');
+module_load_include('inc', 'twoofakind_com_au', 'views/handlers/twoofakind_com_au_handler_filter_datestamp_age');
 
 /**
  * Converts a date to an age value and then builds upon numeric
  * filter
  */
-class twoofakind_com_au_handler_filter_date_age extends twoofakind_com_au_handler_filter_datetime_age {
+class twoofakind_com_au_handler_filter_date_age extends twoofakind_com_au_handler_filter_datestamp_age {
   
   function __queryAddAgeField($fieldName = 'age') {
     

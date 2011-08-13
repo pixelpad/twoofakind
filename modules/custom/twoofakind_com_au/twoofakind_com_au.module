@@ -755,8 +755,6 @@ function _twoofakind_com_au_form_comment_form(&$form, &$form_state) {
  * Theme functions
  ******************************************************************************/
 
-
-
 //function twoofakind_com_au_theme_form($variables) {
 //  $element = $variables['element'];
 //  if (isset($element['#action'])) {
@@ -989,6 +987,10 @@ function twoofakind_com_au_field_formatter_info() {
       'field types' => array('text'),
       'settings' => array('wrapper' => '', 'class' => ''),
     ),
+    'age' => array(
+      'label' => t('Age'),
+      'field types' => array('date', 'datestamp')
+    ),
   );
 }
 
@@ -1059,6 +1061,17 @@ function twoofakind_com_au_field_formatter_view($entity_type, $entity, $field, $
         $content = sprintf($content, $class);
       }
       $element[$delta] = array('#markup' => $content);
+    }
+  }
+  elseif ($display['type'] == 'age') {
+    foreach ($items as $delta => $item) {
+      $dob = $item['value'];
+      if (!is_numeric($item['value'])) {
+        $dob = strtotime($dob);
+      }
+      $now = time();
+      $output = sprintf("%d", floor(abs($now-$dob)/60/60/24/365));
+      $element[$delta] = array('#markup' => $output);
     }
   }
 

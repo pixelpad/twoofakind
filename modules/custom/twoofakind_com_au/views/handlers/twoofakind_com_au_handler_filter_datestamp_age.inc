@@ -4,7 +4,7 @@
  * Converts a date to an age value and then builds upon numeric
  * filter
  */
-class twoofakind_com_au_handler_filter_datetime_age extends views_handler_filter_numeric {
+class twoofakind_com_au_handler_filter_datestamp_age extends views_handler_filter_numeric {
   
   function query() {
     
