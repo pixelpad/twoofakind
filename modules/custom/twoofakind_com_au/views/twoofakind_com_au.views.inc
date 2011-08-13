@@ -5,8 +5,6 @@
  * Exposing matches to views
  */
 
-module_load_include('inc', 'twoofakind_com_au', 'views/handlers/twoofakind_com_au_handler_filter_date_age');
-
 /**
  * Implements hook_views_data_alter()
  */

@@ -1,7 +1,5 @@
 <?php
 
-module_load_include('inc', 'twoofakind_com_au', 'views/handlers/twoofakind_com_au_handler_filter_datestamp_age');
-
 /**
  * Converts a date to an age value and then builds upon numeric
  * filter

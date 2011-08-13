@@ -16,4 +16,5 @@ dependencies[] = terms_of_use
 dependencies[] = nodequeue
 
 ; Views handlers
-files[] = views/handlers/twoofakind_com_au_handler_filter_age.inc
+files[] = views/handlers/twoofakind_com_au_handler_filter_date_age.inc
+files[] = views/handlers/twoofakind_com_au_handler_filter_datestamp_age.inc
