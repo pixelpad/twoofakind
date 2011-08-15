@@ -30,14 +30,15 @@ if (!defined('TWOOFAKIND_PATH_WINK')) {
 function _wink_menu(&$items) {
 
   $items[TWOOFAKIND_PATH_WINK . '/%/%user'] = array(
-    'title'            => 'Wink',
-    'description'      => 'Wink at this user',
-    'page callback'    => '_wink_wink',
-    'page arguments'   => array(1,2),
-    'access callback'  => 'user_access',
-    'access arguments' => array('access user profiles'),
-    'type'             => MENU_CALLBACK,
-    'file'             => 'includes/wink.entity.inc'
+    'title'             => 'Wink',
+    'description'       => 'Wink at this user',
+    'page callback'     => '_wink_wink',
+    'page arguments'    => array(1,2),
+    'access callback'   => 'user_access',
+    'access arguments'  => array('access user profiles'),
+    'type'              => MENU_CALLBACK,
+    'file'              => 'includes/wink.entity.inc',
+    'delivery callback' => 'ajax_deliver',
   );
 }
 
@@ -56,6 +57,7 @@ function _wink_wink($type = 'ajax', $wink_user = FALSE) {
   $link = '';
   $redirect = '<front>';
   $message = 'Wink failed';
+  $status = 'error';
 
   // if js is enabled and this is an ajax request
   if ($type == 'ajax') {
@@ -106,9 +108,10 @@ function _wink_wink($type = 'ajax', $wink_user = FALSE) {
         
         // message
         $message = sprintf(TWOOFAKIND_MSG_WINK, $wink_user->name);
+        $status = 'status';
         
         // redirect
-        $redirect = urlencode('profile/' . $wink_user->name);
+        $redirect = 'user/' . $wink_user->uid;
         
       }
       
@@ -121,7 +124,7 @@ function _wink_wink($type = 'ajax', $wink_user = FALSE) {
     }
     
     // set message and redirect
-    _twoofakind_com_au_user_nojs_response($message, $redirect);
+    _twoofakind_com_au_user_nojs_response($message, $redirect, $status);
     return;
   }
 }

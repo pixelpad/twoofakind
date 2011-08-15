@@ -1477,10 +1477,10 @@ function _twoofakind_com_au_user_ajax_response($user, $entity_type, $message, $l
 /**
  * Simple ajax response wrapper
  */
-function _twoofakind_com_au_user_nojs_response($message, $redirect) {
+function _twoofakind_com_au_user_nojs_response($message, $redirect, $status = 'error') {
  
   // set message and redirect
-  drupal_set_message($message, 'error');
+  drupal_set_message($message, $status);
   drupal_goto($redirect);
   
 }

@@ -33,24 +33,26 @@ if (!defined('TWOOFAKIND_PATH_FEATURED_USER')) {
 function _featured_user_menu(&$items) {
 
   $items[TWOOFAKIND_PATH_FEATURED_USER . '/%/%user'] = array(
-    'title'            => 'Feature user',
-    'description'      => 'Feature this user',
-    'page callback'    => '_featured_user_feature',
-    'page arguments'   => array(1,2),
-    'access callback'  => 'user_access',
-    'access arguments' => array('access user profiles'),
-    'type'             => MENU_CALLBACK,
-    'file'             => 'includes/featured_user.entity.inc'
+    'title'             => 'Feature user',
+    'description'       => 'Feature this user',
+    'page callback'     => '_featured_user_feature',
+    'page arguments'    => array(1,2),
+    'access callback'   => 'user_access',
+    'access arguments'  => array('access user profiles'),
+    'type'              => MENU_CALLBACK,
+    'file'              => 'includes/featured_user.entity.inc',
+    'delivery callback' => 'ajax_deliver',
   );
   $items[TWOOFAKIND_PATH_UNFEATURED_USER . '/%/%user'] = array(
-    'title'            => 'UnFeature user',
-    'description'      => 'UnFeature this user',
-    'page callback'    => '_featured_user_unfeature',
-    'page arguments'   => array(1,2),
-    'access callback'  => 'user_access',
-    'access arguments' => array('access user profiles'),
-    'type'             => MENU_CALLBACK,
-    'file'             => 'includes/featured_user.entity.inc'
+    'title'             => 'UnFeature user',
+    'description'       => 'UnFeature this user',
+    'page callback'     => '_featured_user_unfeature',
+    'page arguments'    => array(1,2),
+    'access callback'   => 'user_access',
+    'access arguments'  => array('access user profiles'),
+    'type'              => MENU_CALLBACK,
+    'file'              => 'includes/featured_user.entity.inc',
+    'delivery callback' => 'ajax_deliver',
   );
 }
 
@@ -72,6 +74,7 @@ function _featured_user_feature($type = 'ajax', $featured_user_user = FALSE) {
   $link = '';
   $redirect = '<front>';
   $message = 'Featured user failed';
+  $status = 'error';
 
   // if js is enabled and this is an ajax request
   if ($type == 'ajax') {
@@ -125,9 +128,10 @@ function _featured_user_feature($type = 'ajax', $featured_user_user = FALSE) {
         
         // message
         $message = sprintf(TWOOFAKIND_MSG_FEATURED_USER, $featured_user_user->name);
+        $status = 'status';
         
         // redirect
-        $redirect = urlencode('profile/' . $featured_user_user->name);
+        $redirect = 'user/' . $featured_user_user->uid;
         
       }
       
@@ -140,7 +144,7 @@ function _featured_user_feature($type = 'ajax', $featured_user_user = FALSE) {
     }
     
     // set message and redirect
-    _twoofakind_com_au_user_nojs_response($message, $redirect);
+    _twoofakind_com_au_user_nojs_response($message, $redirect, $status);
     return;
   }
 }
@@ -163,6 +167,8 @@ function _featured_user_unfeature($type = 'ajax', $featured_user_user = FALSE) {
   $link = '';
   $redirect = '<front>';
   $message = 'UnFeatured user failed';
+  $status = 'error';
+  
   
   // if js is enabled and this is an ajax request
   if ($type == 'ajax') {
@@ -210,15 +216,16 @@ function _featured_user_unfeature($type = 'ajax', $featured_user_user = FALSE) {
     if ($featured_user_user) {
       
       // remove featured_user
-      if (featured_user_delete($featured_user_user->uid)) {
+      if (featured_user_delete($featured_user_user->uid) !== FALSE) {
         
         // all good
         
         // message
         $message = sprintf(TWOOFAKIND_MSG_UNFEATURED_USER, $featured_user_user->name);
+        $status = 'status';
         
         // redirect
-        $redirect = urlencode('profile/' . $featured_user_user->name);
+        $redirect = 'user/' . $featured_user_user->uid;
         
       }
       
@@ -231,7 +238,7 @@ function _featured_user_unfeature($type = 'ajax', $featured_user_user = FALSE) {
     }
     
     // set message and redirect
-    _twoofakind_com_au_user_nojs_response($message, $redirect);
+    _twoofakind_com_au_user_nojs_response($message, $redirect, $status);
     return;
   }
 }
