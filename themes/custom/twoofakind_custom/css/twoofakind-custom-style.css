@@ -497,7 +497,6 @@ div.view-questions.view-display-id-block div.more-link {
   margin-top: -55px;
 }
 
-
 /* Profile
 -------------------------------------------------------------- */
 
@@ -645,6 +644,227 @@ div.user-profile.view-mode-full div.group-right div.field.field-name-field-image
 div.user-profile.view-mode-full div.group-right div.field.field-name-field-images div.field-item {
   padding-right: 5px;
   float: left;
+}
+
+/* Slide show
+-------------------------------------------------------------- */
+
+div.region-slide-shows {
+  overflow: hidden;
+  width: 990px;
+}
+
+div.region-slide-shows div.view-slideshows {
+  position: relative;
+}
+
+div.region-slide-shows div.view-slideshows div.view-content {
+  margin-bottom: 20px;
+}
+
+div.region-slide-shows div.view-slideshows div.view-content div.skin-default {
+  position: relative;
+  width: 938px;
+  height: 240px;
+  margin: 0px 26px;
+  overflow: visible;
+  background-color: #2c2c2c;
+}
+
+div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views-slideshow-controls-top {
+  width: 990px;
+  height: 4px;
+  overflow: visible;
+  position: absolute;
+  z-index: 10;
+  top: 0px;
+  left: -26px;
+  background: transparent url("../images/pageBg-slideTop.png") no-repeat 0 0;
+}
+
+div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views-slideshow-controls-top div.views-slideshow-controls-text-render {
+  
+}
+
+div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views-slideshow-controls-top div.views-slideshow-controls-text-render span.views-slideshow-controls-text-previous,
+div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views-slideshow-controls-top div.views-slideshow-controls-text-render span.views-slideshow-controls-text-next {
+  cursor: pointer;
+  display: block;
+  height: 64px;
+  position: absolute;
+  text-indent: -1000px;
+  top: 65px;
+  width: 51px;
+  z-index: 10;
+}
+
+div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views-slideshow-controls-top div.views-slideshow-controls-text-render span.views-slideshow-controls-text-previous {
+  left: 11px;
+  background: transparent url("../images/slide-previous.png") no-repeat 0 0;
+}
+
+div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views-slideshow-controls-top div.views-slideshow-controls-text-render span.views-slideshow-controls-text-pause {
+  display: none;
+}
+
+div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views-slideshow-controls-top div.views-slideshow-controls-text-render span.views-slideshow-controls-text-next {
+  right: 11px;
+  background: transparent url("../images/slide-next.png") no-repeat 0 0;
+}
+
+div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views_slideshow_cycle_main {
+  position: relative;
+  z-index: 5;
+}
+
+div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views_slideshow_cycle_main div.views-slideshow-cycle-main-frame {
+  
+}
+
+div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views_slideshow_cycle_main div.views-slideshow-cycle-main-frame div.views_slideshow_cycle_slide {
+  
+}
+
+div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views_slideshow_cycle_main div.views-slideshow-cycle-main-frame div.views_slideshow_cycle_slide div.views-row {
+  
+}
+
+div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views_slideshow_cycle_main div.views-slideshow-cycle-main-frame div.views_slideshow_cycle_slide div.views-row div.node.view-mode-slideshow {
+  
+}
+
+div.region-slide-shows div.view-slideshows div.view-footer {
+  width: 990px;
+  position: absolute;
+  top: 185px;
+  left: 0px;
+  z-index: 10;
+	height: 55px;
+	overflow: hidden;
+	background: transparent url("../images/pageBg-slideBottom.png") no-repeat 0 0;
+}
+
+div.node.view-mode-slideshow {
+  width: 100%;
+}
+
+div.node.view-mode-slideshow div.group-left {
+  width: 480px;
+}
+
+div.node.view-mode-slideshow div.group-left div.field {
+  
+}
+
+div.node.view-mode-slideshow div.group-left div.field div.field-items {
+  
+}
+
+div.node.view-mode-slideshow div.group-left div.field div.field-items div.field-item {
+  
+}
+
+div.node.view-mode-slideshow div.group-left div.field-name-field-image {
+  
+}
+
+div.node.view-mode-slideshow div.group-left div.field-name-field-image div.field-items {
+  
+}
+
+div.node.view-mode-slideshow div.group-left div.field-name-field-image div.field-items div.field-item {
+  
+}
+
+div.node.view-mode-slideshow div.group-right {
+  width: 435px;
+  padding: 10px 0px
+}
+
+div.node.view-mode-slideshow div.group-right div.field {
+  margin: 0px 10px;
+}
+
+div.node.view-mode-slideshow div.group-right div.field div.field-items {
+  
+}
+
+div.node.view-mode-slideshow div.group-right div.field div.field-items div.field-item {
+  
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-title {
+  
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-title div.field-items {
+  
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-title div.field-items div.field-item {
+  
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-title div.field-items div.field-item h2 {
+  
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-title div.field-items div.field-item h2 a {
+  
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-body {
+  
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-body div.field-items {
+  
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-body div.field-items div.field-item {
+  color: #ffffff;
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-body div.field-items div.field-item a {
+  
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-node-link {
+  
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-node-link div.field-items {
+  
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-node-link div.field-items div.field-item {
+  
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-node-link div.field-items div.field-item a {
+  color: #ed1c24;
+}
+
+div.node.view-mode-slideshow div.group-right ul.links {
+  margin: 0;
+  padding: 0;
+}
+
+div.node.view-mode-slideshow div.group-right ul.links li {
+  
+}
+
+div.node.view-mode-slideshow div.group-right ul.links li a {
+  
+}
+
+/* Breadcrumbs
+-------------------------------------------------------------- */
+
+/* Hide on home */
+
+body.front div.breadcrumb {
+  display: none;
 }
 
 /* Footer
