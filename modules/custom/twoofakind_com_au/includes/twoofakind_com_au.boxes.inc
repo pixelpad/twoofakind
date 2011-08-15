@@ -35,83 +35,63 @@ function _twoofakind_com_au_boxes_menu(&$items) {
     'file' => 'includes/twoofakind_com_au.boxes.inc'
   );
   
-  // home page
+  // boxes for editing
+  $boxes = array(
+    'home_banner_left' => array(
+      'title' => 'Home banner left',
+      'description' => 'Edit the content that appears below the logo on the home page'
+    ),
+    'home_banner_right' => array(
+      'title' => 'Home banner right',
+      'description' => 'Edit the content that appears below the search form on the home page'
+    ),
+    'welcome' => array(
+      'title' => 'Home banner welcome',
+      'description' => 'Edit the content that appears below the home banner left on the home page'
+    ),
+    'login_welcome' => array(
+      'title' => 'Initial login Welcome message',
+      'description' => 'Edit the content that is displayed to a user when they first log in'
+    ),
+    'footer_partners' => array(
+      'title' => 'Footer : Partners',
+      'description' => 'Edit the partners content that appears in the footer'
+    ),
+    'footer_social' => array(
+      'title' => 'Footer : Social',
+      'description' => 'Edit the social links content that appears in the footer'
+    ),
+    'footer_contact' => array(
+      'title' => 'Footer : Contact',
+      'description' => 'Edit the contact content that appears in the footer'
+    ),
+    'footer_copyright' => array(
+      'title' => 'Footer : Copyright',
+      'description' => 'Edit the copyright content that appears below the footer'
+    ),
+    'user_edit_profile' => array(
+      'title' => 'Profile edit screen : Profile',
+      'description' => 'Edit the content that appears above the profile section on the user edit screen'
+    ),
+    'user_edit_match' => array(
+      'title' => 'Profile edit screen : Match criteria',
+      'description' => 'Edit the content that appears above the match criteria section on the user edit screen'
+    ),
+    'user_edit_account' => array(
+      'title' => 'Profile edit screen : Account details',
+      'description' => 'Edit the content that appears above the Account details section on the user edit screen'
+    ),
+  );
   
-  // Home banner left box
-  $items['admin/content/boxes/home_banner_left'] = array(
-    'title' => 'Home banner left',
-    'description' => 'Edit the content that appears below the logo on the home page',
-  );
-  $items['admin/content/boxes/home_banner_left'] += $common;
-  // Home banner right box
-  $items['admin/content/boxes/home_banner_right'] = array(
-    'title' => 'Home banner right',
-    'description' => 'Edit the content that appears below the search form on the home page',
-  );
-  $items['admin/content/boxes/home_banner_right'] += $common;
-  // Home banner welcome box
-  $items['admin/content/boxes/welcome'] = array(
-    'title' => 'Home banner welcome',
-    'description' => 'Edit the content that appears below the home banner left on the home page',
-  );
-  $items['admin/content/boxes/welcome'] += $common;
-
-  // Initial login
-  
-    // Welcome message upon login
-  $items['admin/content/boxes/login_welcome'] = array(
-    'title' => 'Initial login Welcome message',
-    'description' => 'Edit the content that is displayed to a user when they first log in',
-  );
-  $items['admin/content/boxes/login_welcome'] += $common;
-  
-  // footer
-
-  // Footer partners
-  $items['admin/content/boxes/footer_partners'] = array(
-    'title' => 'Footer : Partners',
-    'description' => 'Edit the partners content that appears in the footer',
-  );
-  $items['admin/content/boxes/footer_partners'] += $common;
-  // Footer social
-  $items['admin/content/boxes/footer_social'] = array(
-    'title' => 'Footer : Social',
-    'description' => 'Edit the social links content that appears in the footer',
-  );
-  $items['admin/content/boxes/footer_social'] += $common;
-  // Footer contact
-  $items['admin/content/boxes/footer_contact'] = array(
-    'title' => 'Footer : Contact',
-    'description' => 'Edit the contact content that appears in the footer',
-  );
-  $items['admin/content/boxes/footer_contact'] += $common;
-  // Footer Copyright
-  $items['admin/content/boxes/footer_copyright'] = array(
-    'title' => 'Footer : Copyright',
-    'description' => 'Edit the copyright content that appears below the footer',
-  );
-  $items['admin/content/boxes/footer_copyright'] += $common;
-  
-  // Edit user screen
-  
-  // Profile
-  $items['admin/content/boxes/user_edit_profile'] = array(
-    'title' => 'Profile edit screen : Profile',
-    'description' => 'Edit the content that appears above the profile section on the user edit screen',
-  );
-  $items['admin/content/boxes/user_edit_profile'] += $common;
-  // Match criteria
-  $items['admin/content/boxes/user_edit_match'] = array(
-    'title' => 'Profile edit screen : Match criteria',
-    'description' => 'Edit the content that appears above the match criteria section on the user edit screen',
-  );
-  $items['admin/content/boxes/user_edit_match'] += $common;
-  // Account details
-  $items['admin/content/boxes/user_edit_account'] = array(
-    'title' => 'Profile edit screen : Account details',
-    'description' => 'Edit the content that appears above the Account details section on the user edit screen',
-  );
-  $items['admin/content/boxes/user_edit_account'] += $common;
+  // add them to the menu
+  foreach ($boxes as $box_machine_name => $data) {
+    $path = 'admin/content/boxes/' . $box_machine_name;
+    $items[$path] = array(
+      'title' => $data['title'],
+      'description' => $data['description']
+    );
+    $items[$path] += $common;
+  }
 
 }
 
@@ -151,30 +131,18 @@ function twoofakind_com_au_admin_menu_block_page() {
  * 
  * @see hook_menu()
  */
-function _twoofakind_com_au_boxes_menu_redirect($item = NULL) {
+function _twoofakind_com_au_boxes_menu_redirect($box_machine_name = NULL) {
   
   $default_destination = 'admin/content/boxes';
   
-  switch ($item) {
-    
-    case 'home_banner_left' :
-    case 'home_banner_right' :
-    case 'welcome' :
-    case 'login_welcome' :
-    case 'footer_partners' :
-    case 'footer_social' :
-    case 'footer_contact' :
-    case 'footer_copyright' :
-    case 'user_edit_profile' :
-    case 'user_edit_match' :
-    case 'user_edit_account' :
-      $redirect = "admin/structure/block/manage/boxes/$item/configure";
-      break;
-
-    default :
-      // redirect back to main home page admin screen
-      $redirect = $default_destination;
-      break;
+  // check if they have permission
+  // and make sure they do not have an eating disorder
+  if (empty($box_machine_name)) {
+    drupal_set_message('No box provided', 'error');
+  }
+  else {
+    $redirect = 'admin/structure/block/manage/boxes/%s/configure';
+    $redirect = sprintf($redirect, $box_machine_name);
   }
   
   // add default destination
