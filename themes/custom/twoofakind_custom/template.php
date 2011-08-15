@@ -47,3 +47,67 @@ function twoofakind_custom_menu_link__menu_user_major_actions($variables) {
 function twoofakind_custom_menu_tree__menu_footer_other($variables) {
   return '<div id="block-menu-footer-other"><ul>' . $variables['tree'] . '</ul></div>';
 }
+
+/**
+ * Process variables for user-profile.tpl.php.
+ *
+ * The $variables array contains the following arguments:
+ * - $account
+ *
+ * @see user-profile.tpl.php
+ */
+function twoofakind_custom_preprocess_user_picture(&$variables) {
+
+  $account = $variables['account'];
+  
+  // modify the user_picture variable
+  if (isset($account->content['view_mode']) && $account->content['view_mode']['#markup'] == 'full') {
+    
+    // only if the view_mode is full
+  
+    // init variable
+    $variables['user_picture_alternate'] = '';
+
+    // generate relevant image style paths
+    if (isset($account->picture->uri) && !empty($account->picture->uri)) {
+      
+      $url_profile_main = image_style_url('profile_main', $account->picture->uri);
+      $url_large = image_style_url('large', $account->picture->uri);
+
+      // build image
+      $attributes = array(
+        'alt' => $account->name,
+        'title' => $account->name
+      );
+      $image = theme('image', array('path' => $url_profile_main, 'attributes' => $attributes));
+
+      // build link
+      $options = array(
+        'attributes' => array(
+          'class' => array(
+            'active',
+            'colorbox',
+            'imagefield',
+            'imagefield-imagelink'
+          ),
+          'rel' => 'gallery-nid',
+          'title' => $account->name
+        ),
+        'html' => TRUE
+      );
+      $link = l($image, $url_large, $options);
+
+      // replace current content with your own link
+      // replacing the user_picture doesn't always work
+      $variables['user_picture'] = $link;
+      // NOTE - if it doesn't alternate variables won't work
+      // only user_picture and account are passed to the template file
+//      $variables['user_picture_alternate'] = $link;
+      // so, you can use this if the first one doesn't work
+//      $variables['account']->content['user_picture_alternate'] = $link;
+
+    }
+    
+  }
+  
+}

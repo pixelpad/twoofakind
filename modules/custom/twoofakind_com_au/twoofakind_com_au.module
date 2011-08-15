@@ -915,7 +915,16 @@ function twoofakind_com_au_user_view($account, $view_mode, $langcode) {
 
   // Add a recent view record
   if ($view_mode == 'full') {
+    
+    // add a recent view
     recent_view_create($account->uid);
+    
+    // pass the build mode to the preprocess function
+    $account->content['view_mode'] =  array(
+      '#type' => 'hidden',
+      '#title' => t('View mode'),
+      '#markup' => $view_mode
+    );
   }
   
 }
@@ -1169,6 +1178,69 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
 
   return array($entity_type => $fields);
 
+}
+
+function twoofakind_com_au_ds_fields_info_alter(&$fields, $entity_type) {
+  if (isset($fields['ds_user_picture'])) {
+    $fields['ds_user_picture']['function'] = '_twoofakind_com_au_ds_render_user_picture';
+    $fields['ds_user_picture']['module'] = 'twoofakind_com_au';
+  }
+}
+
+/**
+ * Copy of ds_render_user_picture with some minor modifications
+ */
+function _twoofakind_com_au_ds_render_user_picture($field) {
+  
+  // if view mode isn't full then default to the normal function
+  if ($field['view_mode'] != 'full') {
+    return ds_render_user_picture($field);
+  }
+  
+  $picture = ds_return_picture($field['entity']);
+  if (!empty($picture)) {
+    $vars = array();
+    $filepath = (isset($picture->uri)) ? $picture->uri : $picture;
+    $name = !empty($field['entity']->name) ? $field['entity']->name : variable_get('anonymous', t('Anonymous'));
+    $alt = t("@user's picture", array('@user' => $name));
+    $vars = array('path' => $filepath, 'alt' => $alt, 'title' => $alt);
+
+    // If the image does not have a valid Drupal scheme (for eg. HTTP),
+    // don't load image styles.
+    if (module_exists('image') && file_valid_uri($filepath)) {
+      $vars['style_name'] = str_replace('ds_picture_', '', $field['formatter']);
+      $image = theme('image_style', $vars);
+    }
+    else {
+      $image = theme('image', $vars);
+    }
+
+    if (!empty($field['entity']->uid) && user_access('access user profiles')) {
+      
+      // grab large image style path
+      $url_large = image_style_url('large', $picture->uri);
+      
+      // build link
+      $options = array(
+        'attributes' => array(
+          'class' => array(
+            'active',
+            'colorbox',
+            'imagefield',
+            'imagefield-imagelink'
+          ),
+//          'rel' => 'gallery-nid',
+          'title' => $field['entity']->name
+        ),
+        'html' => TRUE
+      );
+      
+      return l($image, $url_large, $options);
+    }
+    else {
+      return $image;
+    }
+  }
 }
 
 /**
