@@ -1180,6 +1180,14 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
 
 }
 
+/**
+ * Implemements hook_ds_fields_info_alter
+ *
+ * @param $fields
+ *   An array with fields which can be altered just before they get cached.
+ * @param $entity_type
+ *   The name of the entity type.
+ */
 function twoofakind_com_au_ds_fields_info_alter(&$fields, $entity_type) {
   if (isset($fields['ds_user_picture'])) {
     $fields['ds_user_picture']['function'] = '_twoofakind_com_au_ds_render_user_picture';
