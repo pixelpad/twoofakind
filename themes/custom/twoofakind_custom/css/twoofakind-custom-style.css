@@ -420,14 +420,19 @@ div.region-sidebar-right ul.menu li.views-row div.group-right {
 }
 div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-name div.field-item a {
 	padding-left: 10px;
+  line-height: 54px;
+}
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-name div.field-item a.active {
   line-height: 53px;
 }
-div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-age {
-	margin-top: -20px;
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-name {
+  margin-bottom: -20px;
 }
-div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-field-sex {
-	margin-top: -18px;
-  padding-right: 20px;
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-age,
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-field-sex,
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-location-city {
+  float: right;
+  padding-right: 5px;
 }
 
 /* (Full) Profile list content area
