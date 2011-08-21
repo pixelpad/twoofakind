@@ -205,6 +205,9 @@ function _twoofakind_com_au_views_data_featured_users(&$data) {
         'handler' => 'views_handler_relationship',
         'label' => t('Featured user'),
       ),
+      'filter' => array(
+        'handler' => 'views_handler_filter_numeric',
+      ),
     ),
     'created' => array(
       'title' => t('Created'),
