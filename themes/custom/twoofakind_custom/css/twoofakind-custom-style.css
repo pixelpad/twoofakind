@@ -320,6 +320,10 @@ div.region-content div#sort_form div.form-type-select {
   float: left;
 }
 
+div.region-sidebar-right div#matches_form div.views-reset-button {
+  margin-top: 43px;
+}
+
 div.region-content div#sort_form div.form-type-select {
   line-height: 40px;
   margin-right: 20px;
