@@ -1482,7 +1482,7 @@ function _twoofakind_com_au_user_ajax_response($user, $entity_type, $message, $l
 }
 
 /**
- * Simple ajax response wrapper
+ * Simple nojs response wrapper
  */
 function _twoofakind_com_au_user_nojs_response($message, $redirect, $status = 'error') {
  
