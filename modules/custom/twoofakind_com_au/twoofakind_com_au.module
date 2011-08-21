@@ -942,13 +942,26 @@ function twoofakind_com_au_user_login(&$edit, $account) {
   // if access = 0 then throw them a message telling them to complete their profile
   if (empty($account->access)) {
     
+    // set up some basic defaults
+    $defaults = array(
+      'login_welcome' => array(
+        'subject' => 'Welcome to Two of a Kind',
+        'content' => '<p>Please complete your profile and match criteria for the best results.<p>',
+        'weight' => -0
+      ),
+    );
+    
     // grab welcome content from box
-    $box = boxes_block_view('welcome_login');
+    $box = boxes_block_view('login_welcome');
     $box_title = '';
     $box_content = '';
     if ($box) {
       $box_title = $box['subject'];
       $box_content = $box['content'];
+    }
+    else {
+      $box_title = $defaults['login_welcome']['subject'];
+      $box_content = $defaults['login_welcome']['content'];
     }
     
     // link to edit profile and match criteria
