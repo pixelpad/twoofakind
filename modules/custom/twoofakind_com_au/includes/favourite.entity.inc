@@ -40,7 +40,7 @@ function _favourite_menu(&$items) {
     'access callback'   => 'user_access',
     'access arguments'  => array('access user profiles'),
     'type'              => MENU_CALLBACK,
-    'file'              => 'includes/favourite.entity.inc',
+//    'file'              => 'includes/favourite.entity.inc',
   );
   $items[TWOOFAKIND_PATH_UNFAVOURITE . '/%/%user'] = array(
     'title'             => 'UnFavourite',
@@ -50,7 +50,7 @@ function _favourite_menu(&$items) {
     'access callback'   => 'user_access',
     'access arguments'  => array('access user profiles'),
     'type'              => MENU_CALLBACK,
-    'file'              => 'includes/favourite.entity.inc',
+//    'file'              => 'includes/favourite.entity.inc',
   );
 }
 

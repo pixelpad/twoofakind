@@ -1202,12 +1202,13 @@ function twoofakind_com_au_ds_fields_info_alter(&$fields, $entity_type) {
  * Copy of ds_render_user_picture with some minor modifications
  */
 function _twoofakind_com_au_ds_render_user_picture($field) {
-  
+
   // if view mode isn't full then default to the normal function
+  $picture = ds_return_picture($field['entity']);
   if ($field['view_mode'] != 'full' || !isset($picture->uri)) {
     return ds_render_user_picture($field);
   }
-  
+
   $picture = ds_return_picture($field['entity']);
   if (!empty($picture)) {
     $vars = array();

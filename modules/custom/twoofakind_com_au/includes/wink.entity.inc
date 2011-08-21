@@ -37,7 +37,7 @@ function _wink_menu(&$items) {
     'access callback'   => 'user_access',
     'access arguments'  => array('access user profiles'),
     'type'              => MENU_CALLBACK,
-    'file'              => 'includes/wink.entity.inc',
+//    'file'              => 'includes/wink.entity.inc',
   );
 }
 
@@ -60,66 +60,44 @@ function _wink_wink($type = 'ajax', $wink_user = FALSE) {
 
   // if js is enabled and this is an ajax request
   if ($type == 'ajax') {
-    
     // did we find a user?
     if ($wink_user) {
-
       // we did, create wink record
       // remove wink link
       // also send a notification
-      
       // create wink
       if (wink_create($wink_user->uid) !== FALSE) {
-
         // all went well
-
         // build response message
         $message = sprintf(TWOOFAKIND_MSG_WINK, $wink_user->name);
-
       }
-      
     }
     else {
-      
       // we didn't find one
       // send an error response back
-      
       // create a message and wrap it in a span
       $message = 'User not found';
-      
     }
-
     // ajax response
     _twoofakind_com_au_user_ajax_response($wink_user, 'wink', $message);
-    
   }
   else {
-    
     // js is not enabled. this is a fallback response
-    
     // did we find a user?
     if ($wink_user) {
-      
       // create wink
       if (wink_create($wink_user->uid)) {
-        
         // all good
-        
         // message
         $message = sprintf(TWOOFAKIND_MSG_WINK, $wink_user->name);
         $status = 'status';
-        
         // redirect
         $redirect = 'user/' . $wink_user->uid;
-        
       }
-      
     }
     else {
-
       // message
       $message = 'User not found';
-      
     }
     
     // set message and redirect
