@@ -185,20 +185,26 @@ function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
       'content' => '<p>Tell us a little bit more about you.<p>',
       'weight' => -1000
     ),
-    'user_edit_match' => array(
-      'subject' => 'What are you looking for in a partner?',
-      'content' => '<p>Tell us a little bit more about the kind of person you would like to meet.<p>',
-      'weight' => 1
-    ),
     'user_edit_account' => array(
       'subject' => 'Account details',
       'content' => '<p>Edit your username, password and all that official jazz.<p>',
       'weight' => 2
+    ),
+    'user_edit_match' => array(
+      'subject' => 'What are you looking for in a partner?',
+      'content' => '<p>Tell us a little bit more about the kind of person you would like to meet.<p>',
+      'weight' => 1
     )
   );
   $title = '<h2><a name="%s">%s</a></h2>';
   
+  // change the weight of some of the groups
+  $form['#groups']['group_tabs']->weight = 0;
+  $form['#groups']['group_tabs_match']->weight = 2;
+  $form['account']['name']['#weight'] = -2000;
+  
   // cycle through each of the above and insert them in to the form
+  $index = 0;
   foreach ($defaults as $delta => $data) {
     
     // grab box if one exists
@@ -219,12 +225,18 @@ function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
     $markup = array();
     $markup[] = sprintf($title, $anchor, $box_title);
     $markup[] = $box_content;
-    $form[$delta] = array(
+    
+    // build a form delta
+    $form_delta = str_replace('user_edit_', 'user_edit_'.$index.'_', $delta);
+    // add to form
+    $form[$form_delta] = array(
       '#markup' => implode("\n", $markup),
       '#weight' => $data['weight']
     );
+    
+    ++$index;
   }
-  
+//dsm($form);
   // collapse the pvt messages fieldset
   $form['privatemsg']['#collapsed'] = TRUE;
   
