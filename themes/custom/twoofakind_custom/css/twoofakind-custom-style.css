@@ -666,6 +666,10 @@ div.user-profile.view-mode-full div.group-right div.field.field-name-field-image
   float: left;
 }
 
+div#user-cancel-link {
+  float: right;
+}
+
 /* Slide show
 -------------------------------------------------------------- */
 

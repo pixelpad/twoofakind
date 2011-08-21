@@ -1,0 +1,22 @@
+/* 
+    Document   : twoofakind_com_au
+    Created on : Jul 28, 2011, 2:50:57 AM
+    Author     : Mike Kelly
+    Description:
+        Required styles for this module
+*/
+
+/*
+ * Change cancel account button in to a link
+ */
+div#user-cancel-link {
+  
+}
+
+div#user-cancel-link a {
+  
+}
+
+div#user-cancel-link input {
+  display: none;
+}

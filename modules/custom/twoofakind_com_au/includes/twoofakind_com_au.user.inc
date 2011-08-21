@@ -176,7 +176,7 @@ function _twoofakind_com_au_block_profile() {
  */
 function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
   
-  // add some headings and text
+  global $user;
   
   // set up some basic defaults
   $defaults = array(
@@ -236,7 +236,16 @@ function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
     
     ++$index;
   }
-//dsm($form);
+  
+  // hide the cancel input and add a link instead
+  drupal_add_css(drupal_get_path('module', 'twoofakind_com_au') . '/css/twoofakind_com_au.admin.css', 'file');
+  $output = array(
+    '<div id="user-cancel-link">'
+  );
+  $output[] = l('Cancel account', 'user/' . $user->uid . '/cancel', array('attributes' => array('title' => 'Cancel your account'), 'html' => TRUE));
+  $form['actions']['cancel']['#prefix'] = implode("\n", $output);
+  $form['actions']['cancel']['#suffix'] = '</div>';
+
   // collapse the pvt messages fieldset
   $form['privatemsg']['#collapsed'] = TRUE;
   

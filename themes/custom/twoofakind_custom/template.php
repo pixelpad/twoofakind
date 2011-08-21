@@ -111,3 +111,19 @@ function twoofakind_custom_preprocess_user_picture(&$variables) {
   }
   
 }
+
+/**
+ * Theme buttons for this template
+ */
+//function twoofakind_custom_button($variables) {
+//
+//  $element = $variables['element'];
+//  element_set_attributes($element, array('id', 'name', 'value'));
+//
+//  $output = array();
+//  $output[] = '<button value="' . $element['#value'] . '" type="submit" class="form-submit btn" id="' . $element['#id'] . '">';
+//  $output[] = '<span style="margin-top: -1px;">' . $element['#value'] . '</span>';
+//  $output[] = '</button>';
+//
+//  return implode("\n", $output);
+//}
