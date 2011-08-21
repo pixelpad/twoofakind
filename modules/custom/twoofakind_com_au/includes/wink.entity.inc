@@ -38,7 +38,6 @@ function _wink_menu(&$items) {
     'access arguments'  => array('access user profiles'),
     'type'              => MENU_CALLBACK,
     'file'              => 'includes/wink.entity.inc',
-    'delivery callback' => 'ajax_deliver',
   );
 }
 

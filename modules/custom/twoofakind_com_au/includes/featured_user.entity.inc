@@ -41,7 +41,6 @@ function _featured_user_menu(&$items) {
     'access arguments'  => array('access user profiles'),
     'type'              => MENU_CALLBACK,
     'file'              => 'includes/featured_user.entity.inc',
-    'delivery callback' => 'ajax_deliver',
   );
   $items[TWOOFAKIND_PATH_UNFEATURED_USER . '/%/%user'] = array(
     'title'             => 'UnFeature user',
@@ -52,7 +51,6 @@ function _featured_user_menu(&$items) {
     'access arguments'  => array('access user profiles'),
     'type'              => MENU_CALLBACK,
     'file'              => 'includes/featured_user.entity.inc',
-    'delivery callback' => 'ajax_deliver',
   );
 }
 

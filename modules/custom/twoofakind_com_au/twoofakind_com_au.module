@@ -99,6 +99,9 @@ function twoofakind_com_au_init() {
   drupal_add_js(drupal_get_path('module', 'twoofakind_com_au') . '/js/twoofakind_com_au.js', 'file');
   drupal_add_css(drupal_get_path('module', 'twoofakind_com_au') . '/css/twoofakind_com_au.css', 'file');
   
+  // add ajax, I don't know why it isn't there already
+  drupal_add_library('system', 'drupal.ajax');
+  
   // set some session variables utilised in hook_form_alter below
   if (!empty($user->uid)) {
     // only for auth users
@@ -1466,11 +1469,15 @@ function _twoofakind_com_au_user_ajax_response($user, $entity_type, $message, $l
   // wrap it all in a div
   $output = "<div id=\"$entity_type-{$user->uid}\">$link $message</div>";
 
-  // send it back
-  $commands = array();
-  $commands[] = ajax_command_replace("#$entity_type-{$user->uid}", $output);
-  $page = array('#type' => 'ajax', '#commands' => $commands);
-  ajax_deliver($page);
+  // send it back  
+  $page = array(
+    '#type' => 'ajax',
+    '#commands' => array(
+      ajax_command_replace("#$entity_type-{$user->uid}", $output)
+    ),
+  );
+
+  return ajax_deliver($page);
   
 }
 
