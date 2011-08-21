@@ -192,6 +192,10 @@ div#SearchOptions {
   float: right;
   margin: -20px 30px 0 0;
 }
+
+div#SearchOptions a {
+  color: #ed1c24;
+}
 body.not-logged-in div#SearchOptions {
   display: none;
 }
@@ -230,6 +234,10 @@ div.region-content div#sort_form {
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
   border: 1px solid #F4F5F6;
+}
+
+body.front div.region-sidebar-right div#matches_form {
+  margin-top: 10px;
 }
 
 /* show the search form for non-logged in users */
@@ -672,7 +680,7 @@ div.region-slide-shows div.view-slideshows div.view-content div.skin-default {
   background-color: #2c2c2c;
 }
 
-div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views-slideshow-controls-top {
+div.skin-default div.views-slideshow-controls-top {
   width: 990px;
   height: 4px;
   overflow: visible;
@@ -683,12 +691,8 @@ div.region-slide-shows div.view-slideshows div.view-content div.skin-default div
   background: transparent url("../images/pageBg-slideTop.png") no-repeat 0 0;
 }
 
-div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views-slideshow-controls-top div.views-slideshow-controls-text-render {
-  
-}
-
-div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views-slideshow-controls-top div.views-slideshow-controls-text-render span.views-slideshow-controls-text-previous,
-div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views-slideshow-controls-top div.views-slideshow-controls-text-render span.views-slideshow-controls-text-next {
+div.skin-default div.views-slideshow-controls-top span.views-slideshow-controls-text-previous,
+div.skin-default div.views-slideshow-controls-top span.views-slideshow-controls-text-next {
   cursor: pointer;
   display: block;
   height: 64px;
@@ -699,16 +703,16 @@ div.region-slide-shows div.view-slideshows div.view-content div.skin-default div
   z-index: 10;
 }
 
-div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views-slideshow-controls-top div.views-slideshow-controls-text-render span.views-slideshow-controls-text-previous {
+div.skin-default div.views-slideshow-controls-top span.views-slideshow-controls-text-previous {
   left: 11px;
   background: transparent url("../images/slide-previous.png") no-repeat 0 0;
 }
 
-div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views-slideshow-controls-top div.views-slideshow-controls-text-render span.views-slideshow-controls-text-pause {
+div.skin-default div.views-slideshow-controls-top span.views-slideshow-controls-text-pause {
   display: none;
 }
 
-div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views-slideshow-controls-top div.views-slideshow-controls-text-render span.views-slideshow-controls-text-next {
+div.skin-default div.views-slideshow-controls-top span.views-slideshow-controls-text-next {
   right: 11px;
   background: transparent url("../images/slide-next.png") no-repeat 0 0;
 }
@@ -716,22 +720,6 @@ div.region-slide-shows div.view-slideshows div.view-content div.skin-default div
 div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views_slideshow_cycle_main {
   position: relative;
   z-index: 5;
-}
-
-div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views_slideshow_cycle_main div.views-slideshow-cycle-main-frame {
-  
-}
-
-div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views_slideshow_cycle_main div.views-slideshow-cycle-main-frame div.views_slideshow_cycle_slide {
-  
-}
-
-div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views_slideshow_cycle_main div.views-slideshow-cycle-main-frame div.views_slideshow_cycle_slide div.views-row {
-  
-}
-
-div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views_slideshow_cycle_main div.views-slideshow-cycle-main-frame div.views_slideshow_cycle_slide div.views-row div.node.view-mode-slideshow {
-  
 }
 
 div.region-slide-shows div.view-slideshows div.view-footer {
@@ -753,30 +741,6 @@ div.node.view-mode-slideshow div.group-left {
   width: 480px;
 }
 
-div.node.view-mode-slideshow div.group-left div.field {
-  
-}
-
-div.node.view-mode-slideshow div.group-left div.field div.field-items {
-  
-}
-
-div.node.view-mode-slideshow div.group-left div.field div.field-items div.field-item {
-  
-}
-
-div.node.view-mode-slideshow div.group-left div.field-name-field-image {
-  
-}
-
-div.node.view-mode-slideshow div.group-left div.field-name-field-image div.field-items {
-  
-}
-
-div.node.view-mode-slideshow div.group-left div.field-name-field-image div.field-items div.field-item {
-  
-}
-
 div.node.view-mode-slideshow div.group-right {
   width: 435px;
   padding: 10px 0px
@@ -786,60 +750,8 @@ div.node.view-mode-slideshow div.group-right div.field {
   margin: 0px 10px;
 }
 
-div.node.view-mode-slideshow div.group-right div.field div.field-items {
-  
-}
-
-div.node.view-mode-slideshow div.group-right div.field div.field-items div.field-item {
-  
-}
-
-div.node.view-mode-slideshow div.group-right div.field-name-title {
-  
-}
-
-div.node.view-mode-slideshow div.group-right div.field-name-title div.field-items {
-  
-}
-
-div.node.view-mode-slideshow div.group-right div.field-name-title div.field-items div.field-item {
-  
-}
-
-div.node.view-mode-slideshow div.group-right div.field-name-title div.field-items div.field-item h2 {
-  
-}
-
-div.node.view-mode-slideshow div.group-right div.field-name-title div.field-items div.field-item h2 a {
-  
-}
-
-div.node.view-mode-slideshow div.group-right div.field-name-body {
-  
-}
-
-div.node.view-mode-slideshow div.group-right div.field-name-body div.field-items {
-  
-}
-
 div.node.view-mode-slideshow div.group-right div.field-name-body div.field-items div.field-item {
   color: #ffffff;
-}
-
-div.node.view-mode-slideshow div.group-right div.field-name-body div.field-items div.field-item a {
-  
-}
-
-div.node.view-mode-slideshow div.group-right div.field-name-node-link {
-  
-}
-
-div.node.view-mode-slideshow div.group-right div.field-name-node-link div.field-items {
-  
-}
-
-div.node.view-mode-slideshow div.group-right div.field-name-node-link div.field-items div.field-item {
-  
 }
 
 div.node.view-mode-slideshow div.group-right div.field-name-node-link div.field-items div.field-item a {
@@ -849,14 +761,6 @@ div.node.view-mode-slideshow div.group-right div.field-name-node-link div.field-
 div.node.view-mode-slideshow div.group-right ul.links {
   margin: 0;
   padding: 0;
-}
-
-div.node.view-mode-slideshow div.group-right ul.links li {
-  
-}
-
-div.node.view-mode-slideshow div.group-right ul.links li a {
-  
 }
 
 /* Breadcrumbs
