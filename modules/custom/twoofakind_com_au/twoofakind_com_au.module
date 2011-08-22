@@ -945,6 +945,37 @@ function twoofakind_com_au_user_view($account, $view_mode, $langcode) {
     // add a recent view
     recent_view_create($account->uid);
     
+    // process winks
+    $winks = wink_load_from_account_to_current($account->uid);
+    if (count($winks)) {
+      foreach ($winks as $wink_id => $wink) {
+        if (!$wink->viewed) {
+          $wink->viewed = 1;
+          wink_update($wink);
+        }
+      }
+    }
+    
+    // process matches
+    $matches = match_load_from_current_to_account($account->uid);
+    if (count($matches)) {
+      foreach ($matches as $match_id => $match) {
+        if (!$match->viewed_uid) {
+          $match->viewed_uid = 1;
+          match_update($match);
+        }
+      }
+    }
+    $matches = match_load_from_account_to_current($account->uid);
+    if (count($matches)) {
+      foreach ($matches as $match_id => $match) {
+        if (!$match->viewed_match_uid) {
+          $match->viewed_match_uid = 1;
+          match_update($match);
+        }
+      }
+    }
+    
     // pass the build mode to the preprocess function
     $account->content['view_mode'] =  array(
       '#type' => 'hidden',

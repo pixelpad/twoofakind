@@ -65,6 +65,74 @@ function match_load_all($conditions = array(), $reset = FALSE) {
   return match_load_multiple(FALSE, $conditions, $reset);
 }
 
+/**
+ * Load matches from current user to
+ * 
+ * @param $match_uid
+ *   User id to check
+ * 
+ * @return
+ *   Return array of match entities
+ */
+function match_load_from_current_to_account($match_uid) {
+  
+  global $user;
+  
+  return match_load_from_matcher_matchee($user->uid, $match_uid);
+}
+
+/**
+ * Load matches from user to current
+ * 
+ * @param $match_uid
+ *   User id to check
+ * 
+ * @return
+ *   Return array of match entities
+ */
+function match_load_from_account_to_current($match_uid) {
+  
+  global $user;
+  
+  return match_load_from_matcher_matchee($match_uid, $user->uid);
+}
+
+/**
+ * Load matches from matcher to matchee
+ * 
+ * @param $matcher_uid
+ *   Uid of matcher
+ * 
+ * @param $matchee_uid
+ *   Uid of matchee
+ * 
+ * @return
+ *   Return array of match entities
+ */
+function match_load_from_matcher_matchee($matcher_uid, $matchee_uid) {
+  
+  global $user;
+  
+  // set up the query   
+  $query = new EntityFieldQuery();
+  // we only want favourites
+  $query->entityCondition('entity_type', 'match', '=');
+
+  // match favourite_uid and current uid
+  $query->propertyCondition('uid', $matcher_uid, '=');
+  $query->propertyCondition('match_uid', $matchee_uid, '=');
+
+  // execute
+  $result = $query->execute();
+
+  // return result
+  if (isset($result['match']) && count($result['match'])) {
+      return match_load_multiple(array_keys($result['match']));
+  }
+  
+  return array();
+}
+
 /******************************************************************************
  * CRUD functions
  ******************************************************************************/
@@ -99,6 +167,25 @@ function match_create($match_uid) {
   if($entity) {
     entity_get_controller('match')->save($entity);
     return $entity;
+  }  
+  return FALSE;
+  
+}
+
+/**
+ * Update a match
+ *
+ * @param $match
+ *   The match being updated
+ * 
+ * @return
+ *   The entity or FALSE
+ */
+function match_update($match) {
+  
+  if($match) {
+    entity_get_controller('match')->save($match);
+    return $match;
   }  
   return FALSE;
   

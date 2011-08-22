@@ -171,6 +171,74 @@ function wink_load_all($conditions = array(), $reset = FALSE) {
   return wink_load_multiple(FALSE, $conditions, $reset);
 }
 
+/**
+ * Load winks from current user to account
+ * 
+ * @param $wink_uid
+ *   User id to check
+ * 
+ * @return
+ *   Return array of wink entities
+ */
+function wink_load_from_current_to_account($wink_uid) {
+  
+  global $user;
+  
+  return wink_load_from_winker_winkee($user->uid, $wink_uid);
+}
+
+/**
+ * Load winks from account to current user
+ * 
+ * @param $wink_uid
+ *   User id to check
+ * 
+ * @return
+ *   Return array of wink entities
+ */
+function wink_load_from_account_to_current($wink_uid) {
+  
+  global $user;
+  
+  return wink_load_from_winker_winkee($wink_uid, $user->uid);
+}
+
+/**
+ * Load winks from winker to winkee
+ * 
+ * @param $winker_uid
+ *   Uid of winker
+ * 
+ * @param $winkee_uid
+ *   Uid of winkee
+ * 
+ * @return
+ *   Return array of wink entities
+ */
+function wink_load_from_winker_winkee($winker_uid, $winkee_uid) {
+  
+  global $user;
+  
+  // set up the query   
+  $query = new EntityFieldQuery();
+  // we only want favourites
+  $query->entityCondition('entity_type', 'wink', '=');
+
+  // match favourite_uid and current uid
+  $query->propertyCondition('uid', $winker_uid, '=');
+  $query->propertyCondition('wink_uid', $winkee_uid, '=');
+
+  // execute
+  $result = $query->execute();
+
+  // return result
+  if (isset($result['wink']) && count($result['wink'])) {
+      return wink_load_multiple(array_keys($result['wink']));
+  }
+  
+  return array();
+}
+
 /******************************************************************************
  * CRUD functions
  ******************************************************************************/
@@ -206,6 +274,25 @@ function wink_create($wink_uid) {
   if($entity) {
     entity_get_controller('wink')->save($entity);
     return $entity;
+  }  
+  return FALSE;
+  
+}
+
+/**
+ * Update a wink
+ *
+ * @param $wink
+ *   The wink being updated
+ * 
+ * @return
+ *   The entity or FALSE
+ */
+function wink_update($wink) {
+  
+  if($wink) {
+    entity_get_controller('wink')->save($wink);
+    return $wink;
   }  
   return FALSE;
   
