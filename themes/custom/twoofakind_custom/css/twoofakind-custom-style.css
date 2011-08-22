@@ -832,3 +832,10 @@ div.region-footer div#block-menu-footer-other ul li a {
   font-size: 0.9em;
   padding-left: 10px;
 }
+
+/* Register / profile location fieldset
+-------------------------------------------------------------- */
+
+fieldset.locations legend {
+  font-weight: bold;
+}

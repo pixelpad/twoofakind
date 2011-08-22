@@ -177,7 +177,7 @@ function _twoofakind_com_au_block_profile() {
 function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
   
   global $user;
-  
+
   // set up some basic defaults
   $defaults = array(
     'user_edit_profile' => array(
@@ -197,11 +197,16 @@ function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
     )
   );
   $title = '<h2><a name="%s">%s</a></h2>';
-  
+
   // change the weight of some of the groups
   $form['#groups']['group_tabs']->weight = 0;
-  $form['#groups']['group_tabs_match']->weight = 2;
+  $form['#groups']['group_tabs_match']->weight = 1;
   $form['account']['name']['#weight'] = -2000;
+  
+  // and locations
+  if (isset($form['locations'])) {
+    $form['locations']['#weight'] = -500;
+  }
   
   // cycle through each of the above and insert them in to the form
   $index = 0;
