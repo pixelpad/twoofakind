@@ -13,6 +13,7 @@ if (!defined('TWOOFAKIND_PATH_WINK')) {
   define('TWOOFAKIND_PATH_WINK', 'wink');
   define('TWOOFAKIND_TITLE_WINK', 'Wink at %s');
   define('TWOOFAKIND_MSG_WINK', 'Winked at %s');
+  define('TWOOFAKIND_MSG_WINKED', 'Too many winks at %s');
 }
 
 /******************************************************************************
@@ -55,18 +56,20 @@ function _wink_wink($type = 'ajax', $wink_user = FALSE) {
   // defaults
   $link = '';
   $redirect = '<front>';
-  $message = 'Wink failed';
+  $message = t('Wink failed');
   $status = 'error';
 
   // if js is enabled and this is an ajax request
   if ($type == 'ajax') {
     // did we find a user?
     if ($wink_user) {
-      // we did, create wink record
-      // remove wink link
-      // also send a notification
-      // create wink
-      if (wink_create($wink_user->uid) !== FALSE) {
+      
+      // check if we have winked enough
+      // for today
+      if (wink_has_winked($wink_user->uid) !== FALSE) {
+        $message = t(sprintf(TWOOFAKIND_MSG_WINKED, $wink_user->name));
+      }
+      elseif (wink_create($wink_user->uid) !== FALSE) {
         // all went well
         // build response message
         $message = sprintf(TWOOFAKIND_MSG_WINK, $wink_user->name);
@@ -85,8 +88,10 @@ function _wink_wink($type = 'ajax', $wink_user = FALSE) {
     // js is not enabled. this is a fallback response
     // did we find a user?
     if ($wink_user) {
-      // create wink
-      if (wink_create($wink_user->uid)) {
+      if (wink_has_winked($wink_user->uid) !== FALSE) {
+        $message = t(sprintf(TWOOFAKIND_MSG_WINKED, $wink_user->name));
+      }
+      elseif (wink_create($wink_user->uid)) {
         // all good
         // message
         $message = sprintf(TWOOFAKIND_MSG_WINK, $wink_user->name);
@@ -183,8 +188,15 @@ function wink_create($wink_uid) {
 
   global $user;
 
-  // no need to check if wink exists
-  // wink away
+  // double check that someone hasn't winked within minimum
+  // allowable timeframe or max times etc
+  $wink_id = wink_has_winked($wink_uid);
+  if ($wink_id !== FALSE) {
+    
+    // load the entity and return it
+    $entity = wink_load($wink_id);
+    return $entity;
+  }
   
   $container = array(
     'uid' => $user->uid,
@@ -270,6 +282,52 @@ function wink_uri($wink) {
   return array(
     'path' => 'user/' . $wink->wink_uid,
   );
+}
+
+/******************************************************************************
+ * Utility functions
+ ******************************************************************************/
+
+/**
+ * Has this user been winked at recently or too many times
+ * 
+ * @param $wink_uid
+ *   User id to check
+ * 
+ * @return
+ *   Return Id of winker returned or FALSE
+ * 
+ * @todo
+ *   would be nice to put max winks etc in variable
+ */
+function wink_has_winked($wink_uid) {
+  
+  global $user;
+  
+  // these things should be in a variable
+  $max_winks_in_a_day = 3;
+  
+  // set up the query   
+  $query = new EntityFieldQuery();
+  // we only want favourites
+  $query->entityCondition('entity_type', 'wink', '=');
+
+  // match favourite_uid and current uid
+  $query->propertyCondition('uid', $user->uid, '=');
+  $query->propertyCondition('wink_uid', $wink_uid, '=');
+  $query->propertyCondition('created', date('Y:m:d 00:00:00'), '>');
+
+  // execute
+  $result = $query->execute();
+
+  // return result
+  if (isset($result['wink'])) {
+    if (count($result['wink']) > $max_winks_in_a_day) {
+      return key($result['wink']);
+    }
+  }
+  
+  return FALSE;
 }
 
 /******************************************************************************

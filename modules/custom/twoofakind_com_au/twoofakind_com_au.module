@@ -1154,7 +1154,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
       'title' => t('Favourite'),
       'field_type' => DS_FIELD_TYPE_FUNCTION,
       'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
-      'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/favourite.entity.inc',
+//      'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/favourite.entity.inc',
       'function' => 'theme_ds_favourite_field',
       'properties' => array(
         'favourite_path' => TWOOFAKIND_PATH_FAVOURITE . '/nojs',
@@ -1169,7 +1169,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
       'title' => t('Featured User'),
       'field_type' => DS_FIELD_TYPE_FUNCTION,
       'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
-      'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/featured_user.entity.inc',
+//      'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/featured_user.entity.inc',
       'function' => 'theme_ds_featured_user_field',
       'properties' => array(
         'feature_user_path' => TWOOFAKIND_PATH_FEATURED_USER . '/nojs',
@@ -1184,7 +1184,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
       'title' => t('Wink'),
       'field_type' => DS_FIELD_TYPE_FUNCTION,
       'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
-      'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/wink.entity.inc',
+//      'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/wink.entity.inc',
       'function' => 'theme_ds_wink_field',
       'properties' => array(
         'wink_path' => TWOOFAKIND_PATH_WINK . '/nojs',
