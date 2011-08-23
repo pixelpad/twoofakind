@@ -489,7 +489,7 @@ div.views-page-users div.views-row div.group-left {
 }
 /* row : middle */
 div.views-page-users div.views-row div.group-middle {
-	width: 60px;
+	width: 90px;
   margin-bottom: 10px;
 }
 div.views-page-users div.views-row div.group-middle div.field-item {
@@ -691,15 +691,15 @@ div.region-slide-shows {
   width: 990px;
 }
 
-div.region-slide-shows div.view-slideshows {
+div.region-slide-shows div.slideshow-wrapper {
   position: relative;
 }
 
-div.region-slide-shows div.view-slideshows div.view-content {
+div.region-slide-shows div.slideshow-wrapper div.view-content {
   margin-bottom: 20px;
 }
 
-div.region-slide-shows div.view-slideshows div.view-content div.skin-default {
+div.region-slide-shows div.slideshow-wrapper div.view-content div.skin-default {
   position: relative;
   width: 938px;
   height: 240px;
@@ -745,12 +745,12 @@ div.skin-default div.views-slideshow-controls-top span.views-slideshow-controls-
   background: transparent url("../images/slide-next.png") no-repeat 0 0;
 }
 
-div.region-slide-shows div.view-slideshows div.view-content div.skin-default div.views_slideshow_cycle_main {
+div.region-slide-shows div.slideshow-wrapper div.view-content div.skin-default div.views_slideshow_cycle_main {
   position: relative;
   z-index: 5;
 }
 
-div.region-slide-shows div.view-slideshows div.view-footer {
+div.region-slide-shows div.slideshow-wrapper div.view-footer {
   width: 990px;
   position: absolute;
   top: 185px;
@@ -761,24 +761,29 @@ div.region-slide-shows div.view-slideshows div.view-footer {
 	background: transparent url("../images/pageBg-slideBottom.png") no-repeat 0 0;
 }
 
-div.node.view-mode-slideshow {
+div.node.view-mode-slideshow,
+div.user-profile.view-mode-slideshow {
   width: 100%;
 }
 
-div.node.view-mode-slideshow div.group-left {
+div.node.view-mode-slideshow div.group-left,
+div.user-profile.view-mode-slideshow div.group-left {
   width: 480px;
 }
 
-div.node.view-mode-slideshow div.group-right {
+div.node.view-mode-slideshow div.group-right,
+div.user-profile.view-mode-slideshow div.group-right {
   width: 435px;
   padding: 10px 0px
 }
 
-div.node.view-mode-slideshow div.group-right div.field {
+div.node.view-mode-slideshow div.group-right div.field,
+div.user-profile.view-mode-slideshow div.group-right div.field {
   margin: 0px 10px;
 }
 
-div.node.view-mode-slideshow div.group-right div.field-name-body div.field-items div.field-item {
+div.node.view-mode-slideshow div.group-right div.field-name-body div.field-items div.field-item,
+div.user-profile.view-mode-slideshow div.group-right div.field-name-field-self-summary div.field-items div.field-item {
   color: #ffffff;
 }
 
@@ -789,6 +794,21 @@ div.node.view-mode-slideshow div.group-right div.field-name-node-link div.field-
 div.node.view-mode-slideshow div.group-right ul.links {
   margin: 0;
   padding: 0;
+}
+
+div.user-profile.view-mode-slideshow div.group-right div.field-name-field-headline div.field-items div.field-item h3 {
+  color: #2FA694;
+}
+
+div.user-profile.view-mode-slideshow div.group-right div.group-basics {
+  float: left;
+  width: 110px;
+  padding-bottom: 10px;
+}
+
+div.user-profile.view-mode-slideshow div.group-right div.group-basics div.field-items div.field-item {
+  color: #fff;
+  font-weight: bold;
 }
 
 /* Breadcrumbs

@@ -1252,7 +1252,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
     $fields['location_city'] = array(
       'title' => t('Location : City'),
       'field_type' => DS_FIELD_TYPE_FUNCTION,
-      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block', 'user|slideshow'),
       'function' => 'theme_ds_location_field'
     );
   }
