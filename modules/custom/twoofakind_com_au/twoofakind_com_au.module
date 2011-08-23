@@ -107,6 +107,9 @@ function twoofakind_com_au_init() {
     // only for auth users
     $GLOBALS['UserSearchFormProcessed'] = 0;
   }
+  
+//  $data = views_get_view_result('user_search', 'matches_cron');
+//dsm($data);
 }
 
 /******************************************************************************
@@ -361,7 +364,7 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
     case 'comment_node_question_form':
       _twoofakind_com_au_form_comment_form($form, $form_state);
       break;
-    
+
   }
 }
 
@@ -648,12 +651,12 @@ function _twoofakind_com_au_form_user_search_override_field($form_state, $field_
  *   And it's for  state
  */
 function _twoofakind_com_au_form_views_exposed_form_people_page(&$form, &$form_state) {
-//dsm($form_state, 'Prior');
-  // add some help to the last access item
-  $form['access']['#description'] = 'e.g. -3 months, -7 days';
-  
-  // add some help to the new users item
-  $form['access_new']['#description'] = '0 = new users, blank for all users';
+
+  // modify the option text for status
+  if (isset($form['status']['#options'])) {
+    $form['status']['#options'][0] = 'Blocked';
+    $form['status']['#options'][1] = 'Active';
+  }
   
   // modify the new user field to a checkbox
 //  $form['access_new_checkbox'] = array(
@@ -1592,3 +1595,37 @@ function _twoofakind_com_au_user_nojs_response($message, $redirect, $status = 'e
   drupal_goto($redirect);
   
 }
+
+/******************************************************************************
+ * cron functions
+ ******************************************************************************/
+
+/**
+ * Implementation of hook_cron_queue_info()
+ */
+//function twoofakind_com_au_cron_queue_info() {
+//  $queues['matches'] = array(
+//    'worker callback' => 'matches_process_user',
+//    'time' => 60
+//  );
+//  return $queues;
+//}
+
+/**
+ * Implementation of hook_cron()
+ */
+//function twoofakind_com_au_cron() {
+//  $items = array("Hello", "World");
+//  // Put everything in a queue for processing.
+//  $queue = DrupalQueue::get('matches_new');
+//  foreach($items as $item) {
+//    $queue->createItem($item);
+//  }
+//}
+
+/**
+ * Worker Callback for the runner cron queue.
+ */
+//function runner_run($item) {
+//  print $item;
+//}
