@@ -70,7 +70,7 @@
 							<?php if ($user->uid > 0) { ?> 
 							<li><a href="<?php print url('user/logout') ?>"><span class="mmLogin"><?php print t("LogOut") ?></span></a></li>
 							<?php } else { ?>
-							<li><a href="#ContentPanel" class="topReveal"><span class="mmLogin"><?php print t("Login") ?></span></a></li>
+							<li><a href="#ContentPanel" class="topReveal"><span class="mmLogin"><?php print t("Login / Register") ?></span></a></li>
 							<?php } ?>
 						</ul>
 						

@@ -50,6 +50,10 @@ li.node-readmore a {
 /* Overriding styles
 -------------------------------------------------------------- */
 
+.sf-menu a{
+  padding: 16px 0.75em 15px;
+}
+
 .ribbon span.blogDate { 
 	font-size: 1.4em; 
 	margin: 16px 0 0;
