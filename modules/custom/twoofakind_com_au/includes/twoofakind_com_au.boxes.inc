@@ -3,6 +3,15 @@
 /**
  * @file
  * Admin functions
+ * 
+ * @todo
+ *   Would be good to implement a redirect from the boxes  blocks
+ *   section for non-admins when they get directed there. i.e. they
+ *   should always be bumped back to our admin screen
+ * 
+ * @todo
+ *   Would also be nice to lay this admin screen out a little nicer
+ *   now we've got quite a few boxes going on...
  */
 
 /******************************************************************************
