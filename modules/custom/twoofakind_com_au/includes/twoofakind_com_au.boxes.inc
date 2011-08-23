@@ -16,6 +16,12 @@
  *   Menu items array
  * 
  * @see hook_menu()
+ * 
+ * @todo
+ *   Would it simply be better to grab a list of boxes
+ *   by using one of the boxes functions. it all depends
+ *   on whether or not all boxes should be editable or
+ *   not I guess.
  */
 function _twoofakind_com_au_boxes_menu(&$items) {
   
@@ -39,15 +45,15 @@ function _twoofakind_com_au_boxes_menu(&$items) {
   $boxes = array(
     'home_banner_left' => array(
       'title' => 'Home banner left',
-      'description' => 'Edit the content that appears below the logo on the home page'
+      'description' => 'Edit the content that appears below the slideshow on the left on the home page when not logged in'
     ),
     'home_banner_right' => array(
       'title' => 'Home banner right',
-      'description' => 'Edit the content that appears below the search form on the home page'
+      'description' => 'Edit the content that appears below the slideshow on the right on the home page when not logged in'
     ),
     'welcome' => array(
       'title' => 'Home banner welcome',
-      'description' => 'Edit the content that appears below the home banner left on the home page'
+      'description' => 'Edit the welcome message on the home page when not logged in'
     ),
     'login_welcome' => array(
       'title' => 'Initial login Welcome message',
@@ -81,6 +87,58 @@ function _twoofakind_com_au_boxes_menu(&$items) {
       'title' => 'Profile edit screen : Account details',
       'description' => 'Edit the content that appears above the Account details section on the user edit screen'
     ),
+    'member_dashboard_left' => array(
+      'title' => 'Member dashboard left',
+      'description' => 'Edit the content that appears below the slideshow on the left on the home page when logged in'
+    ),
+    'member_dashboard_right' => array(
+      'title' => 'Member dashboard right',
+      'description' => 'Edit the content that appears below the slideshow on the left on the home page when logged in'
+    ),
+    'member_dashboard_welcome' => array(
+      'title' => 'Member dashboard welcome',
+      'description' => 'Edit the welcome message on the home page when logged in'
+    ),
+    'access_denied' => array(
+      'title' => 'Page : Access Denied',
+      'description' => 'Edit the content found on the access denied page'
+    ),
+    'page_not_found' => array(
+      'title' => 'Page : Page not found',
+      'description' => 'Edit the content found on the page not found page'
+    ),
+    'page_messages' => array(
+      'title' => 'Page : messages',
+      'description' => 'Edit the content found on the messages page'
+    ),
+    'page_matches' => array(
+      'title' => 'Page : my matches',
+      'description' => 'Edit the content found on the my matches page'
+    ),
+    'page_matches_me' => array(
+      'title' => 'Page : who I match',
+      'description' => 'Edit the content found on the who I match page'
+    ),
+    'page_winks_received' => array(
+      'title' => 'Page : winks received',
+      'description' => 'Edit the content found on the winks received page'
+    ),
+    'page_winks' => array(
+      'title' => 'Page : winked at',
+      'description' => 'Edit the content found on the winked at page'
+    ),
+    'page_favourites' => array(
+      'title' => 'Page : favourites',
+      'description' => 'Edit the content found on the favourites page'
+    ),
+    'page_recent_views' => array(
+      'title' => 'Page : recents views',
+      'description' => 'Edit the content found on the recent views page'
+    ),
+    'page_whos_online' => array(
+      'title' => 'Page : who\'s online',
+      'description' => 'Edit the content found on the who\'s online page'
+    )
   );
   
   // add them to the menu
