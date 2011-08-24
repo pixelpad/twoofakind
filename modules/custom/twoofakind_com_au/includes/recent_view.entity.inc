@@ -82,6 +82,11 @@ function recent_view_create($recent_view_uid) {
 
   global $user;
   
+  // don't add a recent view for yourself
+  if ($user->uid == $recent_view_uid) {
+    return;
+  }
+  
   // no need to check if one exists or not
   // can view as many times as they like
   
