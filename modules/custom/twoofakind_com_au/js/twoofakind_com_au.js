@@ -131,7 +131,7 @@
    */
   function search_state_toggle() {
     /* if cookie is set then it's currently open, close it by destroying cookie */
-    if (search_state()) {
+    if (search_open()) {
       drupal_clear_cookie('search_state');
     } else {
       /* otherwise it's closed, open it by setting the cookie */
