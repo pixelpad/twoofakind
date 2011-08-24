@@ -33,20 +33,32 @@ div.region-sidebar-right h4 a:visited {
     color: #ed1c24;
 }
 
+h1 a:hover,
+h2 a:hover,
+h3 a:hover,
+div.region-sidebar-right h4 a:hover {
+  text-decoration: underline;
+}
+
 div.region-sidebar-right div#matches_form h4 a,
 div.region-sidebar-right div#matches_form h4 a:link,
 div.region-sidebar-right div#matches_form h4 a:visited,
 div.region-content div#sort_form h4 a,
 div.region-content div#sort_form h4 a:link,
 div.region-content div#sort_form h4 a:visited {
-    color: #2FA694;
+  color: #2FA694;
+  text-decoration: none;
 }
 
 li.node-readmore a {
-  color: #ed1c24;
+/*  color: #ed1c24;*/
+}
+li.node-readmore a:hover {
+/*    color: #2FA694;*/
+  text-decoration: underline;
 }
 
-div.more-link a {
+div.two-thirds div.more-link a {
   display: block;
   height: 32px;
   padding-right: 20px;
@@ -56,8 +68,8 @@ div.more-link a {
   font-size: 1.5em;
 }
 
-div.more-link a:hover {
-  color: #222222;
+div.two-thirds div.more-link a:hover {
+  color: #ed1c24;
 }
 
 /* Overriding styles
@@ -74,6 +86,10 @@ div.more-link a:hover {
 
 #MmBody {
 	min-width: 200px;
+}
+
+.headline {
+  margin-bottom: 0.1em;
 }
 
 /*
@@ -128,14 +144,14 @@ a.block-expand.block-expanded {
 -------------------------------------------------------------- */
 
 .two-thirds {
-  margin-top: -20px;
+  margin-top: -10px;
 }
 
 /* one third area
 -------------------------------------------------------------- */
 
 .one-third {
-  margin-top: -25px;
+  margin-top: -15px;
 }
 
 /* Implementing button styles to links
@@ -213,6 +229,10 @@ div#SearchOptions {
 div#SearchOptions a {
   color: #ed1c24;
 }
+div#SearchOptions a:hover {
+/*    color: #2FA694;*/
+  text-decoration: underline;
+}
 body.not-logged-in div#SearchOptions {
   display: none;
 }
@@ -238,7 +258,7 @@ div.region-content div#sort_form {
   background: none repeat scroll 0 0 #2C2C2C;
 /*  position: absolute;
   top: 170px;*/
-  margin: -10px 0 10px;
+  margin: -20px 0 10px;
   width: 273px;
   z-index: 100;
   padding: 10px;
@@ -276,7 +296,16 @@ div.region-sidebar-right div#matches_form div#edit-name-search-wrapper {
 
 div.region-sidebar-right div#matches_form div.less-options {
   float: right;
+  margin-top: -5px;
 }
+div.region-sidebar-right div#matches_form div.less-options a {
+  color: #ed1c24;
+}
+div.region-sidebar-right div#matches_form div.less-options a:hover {
+/*    color: #2FA694;*/
+  text-decoration: underline;
+}
+
 body.not-logged-in div.region-sidebar-right div#matches_form div.less-options {
   display: none;
 }
@@ -525,6 +554,13 @@ div.views-page-users div.group-footer div.field-name-privatemsg a,
 div.views-page-users div.group-footer div.field-name-featured-user a {
   color: #ed1c24;
 }
+div.views-page-users div.group-footer div.field-name-favourite a:hover,
+div.views-page-users div.group-footer div.field-name-wink a:hover,
+div.views-page-users div.group-footer div.field-name-privatemsg a:hover,
+div.views-page-users div.group-footer div.field-name-featured-user a:hover {
+/*    color: #2FA694;*/
+  text-decoration: underline;
+}
 
 div.views-page-users div.more-link {
   padding-top: 10px;
@@ -572,6 +608,10 @@ div.user-profile.view-mode-full div.group-header div.group_actions div.field div
 
 div.user-profile.view-mode-full div.group-header div.group_actions div.field div.field-item a {
   color: #ed1c24;
+}
+div.user-profile.view-mode-full div.group-header div.group_actions div.field div.field-item a:hover {
+/*    color: #2FA694;*/
+  text-decoration: underline;
 }
 
 div.user-profile.view-mode-full div.group-header div.field-name-field-headline {
@@ -663,6 +703,10 @@ div.user-profile.view-mode-full div.group-left fieldset.fieldset.collapsed legen
 div.user-profile.view-mode-full div.group-left fieldset.fieldset legend span a {
   color: #ed1c24;
   padding-left: 5px;
+}
+div.user-profile.view-mode-full div.group-left fieldset.fieldset legend span a:hover {
+/*    color: #2FA694;*/
+  text-decoration: underline;
 }
 
 div.user-profile.view-mode-full div.group-left fieldset.fieldset div.fieldset-wrapper div.field {
@@ -809,6 +853,10 @@ div.user-profile.view-mode-slideshow div.group-right div.field-name-field-self-s
 
 div.node.view-mode-slideshow div.group-right div.field-name-node-link div.field-items div.field-item a {
   color: #ed1c24;
+}
+div.node.view-mode-slideshow div.group-right div.field-name-node-link div.field-items div.field-item a:hover {
+/*    color: #2FA694;*/
+  text-decoration: underline;
 }
 
 div.node.view-mode-slideshow div.group-right ul.links {
