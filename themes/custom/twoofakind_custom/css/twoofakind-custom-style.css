@@ -42,9 +42,22 @@ div.region-content div#sort_form h4 a:visited {
     color: #2FA694;
 }
 
-div.more-link a,
 li.node-readmore a {
   color: #ed1c24;
+}
+
+div.more-link a {
+  display: block;
+  height: 32px;
+  padding-right: 20px;
+  float: right;
+  background: url("../images/block.arrow.right.png") no-repeat scroll 100% 0 transparent;
+  line-height: 28px;
+  font-size: 1.5em;
+}
+
+div.more-link a:hover {
+  color: #222222;
 }
 
 /* Overriding styles
@@ -506,6 +519,17 @@ div.views-page-users div.views-row div.group-footer div.field {
   margin-left: 10px;
 }
 
+div.views-page-users div.group-footer div.field-name-favourite a,
+div.views-page-users div.group-footer div.field-name-wink a,
+div.views-page-users div.group-footer div.field-name-privatemsg a,
+div.views-page-users div.group-footer div.field-name-featured-user a {
+  color: #ed1c24;
+}
+
+div.views-page-users div.more-link {
+  padding-top: 10px;
+}
+
 /* Comments
 -------------------------------------------------------------- */
 
@@ -522,7 +546,7 @@ div.comment div.content {
 -------------------------------------------------------------- */
 
 div.view-questions.view-display-id-block div.more-link {
-  margin-top: -55px;
+  margin-top: -50px;
 }
 
 /* Profile
