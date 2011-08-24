@@ -193,6 +193,7 @@
 					<?php if ($tabs): print ''. render($tabs) .''; endif; ?>
 					<?php //if ($tabs2): print ''. render($tabs2) .''; endif; ?>
 					<?php if (!empty($help)): print $help; endif; ?>
+          <?php if ($page['content_top']): ?><?php print render($page['content_top']); ?><?php endif;?>
 					<?php print render($page['content']); ?>
 					<!-- End of Content -->
 					<div class="clear"></div>

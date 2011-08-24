@@ -15,6 +15,7 @@ settings[skin] = 0
 settings[slide_shows] = 0
 
 regions[sidebar_right] = Sidebar Right
+regions[content_top] = Content Top
 regions[content] = Content
 regions[portfolio_top_img] = Portfolio Top Images
 regions[portfolio_top_txt] = Portfolio Top Text
