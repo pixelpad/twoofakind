@@ -99,8 +99,9 @@ function twoofakind_com_au_init() {
   drupal_add_js(drupal_get_path('module', 'twoofakind_com_au') . '/js/twoofakind_com_au.js', 'file');
   drupal_add_css(drupal_get_path('module', 'twoofakind_com_au') . '/css/twoofakind_com_au.css', 'file');
   
-  // add ajax, I don't know why it isn't there already
+  // add ajax and cookie, I don't know why it isn't there already
   drupal_add_library('system', 'drupal.ajax');
+  drupal_add_library('system', 'jquery.cookie');
   
   // set some session variables utilised in hook_form_alter below
   if (!empty($user->uid)) {

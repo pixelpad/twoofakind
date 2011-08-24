@@ -53,16 +53,6 @@
         });
       });
       
-      /* grab the mactehs exposed filters form */
-      var matchesForm = $('div.region-sidebar-right div#matches_form:not(.js-processed)', context);
-      
-      /* make the more options link open and close the search box */
-      $('div#SearchOptions a').bind({
-        click: function () {
-          matchesForm.fadeToggle();
-        }
-      });
-      
       /* make the home page login button reveal the login slider */
       $('div.region-home-banner-1 a[href="/user/login"]').bind({
         click: function() {

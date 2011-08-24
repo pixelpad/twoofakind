@@ -20,8 +20,7 @@
         var sidebar = $(this);
         
         /* block expansion */
-        $('a.block-expand:not(.js-processed)', sidebar).each(function () {
-          $(this).addClass('js-processed');
+        $('a.block-expand', sidebar).each(function () {
           var expand_link = $(this);
           var expand_block = $('div#' + $(this).attr('href').substr(1), sidebar);
           /* check if block is expanded or not and apply link class accordingly */
@@ -38,16 +37,40 @@
             return false;
           });
         });
+      
+        /* I DON'T LIKE THIS BEING HERE AS IT'S A TEMPLATE BASED SELECTOR
+         * BUT I WANTED THE COOKIE STUFF IN HERE SO...
+         * UNTIL A BETTER SOLUTION (OR TEMPLATE) PRESENTS ITSELF WE'LL STICK
+         * WITH THIS DIRTY HACK
+         **/
+        
+        /* matches form stuff */
+        var matchesForm = $('div#matches_form', sidebar);
+
+        /* Init search form */
+        if (search_open()) {
+          matchesForm.fadeToggle();
+        }
 
         /* "show less options" link functionality */
-        $('div#matches_form', sidebar).each(function() {
+        matchesForm.each(function() {
           var matches_form = $(this);
           $('div.less-options a', matches_form).bind({
             click: function () {
               matches_form.fadeToggle();
+              search_state_toggle();
               return false;
             }
           });
+        });
+        
+        /* make the more options link open and close the search box */
+        $('div#SearchOptions a').bind({
+          click: function () {
+            matchesForm.fadeToggle();
+            search_state_toggle();
+            return false;
+          }
         });
         
       });
@@ -75,6 +98,56 @@
         }
       });
       
+    }
+  }
+
+  /*
+   * Wrapper to set cookie
+   */
+  function drupal_set_cookie(key, val) {
+    $.cookie(key, val, { expires: 1, path: '/', domain: document.location.host});
+  }
+  
+  /*
+   * Wrapper to get cookie
+   */
+  function drupal_get_cookie(key) {
+    if ($.cookie) {
+      return $.cookie(key);
+    } else {
+      return false;
+    }
+  }
+  
+  /*
+   * Wrapper to clear cookie
+   */
+  function drupal_clear_cookie(key) {
+    $.cookie(key, null, { expires: -1, path: '/', domain: document.location.host});
+  }
+  
+  /*
+   * Wrapper to toggle search sate
+   */
+  function search_state_toggle() {
+    /* if cookie is set then it's currently open, close it by destroying cookie */
+    if (search_state()) {
+      drupal_clear_cookie('search_state');
+    } else {
+      /* otherwise it's closed, open it by setting the cookie */
+      drupal_set_cookie('search_state', 1);
+    }
+  }
+  
+  /*
+   * Wrapper to get search state
+   */
+  function search_open() {
+    var search_state = drupal_get_cookie('search_state');
+    if (search_state) {
+      return true;
+    } else {
+      return false;
     }
   }
 
