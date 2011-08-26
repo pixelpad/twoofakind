@@ -75,8 +75,15 @@ div.two-thirds div.more-link a:hover {
 /* Overriding styles
 -------------------------------------------------------------- */
 
-.sf-menu a{
-  padding: 16px 0.75em 15px;
+div#MenuWrapper .sf-menu a {
+  padding: 16px 0.65em 15px;
+}
+
+/* adding a little sauce to the people link */
+div#MenuWrapper .sf-menu a.user-search-highlight {
+  color: #ed1c24;
+  font-size: 1.1em;
+  font-weight: bold;
 }
 
 .ribbon span.blogDate { 
