@@ -1630,3 +1630,35 @@ function _twoofakind_com_au_user_nojs_response($message, $redirect, $status = 'e
 //function runner_run($item) {
 //  print $item;
 //}
+
+/******************************************************************************
+ * Location functions
+ ******************************************************************************/
+
+/**
+ * Implements hook_views_api().
+ */
+function twoofakind_com_au_locationapi(&$obj, $op, $a3 = NULL, $a4 = NULL, $a5 = NULL) {
+  switch ($op) {
+    case 'fields':
+      return array('name' => t('Location name'), 'street' => t('Street location'), 'additional' => t('Additional'), 'city' => t('Suburb'), 'province' => t('State/Province'), 'postal_code' => t('Postal code'), 'country' => t('Country'), 'locpick' => t('Coordinate Chooser'));
+
+    case 'field_expand':
+      switch ($a3) {
+
+        case 'city':
+          return array(
+            '#type'           => 'textfield',
+            '#title'          => t('Suburb'),
+            '#default_value'  => $obj,
+            '#size'           => 64,
+            '#maxlength'      => 255,
+            '#description'    => NULL,
+            '#attributes'     => NULL,
+            '#required'       => ($a4 == 2),
+          );
+
+      }
+      break;
+  }
+}
