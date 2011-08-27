@@ -76,7 +76,14 @@ div.two-thirds div.more-link a:hover {
 -------------------------------------------------------------- */
 
 div#MenuWrapper .sf-menu a {
-  padding: 16px 0.65em 15px;
+  padding: 16px 0.55em 15px;
+}
+div#MenuWrapper ul#MmOtherLinks a {
+  padding: 16px 0 15px;
+}
+
+div.mmDivider {
+  margin: 7px 5px 0 0px;
 }
 
 /* adding a little sauce to the people link */
@@ -84,6 +91,9 @@ div#MenuWrapper .sf-menu a.user-search-highlight {
   color: #ed1c24;
   font-size: 1.1em;
   font-weight: bold;
+}
+div#MenuWrapper .sf-menu a.user-search-highlight:hover {
+  text-decoration: underline;
 }
 
 .ribbon span.blogDate { 
