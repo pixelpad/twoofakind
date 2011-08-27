@@ -80,6 +80,10 @@ div#MenuWrapper .sf-menu a {
 }
 div#MenuWrapper ul#MmOtherLinks a {
   padding: 16px 0 15px;
+  color: #ed1c24;
+}
+div#MenuWrapper ul#MmOtherLinks a:hover {
+  text-decoration: underline;
 }
 
 div.mmDivider {
