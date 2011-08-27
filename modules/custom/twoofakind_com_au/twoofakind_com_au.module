@@ -109,20 +109,6 @@ function twoofakind_com_au_init() {
     $GLOBALS['UserSearchFormProcessed'] = 0;
   }
   
-//  $match_criteria = _twoofakind_com_au_user_match_criteria(1);
-//dsm($match_criteria, 'match_criteria');
-//  // use the user_search view to grab results
-//  // this way if we were to alter filters in the search
-//  // we can do the same for the cron search
-//  // and we won't ever have to change this - yay!
-//  $view = views_get_view('user_search');
-//  $view->set_display('matches_cron');
-//  $view->set_exposed_input($match_criteria);
-//  $view->pre_execute();
-//  $view->execute();
-//  $result = $view->result;
-//dsm($result, 'users to match');
-  
 }
 
 /******************************************************************************
