@@ -73,6 +73,11 @@ function match_load_all($conditions = array(), $reset = FALSE) {
  * 
  * @return
  *   Return array of match entities
+ * 
+ * @todo
+ *   Improve!
+ *   Ideally there should only ever be one match record
+ *   We do not need to return an array
  */
 function match_load_from_current_to_account($match_uid) {
   
@@ -89,6 +94,9 @@ function match_load_from_current_to_account($match_uid) {
  * 
  * @return
  *   Return array of match entities
+ * 
+ * @todo
+ *   Similar to match_load_from_current_to_account()
  */
 function match_load_from_account_to_current($match_uid) {
   
@@ -108,10 +116,11 @@ function match_load_from_account_to_current($match_uid) {
  * 
  * @return
  *   Return array of match entities
+ * 
+ * @todo
+ *   Similar to match_load_from_current_to_account()
  */
 function match_load_from_matcher_matchee($matcher_uid, $matchee_uid) {
-  
-  global $user;
   
   // set up the query   
   $query = new EntityFieldQuery();
@@ -133,6 +142,73 @@ function match_load_from_matcher_matchee($matcher_uid, $matchee_uid) {
   return array();
 }
 
+/**
+ * Load matches from matcher uid
+ * 
+ * @param $uid
+ *   Uid of matcher
+ * 
+ * @return
+ *   Return array of match entities
+ */
+function match_load_from_matcher($uid) {
+  
+  // set up the query   
+  $query = new EntityFieldQuery();
+  // we only want favourites
+  $query->entityCondition('entity_type', 'match', '=');
+
+  // match favourite_uid and current uid
+  $query->propertyCondition('uid', $uid, '=');
+
+  // execute
+  $result = $query->execute();
+
+  // return result
+  if (isset($result['match']) && count($result['match'])) {
+    return match_load_multiple(array_keys($result['match']));
+  }
+  
+  return array();
+}
+
+/**
+ * Load users from matches from matcher uid
+ * 
+ * @param $uid
+ *   Uid of matcher
+ * 
+ * @param $objects
+ *   TRUE to return array of objects, FALSE for ids
+ * 
+ * @return
+ *   Return array of user ids or objects
+ */
+function match_load_users_from_matcher($uid = NULL, $objects = FALSE) {
+  
+  if (empty($uid)) {
+    global $user;
+    $uid = $user->uid;
+  }
+  
+  $matches = match_load_from_matcher($uid);
+  
+  if (!count($matches)) {
+    return array();
+  }
+  
+  $uids = array();
+  foreach ($matches as $mid => $match) {
+    $uids[$mid] = $match->match_uid;
+  }
+  
+  if (!$objects) {
+    return $uids;
+  }
+  
+  return user_load_multiple($uids);
+}
+
 /******************************************************************************
  * CRUD functions
  ******************************************************************************/
@@ -143,15 +219,21 @@ function match_load_from_matcher_matchee($matcher_uid, $matchee_uid) {
  * @param $match_uid
  *   The uid of the user being match-ed
  * 
+ * @param $uid
+ *   The uid of the matcher
+ * 
  * @return
  *   The entity or FALSE
  */
-function match_create($match_uid) {
+function match_create($match_uid, $uid = NULL) {
 
-  global $user;
+  if (empty($uid)) {
+    global $user;
+    $uid = $user->uid;
+  }
 
   // double check that a match doesn't already exist
-  $match_id = match_is_match($match_uid);
+  $match_id = match_is_match($match_uid, $uid);
   if ($match_id !== FALSE) {
     
     // load the entity and return it
@@ -160,7 +242,7 @@ function match_create($match_uid) {
   }
   
   $container = array(
-    'uid' => $user->uid,
+    'uid' => $uid,
     'match_uid' => $match_uid
   );
   $entity = entity_create('match', $container);
@@ -275,12 +357,18 @@ function match_uri($match) {
  * @param $match_uid
  *   User id to check
  * 
+ * @param $uid
+ *   The uid of the matcher
+ * 
  * @return
  *   Return Id of first match returned or FALSE
  */
-function match_is_match($match_uid) {
+function match_is_match($match_uid, $uid = NULL) {
   
-  global $user;
+  if (empty($uid)) {
+    global $user;
+    $uid = $user->uid;
+  }
   
   // set up the query   
   $query = new EntityFieldQuery();
@@ -288,7 +376,7 @@ function match_is_match($match_uid) {
   $query->entityCondition('entity_type', 'match', '=');
 
   // match match_uid and current uid
-  $query->propertyCondition('uid', $user->uid, '=');
+  $query->propertyCondition('uid', $uid, '=');
   $query->propertyCondition('match_uid', $match_uid, '=');
   
   // execute

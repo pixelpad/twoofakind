@@ -109,8 +109,20 @@ function twoofakind_com_au_init() {
     $GLOBALS['UserSearchFormProcessed'] = 0;
   }
   
-//  $data = views_get_view_result('user_search', 'matches_cron');
-//dsm($data);
+//  $match_criteria = _twoofakind_com_au_user_match_criteria(1);
+//dsm($match_criteria, 'match_criteria');
+//  // use the user_search view to grab results
+//  // this way if we were to alter filters in the search
+//  // we can do the same for the cron search
+//  // and we won't ever have to change this - yay!
+//  $view = views_get_view('user_search');
+//  $view->set_display('matches_cron');
+//  $view->set_exposed_input($match_criteria);
+//  $view->pre_execute();
+//  $view->execute();
+//  $result = $view->result;
+//dsm($result, 'users to match');
+  
 }
 
 /******************************************************************************
@@ -416,7 +428,7 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
   $form['#suffix'] = '</div>';
 
   // remove some fields for anonymous users
-  _twoofakind_com_au_form_user_search_remove_field($form);
+  _twoofakind_com_au_form_user_search_remove_fields($form);
 
   // check if we're clearing
   if (isset($_GET['op']) && $_GET['op'] == 'Clear') {
@@ -471,7 +483,48 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
 
   // grab the match criteria of the currently logged in user
   // if any exist
-  $user_complete = (array) user_load($user->uid);
+  $match_criteria = _twoofakind_com_au_user_match_criteria();
+  foreach ($match_criteria as $key => $value) {
+
+    // now, if the search key value is empty (in the form state)
+    // populate it with the value from the users match criteria
+    if (array_key_exists($key, $form)) {
+
+      // Should we override
+      // see other function for more information
+      if (_twoofakind_com_au_form_user_search_override_field($form_state, $key)) {
+
+        // override form value
+        $form_state['input'][$key] = $value;
+        $form_state['view']->exposed_input[$key] = $value;
+        $form[$key]['#default_value'] = $value;
+        $form[$key]['#value'] = $value;
+        
+      }
+    }
+  }
+}
+
+/**
+ * Grab a match fields from user object and return as array
+ * 
+ * @param integer $uid (optional)
+ *   A user id
+ */
+function _twoofakind_com_au_user_match_criteria($uid = NULL) {
+  
+  // if empty use logged in user
+  if (empty($uid)) {
+    global $user;
+    $uid = $user->uid;
+  }
+  
+  // init array
+  $match_criteria = array();
+  
+  // grab full user object and cast as array
+  $user_complete = (array) user_load($uid);
+  $langcode = _get_language_from_object($user_complete);
   foreach ($user_complete as $key => $data) {
 
     // we only want fields data
@@ -479,71 +532,50 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
     if (strpos($key, 'field_match') === false) {
       continue;
     }
-
-    // create the field key for the match
-    // special treatment for location and DOB
-    $min_max = NULL;
+    
+    // ignore if field is empty
+    if (empty($data[$langcode])) {
+      continue;
+    }
+    
+    // convert the match key to the profile key
+    $min_max = FALSE;
     if ($key == 'field_match_user_location') {
-      $search_key = 'city';
+      $profile_key = 'city';
     }
     elseif ($key == 'field_match_age_min' || $key == 'field_match_age_max') {
       $min_max = substr($key, -3);
-      $search_key = 'field_date_of_birth_value';
+      $profile_key = 'field_date_of_birth_value';
     }
     else {
-      $search_key = str_replace('field_match', 'field', $key) . '_value';
+      $profile_key = str_replace('field_match', 'field', $key) . '_value';
     }
-
-    // now, if the search key value is empty (in the form state)
-    // populate it with the value from the users match criteria
-    if (array_key_exists($search_key, $form)) {
-
-      // Should we override
-      // see other function for more information
-      if (_twoofakind_com_au_form_user_search_override_field($form_state, $search_key, $min_max)) {
-
-        // form_state value for this field is empty
-        // look for a corresponding value in match criteria
-        if (!empty($data[LANGUAGE_NONE])) {
-
-          // we have match criteria
-          // process the data from the user array format
-          // to that which form state uses
-          $data_formatted = array();
-          $data_is_text = FALSE;
-          foreach ($data[LANGUAGE_NONE] as $value) {
-            $data_formatted[] = $value['value'];
-            if (array_key_exists('format', $value) || array_key_exists('safe_value', $value)) {
-              $data_is_text = TRUE;
-            }
-          }
-
-          // now plug the values in to the form_state
-          if (isset($min_max)) {
-            
-            // data is DOB (or BETWEEN search) plug in to min or max
-            $form_state['input'][$search_key][$min_max] = $data_formatted[0];
-            $form_state['view']->exposed_input[$search_key][$min_max] = $data_formatted[0];
-          }
-          elseif ($data_is_text) {
-
-            // treat text data differently to the others
-            $form_state['input'][$search_key] = $data_formatted[0];
-            $form_state['view']->exposed_input[$search_key] = $data_formatted[0];
-            $form[$search_key]['#default_value'] = $data_formatted[0];
-            $form[$search_key]['#value'] = $data_formatted[0];
-
-          } 
-          else {
-            $form_state['input'][$search_key] = $data_formatted;
-            $form_state['view']->exposed_input[$search_key] = $data_formatted;
-            $form[$search_key]['#default_value'] = $data_formatted;
-            $form[$search_key]['#value'] = $data_formatted;
-          } 
-        } 
+    
+    // convert to simpler format that can be
+    // used in various locations
+    // i.e. form and view input
+    foreach ($data[$langcode] as $value) {
+      // check for age value
+      if ($profile_key == 'field_date_of_birth_value') {
+        // it is, throw in min or max and then bug out
+        $match_criteria[$profile_key][$min_max] = $value['value'];
+        break;
       }
+      // check to see if this is a text based value
+      elseif (array_key_exists('format', $value) || array_key_exists('safe_value', $value)) {
+        // it is, grab one value only and bug out
+        $match_criteria[$profile_key] = $value['value'];
+        break;
+      }
+      if (!isset($match_criteria[$profile_key])) {
+        $match_criteria[$profile_key] = array();
+      }
+      $match_criteria[$profile_key][] = $value['value'];
     }
+    
   }
+  
+  return $match_criteria;
 }
 
 /**
@@ -552,7 +584,7 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
  * @param $form
  *   A form
  */
-function _twoofakind_com_au_form_user_search_remove_field(&$form) {
+function _twoofakind_com_au_form_user_search_remove_fields(&$form) {
   
   global $user;
 
@@ -606,7 +638,7 @@ function _twoofakind_com_au_form_user_search_remove_field(&$form) {
  * 
  * @todo It would be better to do the session handling in this function as well
  */
-function _twoofakind_com_au_form_user_search_override_field($form_state, $field_key, $min_max = NULL) {
+function _twoofakind_com_au_form_user_search_override_field($form_state, $field_key) {
   
   // if a value is set in the form state we won't replace it
   if (array_key_exists($field_key, $form_state['input'])) {
@@ -614,10 +646,10 @@ function _twoofakind_com_au_form_user_search_override_field($form_state, $field_
     // empty min and mx
     if (is_array($form_state['input'][$field_key])) {
       // check for min or max key
-      if (!empty($min_max) && array_key_exists($min_max, $form_state['input'][$field_key])) {
+      if (array_key_exists('min', $form_state['input'][$field_key]) || array_key_exists('max', $form_state['input'][$field_key])) {
         // this is a BETWEEN value i.e. DOB
         // check to see if the min or max value is actually not empty
-        if (!empty($form_state['input'][$field_key][$min_max])) {
+        if (!empty($form_state['input'][$field_key]['min']) || !empty($form_state['input'][$field_key]['max'])) {
           return FALSE;
         }
       }
@@ -940,6 +972,11 @@ function twoofakind_com_au_entity_info() {
  * Implements hook_user_view().
  * 
  * This needs to be here and not the user include
+ * 
+ * @todo
+ *   Improve the process matches section
+ *   Ideally there should only ever be one match record
+ *   We do not need the for loop etc
  */
 function twoofakind_com_au_user_view($account, $view_mode, $langcode) {
 
@@ -1597,6 +1634,22 @@ function _twoofakind_com_au_user_nojs_response($message, $redirect, $status = 'e
   
 }
 
+/**
+ * Grabs langcode as string from object
+ *
+ * @param object $object
+ *   Object to extract it from
+ * 
+ * @return string
+ *   Langcode
+ */
+function _get_language_from_object($object) {
+  if (!is_object($object)) {
+    return LANGUAGE_NONE;
+  }
+  return (isset($object->language) && !empty($object->language)) ? $object->language : LANGUAGE_NONE;
+}
+
 /******************************************************************************
  * cron functions
  ******************************************************************************/
@@ -1604,32 +1657,119 @@ function _twoofakind_com_au_user_nojs_response($message, $redirect, $status = 'e
 /**
  * Implementation of hook_cron_queue_info()
  */
-//function twoofakind_com_au_cron_queue_info() {
-//  $queues['matches'] = array(
-//    'worker callback' => 'matches_process_user',
-//    'time' => 60
-//  );
-//  return $queues;
-//}
+function twoofakind_com_au_cron_queue_info() {
+  $queues = array();
+  $queues['user_matches'] = array(
+    'worker callback' => '_twoofakind_com_au_cron_process_user_matches',
+    'time' => 60
+  );
+  return $queues;
+}
 
 /**
  * Implementation of hook_cron()
  */
-//function twoofakind_com_au_cron() {
-//  $items = array("Hello", "World");
-//  // Put everything in a queue for processing.
-//  $queue = DrupalQueue::get('matches_new');
-//  foreach($items as $item) {
-//    $queue->createItem($item);
-//  }
-//}
+function twoofakind_com_au_cron() {
+
+  // user
+  // matches
+  $uids = _twoofakind_com_au_users_to_match();
+  $queue_matches = DrupalQueue::get('user_matches');
+  foreach($uids as $uid) {
+    $queue_matches->createItem($uid);
+  }
+}
 
 /**
- * Worker Callback for the runner cron queue.
+ * Grabs a list of UID's or User objects that we will create matches for
+ * 
+ * At the moment it does nothing but return published users
+ * At some later point we could add criteria if we need to
+ * 
+ * @param boolean $objects
+ *   Do you want the return array to include id's or objects
+ * 
+ * @return array
+ *   Array of ids or objects
  */
-//function runner_run($item) {
-//  print $item;
-//}
+function _twoofakind_com_au_users_to_match($objects = FALSE) {
+  
+  // set up the query   
+  $query = new EntityFieldQuery();
+  // we only want users
+  $query->entityCondition('entity_type', 'user', '=');
+  $query->propertyCondition('status', 1, '=');
+
+  // execute
+  $result = $query->execute();
+
+  // return result
+  if (isset($result['user']) && count($result['user'])) {
+    $return = array_keys($result['user']);
+    if ($objects) {
+      return user_load_multiple($return);
+    }
+    return $return;
+  }
+  
+  return array();
+  
+}
+
+/**
+ * Process matches for an individual user
+ * 
+ * @param $uid
+ *   User id of user to be archived
+ */
+function _twoofakind_com_au_cron_process_user_matches($uid) {
+
+  // grab the match criteria for this user
+  $match_criteria = _twoofakind_com_au_user_match_criteria($uid);
+  
+  // if they have no match criteria then bug out
+  if (empty($match_criteria)) {
+    return;
+  }
+
+  // use the user_search view to grab results
+  // this way if we were to alter filters in the search
+  // we can do the same for the cron search
+  // and we won't ever have to change this - yay!
+  $view = views_get_view('user_search', TRUE);
+  $view->set_display('matches_cron');
+  $view->set_exposed_input($match_criteria);
+  $view->pre_execute();
+  $view->execute();
+  $results = $view->result;
+  $view->destroy();
+  // have we any new matches for this user?
+  if (!count($results)) {
+    return;
+  }
+
+  // grab users already matched
+  $match_uids_current = match_load_users_from_matcher($uid);
+
+  // grab all match uids for this user
+  // this will be all matches, old and new
+  // at this point I can't figure out
+  // how to add the match_uids values to the
+  // view via filters...
+  $match_uids_new = array();
+  foreach ($results as $result) {
+    $match_uids_new[] = $result->uid;
+  }
+
+  // grab the difference only (for processing)
+  $match_uids = array_diff($match_uids_new, $match_uids_current);
+
+  // create new matches for this user
+  foreach ($match_uids as $match_uid) {
+    match_create($match_uid, $uid);
+  }
+  
+}
 
 /******************************************************************************
  * Location functions
