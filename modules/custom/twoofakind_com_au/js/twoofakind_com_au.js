@@ -38,7 +38,7 @@
           });
         });
       
-        /* I DON'T LIKE THIS BEING HERE AS IT'S A TEMPLATE BASED SELECTOR
+        /* I DON'T LIKE THIS BEING HERE AS IT'S A TEMPLATE BASED SELECTOR (div#SearchOptions)
          * BUT I WANTED THE COOKIE STUFF IN HERE SO...
          * UNTIL A BETTER SOLUTION (OR TEMPLATE) PRESENTS ITSELF WE'LL STICK
          * WITH THIS DIRTY HACK
@@ -75,17 +75,17 @@
         
       });
       
-      /* hide labels that should not appear */
+      /* hide form elements that should not appear */
       $('body.not-logged-in div.region-sidebar-right:not(.js-processed-twice)', context).each(function () {
         var sidebar = $(this);
         $(this).addClass('js-processed-twice');
-        $('label:not(.js-processed)', sidebar).each(function () {
-          $(this).addClass('js-processed');
-          var label_for = $(this).attr('for');
-          var label_input = $('#'+label_for, sidebar);
-          /* dodgy hack to deal with date of birth fields */
-          if (label_input.length == 0 && label_for.indexOf('birth') == -1) {
-            $(this).hide();
+        $('div.views-exposed-widget', sidebar).each(function () {
+          var widget = $('div.views-widget', $(this));
+          if (widget.length > 0) {
+            var widget_children = widget.children();
+            if (widget_children.length == 0) {
+              $(this).hide();
+            }
           }
         });
       });
@@ -105,7 +105,7 @@
    * Wrapper to set cookie
    */
   function drupal_set_cookie(key, val) {
-    $.cookie(key, val, { expires: 1, path: '/', domain: document.location.host});
+    $.cookie(key, val, {expires: 1, path: '/', domain: document.location.host});
   }
   
   /*
@@ -123,7 +123,7 @@
    * Wrapper to clear cookie
    */
   function drupal_clear_cookie(key) {
-    $.cookie(key, null, { expires: -1, path: '/', domain: document.location.host});
+    $.cookie(key, null, {expires: -1, path: '/', domain: document.location.host});
   }
   
   /*
