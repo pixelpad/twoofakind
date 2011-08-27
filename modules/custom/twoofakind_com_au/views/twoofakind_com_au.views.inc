@@ -2,8 +2,57 @@
 
 /**
  * @file
- * Exposing matches to views
+ * Views and data
  */
+
+/**
+ * Implementation of hook_views_default_views().
+ * 
+ * @see http://api.lullabot.com/hook_views_default_views
+ */
+function twoofakind_com_au_views_default_views() {
+  
+  // init views array
+  $views = array();
+  
+  // matches view
+  module_load_include('inc', 'twoofakind_com_au', 'views/twoofakind_com_au.views.matches');
+  $view = _twoofakind_com_au_views_default_views_matches();
+  $views[$view->name] = $view;
+  
+  // matches me view
+  module_load_include('inc', 'twoofakind_com_au', 'views/twoofakind_com_au.views.matches_me');
+  $view = _twoofakind_com_au_views_default_views_matches_me();
+  $views[$view->name] = $view;
+  
+  // favourites view
+  module_load_include('inc', 'twoofakind_com_au', 'views/twoofakind_com_au.views.favourites');
+  $view = _twoofakind_com_au_views_default_views_favourites();
+  $views[$view->name] = $view;
+  
+  // featured_users view
+  module_load_include('inc', 'twoofakind_com_au', 'views/twoofakind_com_au.views.featured_users');
+  $view = _twoofakind_com_au_views_default_views_featured_users();
+  $views[$view->name] = $view;
+  
+  // recent_views view
+  module_load_include('inc', 'twoofakind_com_au', 'views/twoofakind_com_au.views.recent_views');
+  $view = _twoofakind_com_au_views_default_views_recent_views();
+  $views[$view->name] = $view;
+  
+  // winks view
+  module_load_include('inc', 'twoofakind_com_au', 'views/twoofakind_com_au.views.winks');
+  $view = _twoofakind_com_au_views_default_views_winks();
+  $views[$view->name] = $view;
+  
+  // winks_received view
+  module_load_include('inc', 'twoofakind_com_au', 'views/twoofakind_com_au.views.winks_received');
+  $view = _twoofakind_com_au_views_default_views_winks_received();
+  $views[$view->name] = $view;
+
+  return $views;
+  
+}
 
 /**
  * Implements hook_views_data_alter()
@@ -70,7 +119,7 @@ function _twoofakind_com_au_views_data_favourites(&$data) {
       'title' => t('Uid of Favourite-ee'),
       'help' => t('User id of person being marked as favourite'),
     ),
-    'created' => array(
+    'favourite_created' => array(
       'title' => t('Created'),
       'help' => t('The date this Favourite was created.'),
       'field' => array(
@@ -209,7 +258,7 @@ function _twoofakind_com_au_views_data_featured_users(&$data) {
         'handler' => 'views_handler_filter_numeric',
       ),
     ),
-    'created' => array(
+    'featured_user_created' => array(
       'title' => t('Created'),
       'help' => t('The date this Featured user record was created.'),
       'field' => array(
@@ -256,7 +305,7 @@ function _twoofakind_com_au_views_data_matches(&$data) {
       'title' => t('Uid of Match-ee'),
       'help' => t('User id of person being marked as a match'),
     ),
-    'created' => array(
+    'match_created' => array(
       'title' => t('Created'),
       'help' => t('The date this Match was created.'),
       'field' => array(
@@ -393,7 +442,7 @@ function _twoofakind_com_au_views_data_recent_views(&$data) {
       'title' => t('Uid of View-ee'),
       'help' => t('User id of person being viewed'),
     ),
-    'created' => array(
+    'recent_view_created' => array(
       'title' => t('Created'),
       'help' => t('The date this user was viewed.'),
       'field' => array(
@@ -512,7 +561,7 @@ function _twoofakind_com_au_views_data_winks(&$data) {
       'title' => t('Uid of Wink-ee'),
       'help' => t('User id of person being winked at'),
     ),
-    'created' => array(
+    'wink_created' => array(
       'title' => t('Created'),
       'help' => t('The date this Wink was created.'),
       'field' => array(

@@ -33,7 +33,7 @@ function twoofakind_com_au_schema() {
         'not null' => TRUE,
         'description' => 'User id of user matches',
       ),
-      'created' => array(
+      'match_created' => array(
         'mysql_type' => 'timestamp',
         'pgsql_type' => 'timestamp without time zone',
         'type' => 'timestamp',
@@ -90,7 +90,7 @@ function twoofakind_com_au_schema() {
         'not null' => TRUE,
         'description' => 'User id of the wink receiver',
       ),
-      'created' => array(
+      'wink_created' => array(
         'mysql_type' => 'timestamp',
         'pgsql_type' => 'timestamp without time zone',
         'type' => 'timestamp',
@@ -139,7 +139,7 @@ function twoofakind_com_au_schema() {
         'not null' => TRUE,
         'description' => 'User id of the person viewed',
       ),
-      'created' => array(
+      'recent_view_created' => array(
         'mysql_type' => 'timestamp',
         'pgsql_type' => 'timestamp without time zone',
         'type' => 'timestamp',
@@ -188,7 +188,7 @@ function twoofakind_com_au_schema() {
         'not null' => TRUE,
         'description' => 'User id of the person who was favourite\'ed',
       ),
-      'created' => array(
+      'favourite_created' => array(
         'mysql_type' => 'timestamp',
         'pgsql_type' => 'timestamp without time zone',
         'type' => 'timestamp',
@@ -237,7 +237,7 @@ function twoofakind_com_au_schema() {
         'not null' => TRUE,
         'description' => 'User id of the person who was featured',
       ),
-      'created' => array(
+      'featured_user_created' => array(
         'mysql_type' => 'timestamp',
         'pgsql_type' => 'timestamp without time zone',
         'type' => 'timestamp',
@@ -424,5 +424,62 @@ function twoofakind_com_au_update_7005() {
   
   // add wink table
   db_create_table('featured_users', $schema['featured_users']);
+  
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * Changing all "created" fields to be "entity"_created
+ * Having issues in views whereby you can't include
+ * two sorts that both use a created field even if they
+ * are from different tables
+ */
+function twoofakind_com_au_update_7006() {
+  
+  // matches
+  db_change_field('matches', 'created', 'match_created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the match was created',
+  ));
+  
+  // winks
+  db_change_field('winks', 'created', 'wink_created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the wink was created',
+  ));
+  
+  // recent_views
+  db_change_field('recent_views', 'created', 'recent_view_created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the user was viewed',
+  ));
+  
+  // favourites
+  db_change_field('favourites', 'created', 'favourite_created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the favourite was created',
+  ));
+  
+  // featured_users
+  db_change_field('featured_users', 'created', 'featured_user_created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the featured was created',
+  ));
   
 }
