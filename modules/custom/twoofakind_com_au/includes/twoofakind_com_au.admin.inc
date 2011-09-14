@@ -18,6 +18,10 @@ function _twoofakind_com_au_admin_menu_alter(&$items) {
   
   // people
   if (isset($items['admin/people'])) {
+    
+    $items['admin/people/create']['page callback'] = $items['admin/people']['page callback'];
+    $items['admin/people/create']['file'] = $items['admin/people']['file'];
+    
     $items['admin/people']['page callback'] = 'views_page';
     $items['admin/people']['page arguments'] = array('people', 'page');
     $items['admin/people']['access callback'] = 'views_access';
