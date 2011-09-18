@@ -1060,7 +1060,7 @@ function twoofakind_com_au_user_login(&$edit, $account) {
       ),
     );
     $link_profile = l($link_title, $url_edit, $link_options);
-    $link_title = t('Edit your match criteria');
+    $link_title = t('Tell us what you\'re looking for');
     $link_options['fragment'] = 'match';
     $link_options['attributes']['title'] = $link_title;
     $link_match = l($link_title, $url_edit, $link_options);
