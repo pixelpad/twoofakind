@@ -8,6 +8,7 @@ dependencies[] = views
 dependencies[] = privatemsg
 dependencies[] = ds
 dependencies[] = entity
+dependencies[] = flag
 dependencies[] = block
 dependencies[] = user
 dependencies[] = menu

@@ -1251,6 +1251,18 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
       )
     );
     
+    // abusive user
+    $fields['abusive_user'] = array(
+      'title' => t('Abusive user'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
+      'function' => 'theme_ds_abusive_user_field',
+      'properties' => array(
+        'entity_id_key' => 'uid',
+        'flag_name' => 'abusive_user'
+      )
+    );
+    
     // pvt message
     $fields['privatemsg'] = array(
       'title' => t('Private Message'),
@@ -1482,6 +1494,51 @@ function theme_ds_privatemsg_field($field) {
   
   // wrap it in a div
   $output = "<div id=\"message-$entity_id\">$output</div>";
+
+  return $output;
+  
+}
+
+/**
+ * Theme field for abusive user DS field
+ *
+ * @param $field
+ *   The field to be output
+ *
+ * @return 
+ *   The rendered field
+ *
+ * @see hook_ds_fields_info()
+ */
+function theme_ds_abusive_user_field($field) {
+  
+  if (!user_access('access user profiles')) {
+    return '';
+  }
+  
+  // initialise output
+  $output = '';
+  
+  // entity id
+  if (isset($field['properties']['entity_id_key']) && isset($field['entity']->{$field['properties']['entity_id_key']})) {
+    $entity_id = $field['entity']->{$field['properties']['entity_id_key']};
+  } else {
+    $entity_id = FALSE;
+  }
+  
+  // no id no link
+  if (empty($entity_id)) {
+    return;
+  }
+  
+  // path
+  if (isset($field['properties']['flag_name'])) {
+    $flag_name = $field['properties']['flag_name'];
+  } else {
+    $flag_name = FALSE;
+  }
+  
+  $output = flag_create_link($flag_name, $entity_id);
 
   return $output;
   
