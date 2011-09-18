@@ -5,6 +5,71 @@
  * Install, update and uninstall functions for the two of a kind distro module.
  */
 
+/**
+ * Implement hook_install().
+ * 
+ * Create some fields and instances on users
+ * and content
+ */
+function twoofakind_com_au_install() {
+
+  // admin notes
+  _twoofakind_com_au_install_field_admin_notes();
+  
+}
+
+/**
+ * Create admin notes field
+ * 
+ * @param none
+ * @return none
+ */
+function _twoofakind_com_au_install_field_admin_notes() {
+ 
+  // create field if it doesn't exist already
+  if (!field_info_field(TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES)) {
+    // Create custom field for the archived status
+    $field_info = array(
+      'field_name' => TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES,
+      'type' => 'text_long',
+      'entity_types' => array('user'),
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      'translatable' => 1,
+      'locked' => TRUE,
+      'description' => st('Admin notes'),
+    );
+    _field_info_collate_types(TRUE); // quick work around the reported bug: http://drupal.org/node/1168214
+    $field = field_create_field($field_info);
+  }
+  
+  // build instance data
+  $instance_info = array(
+    'field_name' => TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES,
+    'entity_type' => 'user',
+    'bundle' => 'user',
+    'label' => st('Admin notes'),
+    'description' => st('Add notes about this user'),
+    'widget' => array(
+      'type' => 'text_textarea'
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'hidden'
+      ),
+      'teaser' => array(
+        'label' => 'hidden',
+        'type' => 'hidden'
+      ),
+    ),
+  );
+  
+  // create instance
+  if (!field_info_instance('user', TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES, 'user')) {
+    field_create_instance($instance_info);
+  }
+  
+}
 
 /**
  * Implement hook_schema().
@@ -482,4 +547,13 @@ function twoofakind_com_au_update_7006() {
     'description' => 'Date the featured was created',
   ));
   
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * Install admin notes field
+ */
+function twoofakind_com_au_update_7007() {
+  _twoofakind_com_au_install_field_admin_notes();
 }
