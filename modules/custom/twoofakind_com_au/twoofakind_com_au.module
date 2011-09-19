@@ -189,6 +189,10 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
         // who's online
         _twoofakind_com_au_subject_more($data);
       }
+      elseif ($block->delta == 'users_new-block') {
+        // who's new
+        _twoofakind_com_au_subject_more($data);
+      }
     }
     // add the down arrow to all blocks in ride hand side
     _twoofakind_com_au_block_expand($data, $block);
