@@ -845,7 +845,7 @@ function twoofakind_com_au_views_api() {
 function twoofakind_com_au_action_info() {
   return array(
     'twoofakind_com_au_unblock_user_action' => array(
-      'label' => t('Unblock current user'),
+      'label' => t('Approve user'),
       'type' => 'user',
       'configurable' => FALSE,
       'triggers' => array('any'),
@@ -875,7 +875,7 @@ function twoofakind_com_au_unblock_user_action(&$entity, $context = array()) {
   }
   $account = user_load($uid);
   $account = user_save($account, array('status' => 1));
-  watchdog('action', 'Unblocked user %name.', array('%name' => $account->name));
+  watchdog('action', 'Approved user %name.', array('%name' => $account->name));
 }
 
 /******************************************************************************
