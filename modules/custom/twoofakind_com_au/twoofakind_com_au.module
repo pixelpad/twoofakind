@@ -854,6 +854,12 @@ function twoofakind_com_au_action_info() {
       'configurable' => FALSE,
       'triggers' => array('any'),
     ),
+    'twoofakind_com_au_notify_admin_of_abusive_user_action' => array(
+      'label' => t('Notify admin of abusive user'),
+      'type' => 'user',
+      'configurable' => FALSE,
+      'triggers' => array('any'),
+    ),
   );
 }
 
@@ -880,6 +886,72 @@ function twoofakind_com_au_unblock_user_action(&$entity, $context = array()) {
   $account = user_load($uid);
   $account = user_save($account, array('status' => 1));
   watchdog('action', 'Approved user %name.', array('%name' => $account->name));
+}
+
+/**
+ * Notify admin of abusive user
+ *
+ * @ingroup actions
+ */
+function twoofakind_com_au_notify_admin_of_abusive_user_action(&$entity, $context = array()) {
+  
+  global $user, $base_url;
+  
+  // find the user
+  if (isset($entity->uid)) {
+    $uid = $entity->uid;
+  }
+  elseif (isset($context['uid'])) {
+    $uid = $context['uid'];
+  }
+  // If neither of those are valid, then unblock the current user.
+  else {
+    $uid = $GLOBALS['user']->uid;
+  }
+  $account = user_load($uid);
+  
+  // add a note to the abusive users account indicating who marked them as aubsive
+  $langid = _object_language($account);
+  if (
+      !isset($account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES})
+      || empty($account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES})
+     ) {
+    $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES} = array(
+      $langcode => array()
+    );
+  }
+  $user_link = l($user->name, 'user/' . $user->uid);
+  $account_link = l($account->name, 'user/' . $account->uid);
+  $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES}[$langid][] = array(
+    'value' => sprintf('This user was reported abusive by %s', $user_link)
+  );
+  
+  // save the user
+  $account = user_save($account);
+  
+  // notify the administrator
+
+  // set up email basics
+  $to = variable_get('site_mail', 'support@whatsthatweb.com.au');
+  $from = $to;
+  $subject = $base_url . ' : Abusive user';
+  $key = 'twoofakind_com_au_notify_admin_of_abusive_user_action';
+  
+  // throw together the message
+  $message = array();
+  $message[] = 'The following user has been reported as abusive : ' . $base_url . $account_link;
+  $message[] = 'By : ' . $base_url . $user_link;
+
+  $params = array(
+    'subject' => $base_url . ' : Abusive user',
+    'message' => implode("\n", $message)
+  );
+
+  $message = drupal_mail('twoofakind_com_au', $key, $to, language_default(), $params, $from);
+  if ($message['result']) {
+    watchdog('twoofakind_com_au', 'Successfully sent abusive user email to %recipient', array('%recipient' => $to));
+  }
+  
 }
 
 /******************************************************************************
@@ -1300,6 +1372,14 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
       'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block', 'user|slideshow'),
       'function' => 'theme_ds_location_field'
     );
+    
+    // admin notes
+    $fields['admin_notes_protected'] = array(
+      'title' => t('Admin notes'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|default'),
+      'function' => 'theme_ds_admin_notes_protected_field'
+    );
   }
 
   return array($entity_type => $fields);
@@ -1426,6 +1506,51 @@ function theme_ds_location_field($field) {
   // look for DOB field
   if (isset($field['entity']->location) && !empty($field['entity']->location) && !empty($field['entity']->location['city'])) {
     $output = $field['entity']->location['city'];
+  }
+
+  return $output;
+  
+}
+
+/**
+ * Theme field for admin_notes_protected DS field
+ *
+ * @param $field
+ *   The field to be output
+ *
+ * @return 
+ *   The rendered field
+ *
+ * @see hook_ds_fields_info()
+ */
+function theme_ds_admin_notes_protected_field($field) {
+  
+  // check permissions
+  if (!user_access('administer users')) {
+    return;
+  }
+  
+  // initialise output
+  $output = '';
+  
+  // look for admin notes field
+  if (isset($field['entity']->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES}[LANGUAGE_NONE][0]['value'])) {
+    
+    // build an item list
+    $items = array();
+    foreach ($field['entity']->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES}[LANGUAGE_NONE] as $note) {
+      $items[] = $note['value'];
+    }
+    
+    // build a themed item list
+    $variables = array(
+      'items' => $items,
+      'type' => 'ul',
+      'title' => 'Admin notes',
+      'attributes' => array()
+    );
+    $output = theme_item_list($variables);
+    
   }
 
   return $output;
@@ -1853,4 +1978,24 @@ function twoofakind_com_au_locationapi(&$obj, $op, $a3 = NULL, $a4 = NULL, $a5 =
       }
       break;
   }
+}
+
+/******************************************************************************
+ * Utility functions
+ ******************************************************************************/
+
+/**
+ * Grabs langcode as string from object
+ *
+ * @param object $object
+ *   Object to extract it from
+ * 
+ * @return string
+ *   Langcode
+ */
+function _object_language($object) {
+  if (!is_object($object)) {
+    return LANGUAGE_NONE;
+  }
+  return (isset($object->language) && !empty($object->language)) ? $object->language : LANGUAGE_NONE;
 }
