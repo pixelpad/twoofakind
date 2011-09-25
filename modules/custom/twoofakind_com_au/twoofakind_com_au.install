@@ -83,6 +83,7 @@ function _twoofakind_com_au_install_variables_email_templates() {
   foreach ($emails_custom as $key => $data) {
     variable_set('user_mail_' . $key . '_subject', $data['subject']);
     variable_set('user_mail_' . $key . '_body', $data['body']);
+    variable_set('user_mail_' . $key . '_notify', TRUE);
   }
   
 }
@@ -580,6 +581,16 @@ function twoofakind_com_au_update_7007() {
  * Install custom emails variables
  */
 function twoofakind_com_au_update_7008() {
+  module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
+  _twoofakind_com_au_install_variables_email_templates();
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * Install custom emails variables again - need notify value
+ */
+function twoofakind_com_au_update_7009() {
   module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
   _twoofakind_com_au_install_variables_email_templates();
 }

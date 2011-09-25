@@ -836,6 +836,24 @@ function twoofakind_com_au_action_info() {
       'configurable' => FALSE,
       'triggers' => array('any'),
     ),
+    'twoofakind_com_au_abusive_user_action' => array(
+      'label' => t('Block abusive user'),
+      'type' => 'user',
+      'configurable' => FALSE,
+      'triggers' => array('any'),
+    ),
+    'twoofakind_com_au_deactivate_user_action' => array(
+      'label' => t('Deactivate user'),
+      'type' => 'user',
+      'configurable' => FALSE,
+      'triggers' => array('any'),
+    ),
+    'twoofakind_com_au_reactivate_user_action' => array(
+      'label' => t('Reactivate user'),
+      'type' => 'user',
+      'configurable' => FALSE,
+      'triggers' => array('any'),
+    ),
   );
 }
 
@@ -899,7 +917,7 @@ function twoofakind_com_au_notify_admin_of_abusive_user_action(&$entity, $contex
   $user_link = l($user->name, 'user/' . $user->uid);
   $account_link = l($account->name, 'user/' . $account->uid);
   $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES}[$langid][] = array(
-    'value' => sprintf('This user was reported abusive by %s', $user_link)
+    'value' => date('F jS Y') . ' - ' . sprintf('This user was reported abusive by %s', $user_link)
   );
 
   // save the user
@@ -924,8 +942,120 @@ function twoofakind_com_au_notify_admin_of_abusive_user_action(&$entity, $contex
 
   $message = drupal_mail('twoofakind_com_au', $key, $to, language_default(), $params, $from);
   if ($message['result']) {
-    watchdog('twoofakind_com_au', 'Successfully sent abusive user email to %recipient', array('%recipient' => $to));
+    watchdog('twoofakind_com_au', 'Successfully sent abusive user email to admin %recipient', array('%recipient' => $to));
   }
+}
+
+/**
+ * Marks user as abusive and contacts them.
+ *
+ * @ingroup actions
+ */
+function twoofakind_com_au_abusive_user_action(&$entity, $context = array()) {
+  // First priority: If there is a $entity->uid, unblock that user.
+  // This is most likely a user object or the author if a node or comment.
+  if (isset($entity->uid)) {
+    $uid = $entity->uid;
+  }
+  elseif (isset($context['uid'])) {
+    $uid = $context['uid'];
+  }
+  // If neither of those are valid, then block the current user.
+  else {
+    $uid = $GLOBALS['user']->uid;
+  }
+  $account = user_load($uid);
+  $edit = array('status' => 0);
+  $role_abusive = user_role_load_by_name('Abusive');
+  if ($role_abusive) {
+    $account->roles[$role_abusive->rid] = $role_abusive->name;
+    $edit['roles'] = $account->roles;
+  }
+  // add a note to the abusive users account indicating they have been marked as abusive
+  $langid = _object_language($account);
+  $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES}[$langid][] = array(
+    'value' => date('F jS Y') . ' - ' . t('User confirmed as abusive and blocked by administrator')
+  );
+  $edit[TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES] = $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES};
+  
+  // save account
+  $account = user_save($account, $edit);
+  
+  // notify user
+  _user_mail_notify('abusive_user', $account);
+  
+  watchdog('action', 'User %name marked as abusive.', array('%name' => $account->name));
+}
+
+/**
+ * Deactivates user and notifies them
+ *
+ * @ingroup actions
+ */
+function twoofakind_com_au_deactivate_user_action(&$entity, $context = array()) {
+  // First priority: If there is a $entity->uid, unblock that user.
+  // This is most likely a user object or the author if a node or comment.
+  if (isset($entity->uid)) {
+    $uid = $entity->uid;
+  }
+  elseif (isset($context['uid'])) {
+    $uid = $context['uid'];
+  }
+  // If neither of those are valid, then deactivate the current user.
+  else {
+    $uid = $GLOBALS['user']->uid;
+  }
+  $account = user_load($uid);
+  $edit = array('status' => 0);
+  $role_deactivate= user_role_load_by_name('Deactivated');
+  if ($role_deactivate) {
+    $account->roles[$role_deactivate->rid] = $role_deactivate->name;
+    $edit['roles'] = $account->roles;
+  }
+  $account = user_save($account, $edit);
+  
+  // notify user
+  _user_mail_notify('deactivate_user', $account);
+  
+  watchdog('action', 'User %name deactivated.', array('%name' => $account->name));
+}
+
+/**
+ * Reactivates user and notifies them
+ *
+ * @ingroup actions
+ */
+function twoofakind_com_au_reactivate_user_action(&$entity, $context = array()) {
+  // First priority: If there is a $entity->uid, unblock that user.
+  // This is most likely a user object or the author if a node or comment.
+  if (isset($entity->uid)) {
+    $uid = $entity->uid;
+  }
+  elseif (isset($context['uid'])) {
+    $uid = $context['uid'];
+  }
+  // If neither of those are valid, then reactivate the current user.
+  else {
+    $uid = $GLOBALS['user']->uid;
+  }
+  $account = user_load($uid);
+  $edit = array('status' => 1);
+  $role_deactivate= user_role_load_by_name('Deactivated');
+  if ($role_deactivate && isset($account->roles[$role_deactivate->rid])) {
+    unset($account->roles[$role_deactivate->rid]);
+    $edit['roles'] = $account->roles;
+  }
+  $role_reactivate= user_role_load_by_name('Reactivate');
+  if ($role_reactivate && isset($account->roles[$role_reactivate->rid])) {
+    unset($account->roles[$role_reactivate->rid]);
+    $edit['roles'] = $account->roles;
+  }
+  $account = user_save($account, $edit);
+  
+  // notify user
+  _user_mail_notify('reactivate_user', $account);
+  
+  watchdog('action', 'User %name reactivated.', array('%name' => $account->name));
 }
 
 /* * ****************************************************************************
