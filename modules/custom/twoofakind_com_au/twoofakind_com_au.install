@@ -72,6 +72,22 @@ function _twoofakind_com_au_install_field_admin_notes() {
 }
 
 /**
+ * Create custom email template variables
+ * 
+ * @param none
+ * @return none
+ */
+function _twoofakind_com_au_install_variables_email_templates() {
+  
+  $emails_custom = _twoofakind_com_au_custom_email_templates();
+  foreach ($emails_custom as $key => $data) {
+    variable_set('user_mail_' . $key . '_subject', $data['subject']);
+    variable_set('user_mail_' . $key . '_body', $data['body']);
+  }
+  
+}
+
+/**
  * Implement hook_schema().
  */
 function twoofakind_com_au_schema() {
@@ -556,4 +572,14 @@ function twoofakind_com_au_update_7006() {
  */
 function twoofakind_com_au_update_7007() {
   _twoofakind_com_au_install_field_admin_notes();
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * Install custom emails variables
+ */
+function twoofakind_com_au_update_7008() {
+  module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
+  _twoofakind_com_au_install_variables_email_templates();
 }
