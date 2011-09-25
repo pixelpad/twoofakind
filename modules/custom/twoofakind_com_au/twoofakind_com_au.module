@@ -4,7 +4,6 @@
  * @file
  * Custom site mods for two of a kind
  */
-
 /**
  * Required constants
  */
@@ -13,7 +12,6 @@ define('TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES', 'field_admin_notes');
 /**
  * Required includes
  */
-
 /* entities */
 module_load_include('inc', 'twoofakind_com_au', 'includes/match.entity');
 module_load_include('inc', 'twoofakind_com_au', 'includes/wink.entity');
@@ -21,38 +19,38 @@ module_load_include('inc', 'twoofakind_com_au', 'includes/recent_view.entity');
 module_load_include('inc', 'twoofakind_com_au', 'includes/favourite.entity');
 module_load_include('inc', 'twoofakind_com_au', 'includes/featured_user.entity');
 
-/******************************************************************************
+/* * ****************************************************************************
  * Menu functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 /**
  * Implements hook_menu().
  */
 function twoofakind_com_au_menu() {
-  
+
   $items = array();
 
   // favourites
   _favourite_menu($items);
-  
+
   // featured
   _featured_user_menu($items);
-  
+
   // winks
   _wink_menu($items);
-  
+
   // boxes
   module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.boxes');
   _twoofakind_com_au_boxes_menu($items);
-  
+
   // nodequeue
   module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.nodequeue');
   _twoofakind_com_au_nodequeue_menu($items);
-  
+
   // page_error
   module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.page_error');
   _twoofakind_com_au_page_error_menu($items);
-  
+
   // user
   module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
   _twoofakind_com_au_user_menu($items);
@@ -64,15 +62,14 @@ function twoofakind_com_au_menu() {
  * Implements hook_menu_alter().
  */
 function twoofakind_com_au_menu_alter(&$items) {
-  
+
   // admin
   module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.admin');
   _twoofakind_com_au_admin_menu_alter($items);
-  
+
   // nodequeue
   module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.nodequeue');
   _twoofakind_com_au_nodequeue_menu_alter($items);
-  
 }
 
 /**
@@ -84,41 +81,39 @@ function twoofakind_com_au_menu_alter(&$items) {
  * @see hook_menu()
  */
 function _twoofakind_com_au_menu_redirect() {
-  
+
   drupal_goto('admin/people/custom');
-  
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * Init functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 /**
  * Implements hook_init().
  */
 function twoofakind_com_au_init() {
-  
+
   global $user;
-  
+
   // add required js and css
   drupal_add_js(drupal_get_path('module', 'twoofakind_com_au') . '/js/twoofakind_com_au.js', 'file');
   drupal_add_css(drupal_get_path('module', 'twoofakind_com_au') . '/css/twoofakind_com_au.css', 'file');
-  
+
   // add ajax and cookie, I don't know why it isn't there already
   drupal_add_library('system', 'drupal.ajax');
   drupal_add_library('system', 'jquery.cookie');
-  
+
   // set some session variables utilised in hook_form_alter below
   if (!empty($user->uid)) {
     // only for auth users
     $GLOBALS['UserSearchFormProcessed'] = 0;
   }
-  
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * Block functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 /**
  * Implements hook_block_view_alter().
@@ -147,8 +142,8 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
         // winked at
         // don't need count for this one
         // however, this is how it would be done
-  //      $count = wink_count_winker_unviewed_winks();
-  //      $data['subject'] .= " ($count)";
+        //      $count = wink_count_winker_unviewed_winks();
+        //      $data['subject'] .= " ($count)";
         _twoofakind_com_au_subject_more($data);
       }
       elseif ($block->delta == 'winks_received-block') {
@@ -161,8 +156,8 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
         // favourites
         // don't need count for this one
         // however, this is how it would be done
-  //      $count = favourite_count_favouriteer_unviewed_favourites();
-  //      $data['subject'] .= " ($count)";
+        //      $count = favourite_count_favouriteer_unviewed_favourites();
+        //      $data['subject'] .= " ($count)";
         _twoofakind_com_au_subject_more($data);
       }
       elseif ($block->delta == 'favourites_received-block') {
@@ -175,8 +170,8 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
         // recently viewed
         // don't need count for this one
         // however, this is how it would be done
-  //      $count = recent_view_count_recent_viewer_unviewed_recent_views();
-  //      $data['subject'] .= " ($count)";
+        //      $count = recent_view_count_recent_viewer_unviewed_recent_views();
+        //      $data['subject'] .= " ($count)";
         _twoofakind_com_au_subject_more($data);
       }
       elseif ($block->delta == 'recent_views_received-block') {
@@ -197,7 +192,6 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
     // add the down arrow to all blocks in ride hand side
     _twoofakind_com_au_block_expand($data, $block);
   }
-  
 }
 
 /**
@@ -205,17 +199,17 @@ function twoofakind_com_au_block_view_alter(&$data, $block) {
  */
 function twoofakind_com_au_block_info() {
   $blocks = array();
-  
+
   // recent messages block
   $blocks['twoofakind_privatemsg_messages'] = array(
     'info' => t('Two of a kind : PrivateMsg : Recent messages'),
   );
-  
+
   // profile block
   $blocks['twoofakind_profile'] = array(
     'info' => t('Two of a kind : Profile block'),
   );
-  
+
   return $blocks;
 }
 
@@ -228,11 +222,11 @@ function twoofakind_com_au_block_info() {
 function twoofakind_com_au_block_view($delta = '') {
   $block = array();
   switch ($delta) {
-    
+
     case 'twoofakind_privatemsg_messages':
       $block = _twoofakind_com_au_block_recent_messages();
       break;
-    
+
     case 'twoofakind_profile':
       module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
       $block = _twoofakind_com_au_block_profile();
@@ -264,15 +258,14 @@ function _twoofakind_com_au_block_recent_messages() {
 
   // Generate the query to load the messages.
   $query = _privatemsg_assemble_query('list', $user);
-  
+
   // Replace 'inbox' with 'sent' to display sent messages or 'list' to display all messages.
   // $query = _privatemsg_assemble_query('list', $user, 'inbox');
   // @todo - inbox/sent gets ignored. Cannot get inbox or sent get via the gui either. 
   //         is it how D7 version works?
-
   // Load 5 messages/threads. Replace 5 if you want to display a different amount of messages.
   $result = $query->limit(5)->execute();
- 
+
   $list = array();
   foreach ($result as $thread) {
     // Generate a link with the subject as title that points to the view message page.
@@ -295,10 +288,10 @@ function _twoofakind_com_au_block_recent_messages() {
     }
     $list[] = l($thread_subject, 'messages/view/' . $thread->thread_id, $options);
   }
-  
+
   // grab count of unread messages
   $count = privatemsg_unread_count();
-  
+
   // put the block together
   // set up title as link
   $subject = t('Messages') . " ($count)";
@@ -312,12 +305,12 @@ function _twoofakind_com_au_block_recent_messages() {
   );
   // add the list to the content
   $block['content'] = theme('item_list', array(
-      'items' => $list,
-      'type' => 'ul',
-      'attributes' => array(
-        'class' => 'menu'
-      )
+    'items' => $list,
+    'type' => 'ul',
+    'attributes' => array(
+      'class' => 'menu'
     )
+      )
   );
   // and a more link to the content
   $block['content'] .= '<div class="more-link">';
@@ -328,24 +321,23 @@ function _twoofakind_com_au_block_recent_messages() {
   );
   $block['content'] .= l(t('more'), 'messages', $options);
   $block['content'] .= '</div>';
-  
+
   // add a wrapper
   $block['content'] = '<div class="view">' . $block['content'] . '</div>';
-  
-  return $block;
 
+  return $block;
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * Form functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 /**
  * Implementation of hook_form_alter()
  */
 function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
   switch ($form_id) {
-    
+
     case 'views_exposed_form':
       switch ($form['#id']) {
         case 'views-exposed-form-user-search-page-user-search':
@@ -359,20 +351,19 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
           break;
       }
       break;
-    
+
     case 'user_profile_form':
       module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
       _twoofakind_com_au_form_user_profile_form($form, $form_state);
-      // fall through
-    
+    // fall through
+
     case 'user_register_form':
       _twoofakind_com_au_form_fix_location_fieldset($form, $form_state);
       break;
-    
+
     case 'comment_node_question_form':
       _twoofakind_com_au_form_comment_form($form, $form_state);
       break;
-
   }
 }
 
@@ -388,7 +379,7 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
  * @param $form_state
  */
 function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_state) {
-  
+
   global $user;
 
   // defaults
@@ -411,14 +402,14 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
     'alias' => TRUE
   );
   $link_less_options = l($title, $path, $options);
-  
+
   // wrap the whole form in a div
   $form['#prefix'] = '<div id="matches_form">';
   // add a show less options link
   $form['#prefix'] .= '<div class="less-options">' . $link_less_options . '</div>';
   // add a title that links through to search results
   $form['#prefix'] .= '<h4 class="title">' . $link_title . '</h4>';
-  
+
   // close the div
   $form['#suffix'] = '</div>';
 
@@ -445,13 +436,11 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
   // TO STORE THE FORM STATE BETWEEN PAGE LOADS
   // WILL REQUIRE THE SESSION_API AND MORE WORK THAN I 
   // HAVE TIME FOR AT THIS POINT
-  
   // we need to store each form state in to a session variable
   // so we can compare this form_state against the last
   // the reason for this being that if a user empties a field
   // or it's options we need to retain that emptiness and not
   // reinstate match criteria values
-
   // this is because this hook is run twice for some reason
   // at this point I could find no other differentiator
   // in the form_state
@@ -475,7 +464,6 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
 //      $_SESSION['UserSearchFormState'] = $form_state;
 //    }
 //  }
-
   // grab the match criteria of the currently logged in user
   // if any exist
   $match_criteria = _twoofakind_com_au_user_match_criteria();
@@ -494,7 +482,6 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
         $form_state['view']->exposed_input[$key] = $value;
         $form[$key]['#default_value'] = $value;
         $form[$key]['#value'] = $value;
-        
       }
     }
   }
@@ -507,16 +494,16 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
  *   A user id
  */
 function _twoofakind_com_au_user_match_criteria($uid = NULL) {
-  
+
   // if empty use logged in user
   if (empty($uid)) {
     global $user;
     $uid = $user->uid;
   }
-  
+
   // init array
   $match_criteria = array();
-  
+
   // grab full user object and cast as array
   $user_complete = (array) user_load($uid);
   $langcode = _get_language_from_object($user_complete);
@@ -527,12 +514,12 @@ function _twoofakind_com_au_user_match_criteria($uid = NULL) {
     if (strpos($key, 'field_match') === false) {
       continue;
     }
-    
+
     // ignore if field is empty
     if (empty($data[$langcode])) {
       continue;
     }
-    
+
     // convert the match key to the profile key
     $min_max = FALSE;
     if ($key == 'field_match_user_location') {
@@ -545,7 +532,7 @@ function _twoofakind_com_au_user_match_criteria($uid = NULL) {
     else {
       $profile_key = str_replace('field_match', 'field', $key) . '_value';
     }
-    
+
     // convert to simpler format that can be
     // used in various locations
     // i.e. form and view input
@@ -567,9 +554,8 @@ function _twoofakind_com_au_user_match_criteria($uid = NULL) {
       }
       $match_criteria[$profile_key][] = $value['value'];
     }
-    
   }
-  
+
   return $match_criteria;
 }
 
@@ -580,14 +566,14 @@ function _twoofakind_com_au_user_match_criteria($uid = NULL) {
  *   A form
  */
 function _twoofakind_com_au_form_user_search_remove_fields(&$form) {
-  
+
   global $user;
 
   // if logged in don't remove
   if ($user->uid) {
     return;
   }
-  
+
   // we need to remove some options from the form if 
   // the user is not logged in
   // there is some JS that goes along with this
@@ -616,7 +602,6 @@ function _twoofakind_com_au_form_user_search_remove_fields(&$form) {
       $form[$field_name]['#access'] = FALSE;
     }
   }
-  
 }
 
 /**
@@ -634,7 +619,7 @@ function _twoofakind_com_au_form_user_search_remove_fields(&$form) {
  * @todo It would be better to do the session handling in this function as well
  */
 function _twoofakind_com_au_form_user_search_override_field($form_state, $field_key) {
-  
+
   // if a value is set in the form state we won't replace it
   if (array_key_exists($field_key, $form_state['input'])) {
     // the only caveat is DOB as it populates form state with
@@ -660,7 +645,6 @@ function _twoofakind_com_au_form_user_search_override_field($form_state, $field_
   }
 
   return TRUE;
-  
 }
 
 /**
@@ -685,7 +669,7 @@ function _twoofakind_com_au_form_views_exposed_form_people_page(&$form, &$form_s
     $form['status']['#options'][0] = 'Blocked';
     $form['status']['#options'][1] = 'Active';
   }
-  
+
   // modify the new user field to a checkbox
 //  $form['access_new_checkbox'] = array(
 //    '#type' => 'checkbox',
@@ -701,14 +685,12 @@ function _twoofakind_com_au_form_views_exposed_form_people_page(&$form, &$form_s
 //      
 //    }
 //  }
-  
   // add your own submit function to deal with checkbox modification
 //  $form['#submit'] = array(
 //    '_twoofakind_com_au_form_views_exposed_form_people_page_submit',
 //    $form['#submit'][0]
 //  );
 //  dsm($form);
-  
 }
 
 /**
@@ -721,8 +703,7 @@ function _twoofakind_com_au_form_views_exposed_form_people_page(&$form, &$form_s
  *   And it's for  state
  */
 //function _twoofakind_com_au_form_views_exposed_form_people_page_submit(&$form, &$form_state) {
-
-  // modify the for state value for the new_user field
+// modify the for state value for the new_user field
 //  if (array_key_exists('access_new', $form_state['values'])) {
 //dsm($form_state, 'Post');
 //    if ($form_state['values']['access_new'] == 1) {
@@ -743,7 +724,7 @@ function _twoofakind_com_au_form_views_exposed_form_people_page(&$form, &$form_s
  *  A form's state
  */
 function _twoofakind_com_au_form_views_exposed_form(&$form, &$form_state) {
-  
+
   // defaults
   $title = t('Sort your results');
   $path = substr($form['#action'], 1);
@@ -754,15 +735,14 @@ function _twoofakind_com_au_form_views_exposed_form(&$form, &$form_state) {
     'alias' => TRUE
   );
   $link = l($title, $path, $options);
-  
+
   // wrap the whole form in a div
   $form['#prefix'] = '<div id="sort_form">';
   // add a title that links through to search results
   $form['#prefix'] .= '<h4 class="title">' . $link . '</h4>';
-  
+
   // close the div
   $form['#suffix'] = '</div>';
-  
 }
 
 /**
@@ -775,20 +755,17 @@ function _twoofakind_com_au_form_views_exposed_form(&$form, &$form_state) {
  *  A form's state
  */
 function _twoofakind_com_au_form_comment_form(&$form, &$form_state) {
-  
+
   // only for questions
   if ($form['#node']->type == 'question') {
-    
+
     // hide name field
     $form['author']['_author']['#type'] = 'hidden';
-    
+
     // change submit to Answer
     $form['actions']['submit']['#value'] = 'Respond';
-    
   }
-  
 }
-
 
 /**
  * Fix location fieldset as it's ridiculous
@@ -800,17 +777,16 @@ function _twoofakind_com_au_form_comment_form(&$form, &$form_state) {
  *   The form's state
  */
 function _twoofakind_com_au_form_fix_location_fieldset(&$form, &$form_state) {
-  
+
   if (isset($form['locations'])) {
     $form['locations']['#title'] = NULL;
     $form['locations'][0]['#title'] = t('Where are you?');
   }
-  
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * Theme functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 //function twoofakind_com_au_theme_form($variables) {
 //  $element = $variables['element'];
@@ -825,9 +801,9 @@ function _twoofakind_com_au_form_fix_location_fieldset(&$form, &$form_state) {
 //  return '<form' . drupal_attributes($element['#attributes']) . '><div>' . $element['#children'] . '</div></form>';
 //}
 
-/******************************************************************************
+/* * ****************************************************************************
  * View functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 /**
  * Implements hook_views_api().
@@ -839,9 +815,9 @@ function twoofakind_com_au_views_api() {
   );
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * Action functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 /**
  * Implements hook_action_info().
@@ -894,9 +870,9 @@ function twoofakind_com_au_unblock_user_action(&$entity, $context = array()) {
  * @ingroup actions
  */
 function twoofakind_com_au_notify_admin_of_abusive_user_action(&$entity, $context = array()) {
-  
+
   global $user, $base_url;
-  
+
   // find the user
   if (isset($entity->uid)) {
     $uid = $entity->uid;
@@ -909,13 +885,13 @@ function twoofakind_com_au_notify_admin_of_abusive_user_action(&$entity, $contex
     $uid = $GLOBALS['user']->uid;
   }
   $account = user_load($uid);
-  
+
   // add a note to the abusive users account indicating who marked them as aubsive
   $langid = _object_language($account);
   if (
       !isset($account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES})
       || empty($account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES})
-     ) {
+  ) {
     $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES} = array(
       $langcode => array()
     );
@@ -925,18 +901,17 @@ function twoofakind_com_au_notify_admin_of_abusive_user_action(&$entity, $contex
   $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES}[$langid][] = array(
     'value' => sprintf('This user was reported abusive by %s', $user_link)
   );
-  
+
   // save the user
   $account = user_save($account);
-  
-  // notify the administrator
 
+  // notify the administrator
   // set up email basics
   $to = variable_get('site_mail', 'support@whatsthatweb.com.au');
   $from = $to;
   $subject = $base_url . ' : Abusive user';
   $key = 'twoofakind_com_au_notify_admin_of_abusive_user_action';
-  
+
   // throw together the message
   $message = array();
   $message[] = 'The following user has been reported as abusive : ' . $base_url . $account_link;
@@ -951,12 +926,11 @@ function twoofakind_com_au_notify_admin_of_abusive_user_action(&$entity, $contex
   if ($message['result']) {
     watchdog('twoofakind_com_au', 'Successfully sent abusive user email to %recipient', array('%recipient' => $to));
   }
-  
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * Entity functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 /**
  * Implement hook_entity_info().
@@ -1031,9 +1005,9 @@ function twoofakind_com_au_entity_info() {
   return $return;
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * User functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 /**
  * Implements hook_user_view().
@@ -1049,10 +1023,10 @@ function twoofakind_com_au_user_view($account, $view_mode, $langcode) {
 
   // Add a recent view record
   if ($view_mode == 'full') {
-    
+
     // add a recent view
     recent_view_create($account->uid);
-    
+
     // process winks
     $winks = wink_load_from_account_to_current($account->uid);
     if (count($winks)) {
@@ -1063,7 +1037,7 @@ function twoofakind_com_au_user_view($account, $view_mode, $langcode) {
         }
       }
     }
-    
+
     // process matches
     $matches = match_load_from_current_to_account($account->uid);
     if (count($matches)) {
@@ -1083,15 +1057,14 @@ function twoofakind_com_au_user_view($account, $view_mode, $langcode) {
         }
       }
     }
-    
+
     // pass the build mode to the preprocess function
-    $account->content['view_mode'] =  array(
+    $account->content['view_mode'] = array(
       '#type' => 'hidden',
       '#title' => t('View mode'),
       '#markup' => $view_mode
     );
   }
-  
 }
 
 /**
@@ -1100,10 +1073,10 @@ function twoofakind_com_au_user_view($account, $view_mode, $langcode) {
  * This needs to be here and not the user include
  */
 function twoofakind_com_au_user_login(&$edit, $account) {
-  
+
   // if access = 0 then throw them a message telling them to complete their profile
   if (empty($account->access)) {
-    
+
     // set up some basic defaults
     $defaults = array(
       'login_welcome' => array(
@@ -1112,7 +1085,7 @@ function twoofakind_com_au_user_login(&$edit, $account) {
         'weight' => -0
       ),
     );
-    
+
     // grab welcome content from box
     $box = boxes_block_view('login_welcome');
     $box_title = '';
@@ -1125,7 +1098,7 @@ function twoofakind_com_au_user_login(&$edit, $account) {
       $box_title = $defaults['login_welcome']['subject'];
       $box_content = $defaults['login_welcome']['content'];
     }
-    
+
     // link to edit profile and match criteria
     $url_edit = "user/$account->uid/edit";
     $link_title = t('Edit your profile');
@@ -1140,7 +1113,7 @@ function twoofakind_com_au_user_login(&$edit, $account) {
     $link_options['fragment'] = 'match';
     $link_options['attributes']['title'] = $link_title;
     $link_match = l($link_title, $url_edit, $link_options);
-    
+
     // build output
     $output = array();
     if (!empty($box_title)) {
@@ -1151,14 +1124,14 @@ function twoofakind_com_au_user_login(&$edit, $account) {
     $output[] = '<li>' . $link_profile . '</li>';
     $output[] = '<li>' . $link_match . '</li>';
     $output[] = '</ul>';
-    
+
     drupal_set_message(implode("\n", $output));
   }
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * Field functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 /**
  * Implements hook_field_formatter_info
@@ -1257,7 +1230,7 @@ function twoofakind_com_au_field_formatter_view($entity_type, $entity, $field, $
         $dob = strtotime($dob);
       }
       $now = time();
-      $output = sprintf("%d", floor(abs($now-$dob)/60/60/24/365));
+      $output = sprintf("%d", floor(abs($now - $dob) / 60 / 60 / 24 / 365));
       $element[$delta] = array('#markup' => $output);
     }
   }
@@ -1265,9 +1238,9 @@ function twoofakind_com_au_field_formatter_view($entity_type, $entity, $field, $
   return $element;
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * Display Suite functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 /**
  * Implements hook_ds_fields_info
@@ -1287,7 +1260,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
 
   // user fields
   if ($entity_type == 'user') {
-    
+
     // favourites
     $fields['favourite'] = array(
       'title' => t('Favourite'),
@@ -1302,7 +1275,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
         'entity_render_key' => 'name',
       )
     );
-    
+
     // featured users
     $fields['featured_user'] = array(
       'title' => t('Featured User'),
@@ -1317,7 +1290,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
         'entity_render_key' => 'name',
       )
     );
-    
+
     // winks
     $fields['wink'] = array(
       'title' => t('Wink'),
@@ -1331,7 +1304,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
         'entity_render_key' => 'name',
       )
     );
-    
+
     // abusive user
     $fields['abusive_user'] = array(
       'title' => t('Abusive user'),
@@ -1343,7 +1316,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
         'flag_name' => 'abusive_user'
       )
     );
-    
+
     // pvt message
     $fields['privatemsg'] = array(
       'title' => t('Private Message'),
@@ -1356,7 +1329,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
         'entity_render_key' => 'name',
       )
     );
-    
+
     // age
     $fields['age'] = array(
       'title' => t('Age'),
@@ -1364,7 +1337,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
       'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
       'function' => 'theme_ds_age_field'
     );
-    
+
     // location
     $fields['location_city'] = array(
       'title' => t('Location : City'),
@@ -1372,7 +1345,7 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
       'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block', 'user|slideshow'),
       'function' => 'theme_ds_location_field'
     );
-    
+
     // admin notes
     $fields['admin_notes_protected'] = array(
       'title' => t('Admin notes'),
@@ -1383,7 +1356,6 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
   }
 
   return array($entity_type => $fields);
-
 }
 
 /**
@@ -1431,10 +1403,10 @@ function _twoofakind_com_au_ds_render_user_picture($field) {
     }
 
     if (!empty($field['entity']->uid) && user_access('access user profiles')) {
-      
+
       // grab large image style path
       $url_large = image_style_url('large', $picture->uri);
-      
+
       // build link
       $options = array(
         'attributes' => array(
@@ -1449,7 +1421,7 @@ function _twoofakind_com_au_ds_render_user_picture($field) {
         ),
         'html' => TRUE
       );
-      
+
       return l($image, $url_large, $options);
     }
     else {
@@ -1470,21 +1442,19 @@ function _twoofakind_com_au_ds_render_user_picture($field) {
  * @see hook_ds_fields_info()
  */
 function theme_ds_age_field($field) {
-  
+
   // initialise output
   $output = '';
-  
+
   // look for DOB field
   if (isset($field['entity']->field_date_of_birth[LANGUAGE_NONE][0]['value'])) {
-    
+
     $dob = $field['entity']->field_date_of_birth[LANGUAGE_NONE][0]['value'];
     $now = time();
-    $output = sprintf("%d", floor(abs($now-$dob)/60/60/24/365));
-    
+    $output = sprintf("%d", floor(abs($now - $dob) / 60 / 60 / 24 / 365));
   }
 
   return $output;
-  
 }
 
 /**
@@ -1499,17 +1469,16 @@ function theme_ds_age_field($field) {
  * @see hook_ds_fields_info()
  */
 function theme_ds_location_field($field) {
-  
+
   // initialise output
   $output = '';
-  
+
   // look for DOB field
   if (isset($field['entity']->location) && !empty($field['entity']->location) && !empty($field['entity']->location['city'])) {
     $output = $field['entity']->location['city'];
   }
 
   return $output;
-  
 }
 
 /**
@@ -1524,24 +1493,24 @@ function theme_ds_location_field($field) {
  * @see hook_ds_fields_info()
  */
 function theme_ds_admin_notes_protected_field($field) {
-  
+
   // check permissions
   if (!user_access('administer users')) {
     return;
   }
-  
+
   // initialise output
   $output = '';
-  
+
   // look for admin notes field
   if (isset($field['entity']->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES}[LANGUAGE_NONE][0]['value'])) {
-    
+
     // build an item list
     $items = array();
     foreach ($field['entity']->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES}[LANGUAGE_NONE] as $note) {
       $items[] = $note['value'];
     }
-    
+
     // build a themed item list
     $variables = array(
       'items' => $items,
@@ -1550,11 +1519,9 @@ function theme_ds_admin_notes_protected_field($field) {
       'attributes' => array()
     );
     $output = theme_item_list($variables);
-    
   }
 
   return $output;
-  
 }
 
 /**
@@ -1569,53 +1536,56 @@ function theme_ds_admin_notes_protected_field($field) {
  * @see hook_ds_fields_info()
  */
 function theme_ds_privatemsg_field($field) {
-  
+
   if (!user_access('access user profiles')) {
     return '';
   }
-  
+
   // initialise output
   $output = '';
-  
+
   // entity id
   if (isset($field['properties']['entity_id_key']) && isset($field['entity']->{$field['properties']['entity_id_key']})) {
     $entity_id = $field['entity']->{$field['properties']['entity_id_key']};
-  } else {
+  }
+  else {
     $entity_id = FALSE;
   }
-  
+
   // no id no link
   if (empty($entity_id)) {
     return;
   }
-  
+
   // Put together text for link
   if (isset($field['properties']['entity_render_key']) && isset($field['entity']->{$field['properties']['entity_render_key']})) {
     $render = $field['entity']->{$field['properties']['entity_render_key']};
-  } else {
+  }
+  else {
     $render = FALSE;
   }
-  
+
   // no output no link
   if (empty($render)) {
     return;
   }
-  
-   // path
+
+  // path
   if (isset($field['properties']['privatemsg_path'])) {
     $privatemsg_path = $field['properties']['privatemsg_path'];
-  } else {
+  }
+  else {
     $privatemsg_path = FALSE;
   }
-  
+
   // no path no link
   if (empty($privatemsg_path)) {
     return;
   }
-  
+
   // finalise path
   $path = $privatemsg_path . '/' . $entity_id;
-  
+
   // options
   $options = array(
     'attributes' => array(
@@ -1625,12 +1595,11 @@ function theme_ds_privatemsg_field($field) {
 
   // put it all together
   $output = l('Message', $path, $options);
-  
+
   // wrap it in a div
   $output = "<div id=\"message-$entity_id\">$output</div>";
 
   return $output;
-  
 }
 
 /**
@@ -1645,48 +1614,49 @@ function theme_ds_privatemsg_field($field) {
  * @see hook_ds_fields_info()
  */
 function theme_ds_abusive_user_field($field) {
-  
+
   if (!user_access('access user profiles')) {
     return '';
   }
-  
+
   // initialise output
   $output = '';
-  
+
   // entity id
   if (isset($field['properties']['entity_id_key']) && isset($field['entity']->{$field['properties']['entity_id_key']})) {
     $entity_id = $field['entity']->{$field['properties']['entity_id_key']};
-  } else {
+  }
+  else {
     $entity_id = FALSE;
   }
-  
+
   // no id no link
   if (empty($entity_id)) {
     return;
   }
-  
+
   // path
   if (isset($field['properties']['flag_name'])) {
     $flag_name = $field['properties']['flag_name'];
-  } else {
+  }
+  else {
     $flag_name = FALSE;
   }
-  
+
   $output = flag_create_link($flag_name, $entity_id);
 
   return $output;
-  
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * Utility functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 /**
  * Turns the block subject in to a link that is directed to the more link href
  */
 function _twoofakind_com_au_subject_more(&$data) {
-  
+
   // grab view information
   $view_path = false;
   if (isset($data['content']['#views_contextual_links_info']['views_ui']['view_name'])) {
@@ -1706,7 +1676,7 @@ function _twoofakind_com_au_subject_more(&$data) {
       }
     }
   }
-  
+
   // did we find a view path
   if ($view_path) {
     $options = array(
@@ -1722,17 +1692,17 @@ function _twoofakind_com_au_subject_more(&$data) {
  * Adds an expansion link to the subject
  */
 function _twoofakind_com_au_block_expand(&$data, $block) {
-  
+
   // if the block has no subject then do nothing
   if (!isset($data['subject']) || empty($data['subject']) || $data['subject'] == '<none>') {
     return;
   }
-  
+
   // grab the delta of the block
   // modify it so it resembles other CSS ID's / classes
   $block_delta_id = 'block-' . str_replace('_', '-', $block->delta);
   $block_div_replacement = '<div id="' . $block_delta_id . '"';
-  
+
   // make sure the content includes this div ID
   if (is_array($data['content']) && isset($data['content']['#markup'])) {
     // handle views
@@ -1774,7 +1744,6 @@ function _twoofakind_com_au_user_ajax_link($user, $path, $title) {
 
   // create link
   return l(sprintf($title, ''), $path, $options);
-  
 }
 
 /**
@@ -1797,18 +1766,16 @@ function _twoofakind_com_au_user_ajax_response($user, $entity_type, $message, $l
   );
 
   return ajax_deliver($page);
-  
 }
 
 /**
  * Simple nojs response wrapper
  */
 function _twoofakind_com_au_user_nojs_response($message, $redirect, $status = 'error') {
- 
+
   // set message and redirect
   drupal_set_message($message, $status);
   drupal_goto($redirect);
-  
 }
 
 /**
@@ -1827,9 +1794,9 @@ function _get_language_from_object($object) {
   return (isset($object->language) && !empty($object->language)) ? $object->language : LANGUAGE_NONE;
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * cron functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 /**
  * Implementation of hook_cron_queue_info()
@@ -1852,7 +1819,7 @@ function twoofakind_com_au_cron() {
   // matches
   $uids = _twoofakind_com_au_users_to_match();
   $queue_matches = DrupalQueue::get('user_matches');
-  foreach($uids as $uid) {
+  foreach ($uids as $uid) {
     $queue_matches->createItem($uid);
   }
 }
@@ -1870,7 +1837,7 @@ function twoofakind_com_au_cron() {
  *   Array of ids or objects
  */
 function _twoofakind_com_au_users_to_match($objects = FALSE) {
-  
+
   // set up the query   
   $query = new EntityFieldQuery();
   // we only want users
@@ -1888,9 +1855,8 @@ function _twoofakind_com_au_users_to_match($objects = FALSE) {
     }
     return $return;
   }
-  
+
   return array();
-  
 }
 
 /**
@@ -1903,7 +1869,7 @@ function _twoofakind_com_au_cron_process_user_matches($uid) {
 
   // grab the match criteria for this user
   $match_criteria = _twoofakind_com_au_user_match_criteria($uid);
-  
+
   // if they have no match criteria then bug out
   if (empty($match_criteria)) {
     return;
@@ -1945,12 +1911,11 @@ function _twoofakind_com_au_cron_process_user_matches($uid) {
   foreach ($match_uids as $match_uid) {
     match_create($match_uid, $uid);
   }
-  
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * Location functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 /**
  * Implements hook_views_api().
@@ -1965,24 +1930,23 @@ function twoofakind_com_au_locationapi(&$obj, $op, $a3 = NULL, $a4 = NULL, $a5 =
 
         case 'city':
           return array(
-            '#type'           => 'textfield',
-            '#title'          => t('Suburb'),
-            '#default_value'  => $obj,
-            '#size'           => 64,
-            '#maxlength'      => 255,
-            '#description'    => NULL,
-            '#attributes'     => NULL,
-            '#required'       => ($a4 == 2),
+            '#type' => 'textfield',
+            '#title' => t('Suburb'),
+            '#default_value' => $obj,
+            '#size' => 64,
+            '#maxlength' => 255,
+            '#description' => NULL,
+            '#attributes' => NULL,
+            '#required' => ($a4 == 2),
           );
-
       }
       break;
   }
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * Utility functions
- ******************************************************************************/
+ * **************************************************************************** */
 
 /**
  * Grabs langcode as string from object
