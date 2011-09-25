@@ -48,6 +48,15 @@ function _twoofakind_com_au_user_menu(&$items) {
     'file' => 'includes/twoofakind_com_au.user.inc',
   );
   
+  // Request reactivation
+  $items['user/%user/reactivate'] = array(
+    'title' => 'Reactivate account',
+    'page callback' => 'twoofakind_com_au_user_reactivate',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'file' => 'includes/twoofakind_com_au.user.inc',
+  );
+  
   // ADMIN
   
   // user emails admin screen
@@ -96,6 +105,51 @@ function twoofakind_com_au_user_menu_edit($edit) {
   );
   
   drupal_goto($path, $options);
+
+}
+
+/**
+ * Reactivate user
+ * 
+ * @see hook_menu()
+ */
+function twoofakind_com_au_user_reactivate($account) {
+  
+  $edit = array();
+  $role_reactivate = user_role_load_by_name('Reactivate');
+  if (!$role_reactivate) {
+    // role doesn't exist - boo
+    // set message and redirect
+    drupal_set_message('Your request for reactivation could not be processed at this time, please try again later.', 'error');
+    drupal_goto('<front>');
+    return;
+  }
+  
+  // add reactivate role
+  $account->roles[$role_reactivate->rid] = $role_reactivate->name;
+  $edit['roles'] = $account->roles;
+    
+  // add a note to the account indicating they would like to reactivate
+  $langid = _object_language($account);
+  if (
+      !isset($account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES})
+      || empty($account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES})
+  ) {
+    $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES} = array(
+      $langcode => array()
+    );
+  }
+  $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES}[$langid][] = array(
+    'value' => date('F jS Y') . ' - ' . t('User requested reactivation')
+  );
+  $edit[TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES] = $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES};
+  
+  // save account
+  $account = user_save($account, $edit);
+  
+  // set message and redirect
+  drupal_set_message('Your request for reactivation has been processed, please keep an eye on your email account for confirmation.', 'status');
+  drupal_goto('<front>');
 
 }
 
