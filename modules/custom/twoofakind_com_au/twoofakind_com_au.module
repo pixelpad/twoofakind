@@ -360,6 +360,11 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
     case 'user_register_form':
       _twoofakind_com_au_form_fix_location_fieldset($form, $form_state);
       break;
+    
+    case 'user_login' :
+      module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
+      _twoofakind_com_au_form_alter_user_login_form($form, $form_state);
+      break;
 
     case 'comment_node_question_form':
       _twoofakind_com_au_form_comment_form($form, $form_state);
