@@ -255,7 +255,7 @@ function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
   $form['privatemsg']['#collapsed'] = TRUE;
   
   // hide the admin notes section for non-admin users
-  if (!user_access('administer user')) {
+  if (!user_access('administer users')) {
     $form['field_admin_notes']['#access'] = FALSE;
   }
 }
