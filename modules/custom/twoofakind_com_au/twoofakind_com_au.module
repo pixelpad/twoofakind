@@ -8,6 +8,7 @@
  * Required constants
  */
 define('TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES', 'field_admin_notes');
+define('TWOOFAKIND_COM_AU_FIELD_NAME_IMPORTED_UID', 'field_imported_uid');
 
 /**
  * Required includes

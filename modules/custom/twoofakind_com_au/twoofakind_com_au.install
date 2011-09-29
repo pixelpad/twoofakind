@@ -16,6 +16,12 @@ function twoofakind_com_au_install() {
   // admin notes
   _twoofakind_com_au_install_field_admin_notes();
   
+  // imported uid field
+  _twoofakind_com_au_install_field_imported_uid();
+  
+  // custom email system variables
+  _twoofakind_com_au_install_variables_email_templates();
+  
 }
 
 /**
@@ -66,6 +72,59 @@ function _twoofakind_com_au_install_field_admin_notes() {
   
   // create instance
   if (!field_info_instance('user', TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES, 'user')) {
+    field_create_instance($instance_info);
+  }
+  
+}
+
+/**
+ * Create imported uid field
+ * 
+ * @param none
+ * @return none
+ */
+function _twoofakind_com_au_install_field_imported_uid() {
+ 
+  // create field if it doesn't exist already
+  if (!field_info_field(TWOOFAKIND_COM_AU_FIELD_NAME_IMPORTED_UID)) {
+    // Create custom field for the archived status
+    $field_info = array(
+      'field_name' => TWOOFAKIND_COM_AU_FIELD_NAME_IMPORTED_UID,
+      'type' => 'number_integer',
+      'entity_types' => array('user'),
+      'cardinality' => 1,
+      'translatable' => FALSE,
+      'locked' => TRUE,
+      'description' => st('Imported UID'),
+    );
+    _field_info_collate_types(TRUE); // quick work around the reported bug: http://drupal.org/node/1168214
+    $field = field_create_field($field_info);
+  }
+  
+  // build instance data
+  $instance_info = array(
+    'field_name' => TWOOFAKIND_COM_AU_FIELD_NAME_IMPORTED_UID,
+    'entity_type' => 'user',
+    'bundle' => 'user',
+    'label' => st('Imported UID'),
+    'description' => st('UID from previous system'),
+    'widget' => array(
+      'type' => 'number'
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'hidden'
+      ),
+      'teaser' => array(
+        'label' => 'hidden',
+        'type' => 'hidden'
+      ),
+    ),
+  );
+  
+  // create instance
+  if (!field_info_instance('user', TWOOFAKIND_COM_AU_FIELD_NAME_IMPORTED_UID, 'user')) {
     field_create_instance($instance_info);
   }
   
@@ -593,4 +652,13 @@ function twoofakind_com_au_update_7008() {
 function twoofakind_com_au_update_7009() {
   module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
   _twoofakind_com_au_install_variables_email_templates();
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * Install imported UID field
+ */
+function twoofakind_com_au_update_7010() {
+  _twoofakind_com_au_install_field_imported_uid();
 }
