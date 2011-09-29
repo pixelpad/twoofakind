@@ -9,6 +9,7 @@
  */
 define('TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES', 'field_admin_notes');
 define('TWOOFAKIND_COM_AU_FIELD_NAME_IMPORTED_UID', 'field_imported_uid');
+define('TWOOFAKIND_COM_AU_FIELD_NAME_HEARD_ABOUT_US', 'field_heard_about_us');
 
 /**
  * Required includes
@@ -2284,6 +2285,21 @@ function twoofakind_com_au_locationapi(&$obj, $op, $a3 = NULL, $a4 = NULL, $a5 =
       }
       break;
   }
+}
+
+/* * ****************************************************************************
+ * Migrate functions
+ * **************************************************************************** */
+
+/*
+ * You must implement hook_migrate_api(), setting the API level to 2, for
+ * your migration classes to be recognized by the Migrate module.
+ */
+function twoofakind_com_au_migrate_api() {
+  $api = array(
+    'api' => 2,
+  );
+  return $api;
 }
 
 /* * ****************************************************************************
