@@ -66,11 +66,13 @@
 						
 						<!-- Extra Menu Links -->
 						<ul id="MmOtherLinks" class="sf-menu">
+              <?php if (FALSE) : ?>
 							<li><a href="/rss.xml"><span class="mmFeeds"><?php print t("Feeds") ?></span></a></li>
+              <?php endif; ?>
 							<?php if ($user->uid > 0) { ?> 
 							<li><a href="<?php print url('user/logout') ?>"><span class="mmLogin"><?php print t("LogOut") ?></span></a></li>
 							<?php } else { ?>
-							<li><a href="#ContentPanel" class="topReveal"><span class="mmLogin"><?php print t("Login") ?></span></a></li>
+							<li><a href="#ContentPanel" class="topReveal"><span class="mmLogin"><?php print t("Login / Register") ?></span></a></li>
 							<?php } ?>
 						</ul>
 						
@@ -81,13 +83,14 @@
 			
 			<!-- Search -->
 			<div id="Search">
-				<form action="<?php print url("search/node") ?>" id="SearchForm" method="post">
+				<form action="#" id="SearchForm" method="post">
 					<div class="m4"><input type="text" name="keys" id="SearchInput" value="" /></div>
 					<div class="m4"><input type="submit" name="op" id="SearchSubmit" class="noStyle" value="<?php print t("Search") ?>" /></div>
 					<input type="hidden" name="form_token" id="edit-search-block-form-form-token" value="<?php print drupal_get_token("search_form") ?>"  />
 					<input type="hidden" name="form_id" id="edit-search-block-form" value="search_form"  />
 				</form>
 			</div>
+      <div id="SearchOptions"><a href="#" title="More search options">More search options</a></div>
 			
 			<!-- Logo -->
 			<div id="Logo">
@@ -98,7 +101,7 @@
 			<div class="clear"></div>
 		
 		</div>
-
+    <?php if (!empty($messages)): print $messages; endif; ?>
 		
 
 		<?php if (arg(0) == 'portfolio') { ?>
@@ -106,7 +109,6 @@
       <h1 class="headline"><strong><?php print $title ?></strong></h1>
 			<div class="hr"></div>
 			<div class="breadcrumbs"><?php print $breadcrumb; ?></div>
-			<?php if (!empty($messages)): print $messages; endif; ?>
 			<?php if ($tabs): print ''. render($tabs) .''; endif; ?>
 			<?php //if ($tabs2): print ''. $tabs2 .''; endif; ?>
 			<?php if (!empty($help)): print $help; endif; ?>
@@ -149,16 +151,6 @@
 
 			<!-- Page Content -->
 			<div class="contentArea">
-			<?php if (arg(0) == 'portfolio') { ?>
-				<div class="full-page">
-
-					<div class="portfolio">
-					<?php print render($page['content']); ?>
-					</div>
-					<div class="clear"></div>
-				</div>
-				<div class="clear"></div>
-			<?php } else {?>
 				<div class="two-thirds">
 					<?php if ($is_front): ?>
 					<?php if ($page['home_banner_3']): ?><?php print render($page['home_banner_3']); ?><?php endif;?>
@@ -176,10 +168,10 @@
 					<?php endif;?>
 					<!-- Breadcrumbs -->
 					<div class="breadcrumbs"><?php print $breadcrumb; ?></div>
-					<?php if (!empty($messages)): print $messages; endif; ?>
 					<?php if ($tabs): print ''. render($tabs) .''; endif; ?>
 					<?php //if ($tabs2): print ''. render($tabs2) .''; endif; ?>
 					<?php if (!empty($help)): print $help; endif; ?>
+          <?php if ($page['content_top']): ?><?php print render($page['content_top']); ?><?php endif;?>
 					<?php print render($page['content']); ?>
 					<!-- End of Content -->
 					<div class="clear"></div>
@@ -193,7 +185,6 @@
 				
 				<!-- End of Content -->
 				<div class="clear"></div>
-			<?php } ?>
 			</div>
 
 		</div>
@@ -232,7 +223,7 @@
 		
 		<!-- Copyright/legal text -->
 		<div id="Copyright">
-			<p><?php print render($page['footer']); ?></p>
+			<?php print render($page['footer']); ?>
 		</div>		
 	</div>
 </div>
