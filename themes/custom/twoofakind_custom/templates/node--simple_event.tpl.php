@@ -26,11 +26,12 @@ if (isset($event_date['#items']) && count($event_date['#items'])) {
   if (isset($event_date_data['value'])) {
     $event_date_time = strtotime($event_date_data['value']);
     $event_date_display = format_date($event_date_time, 'custom', 'j M. Y');
+    // utilised if you ever want to distinguish between dates coming and those gone
     if ($event_date_time > time()) {
-      $event_date_display = 'Coming up on ' . $event_date_display;
+      $event_date_display = $event_date_display;
     }
     else {
-      $event_date_display = 'Went down on ' . $event_date_display;
+      $event_date_display = $event_date_display;
     }
   }
 }
@@ -49,6 +50,17 @@ $content['links']['#weight'] = 10;
     }
     ?></span>
 		<span class="blogPostInfo"><?php print t("Posted by") ?> <?php print theme('username', array('account' => $node)).$output ?> </span>
+	</div>
+</div>
+<?php } elseif (!drupal_is_front_page()) { ?>
+<div class="ribbon">
+	<div class="wrapAround"></div>
+	<div class="tab">
+		<span class="blogDate"><?php 
+    if (isset($event_date_display)) {
+      print $event_date_display;
+    }
+    ?></span>
 	</div>
 </div>
 <?php } ?>
