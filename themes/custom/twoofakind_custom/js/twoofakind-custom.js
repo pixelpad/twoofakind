@@ -20,7 +20,7 @@
          */
         $('input#SearchInput', $(this)).each(function () {
           var input_username_val = input_username.val();
-          if (input_username_val.length > 0) {
+          if (typeof input_username_val != 'undefined' && input_username_val.length > 0) {
             $(this).val(input_username_val);
           }
           else {
@@ -61,6 +61,12 @@
           return false;
         }
       });
+      
+      /* adding a form navigate confirm */
+      var form_user_profile = $('form#user-profile-form');
+      if (form_user_profile.size() > 0) {
+        form_user_profile.FormNavigate('Have you saved your changes?');
+      }
     }
   }
 

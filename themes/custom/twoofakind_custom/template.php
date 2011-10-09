@@ -1,7 +1,21 @@
 <?php
 
 // we have to add our own css here so it overwrites the previous
+// @TODO - there will be a better method than this, find it!
 drupal_add_css(path_to_theme().'/css/twoofakind-custom-style.css', array('group' => CSS_THEME));
+
+/*
+ * implements template_preprocess_page
+ * 
+ * We want to add some JS if within user edit screen
+ */
+function twoofakind_custom_preprocess_page(&$variables) {
+  
+  if (in_array('page__user__edit', $variables['theme_hook_suggestions'])) {
+    drupal_add_js(drupal_get_path('theme', 'twoofakind_custom') . '/js/jquery.FormNavigate.js', 'file');
+  }
+  
+}
 
 /*
  * implements theme_menu_tree__menu_user_major_actions
