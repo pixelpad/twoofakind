@@ -9,6 +9,7 @@ scripts[] = js/jquery.overlabel.min.js
 scripts[] = js/twoofakind-custom.js
 scripts[] = js/demo.js
 scripts[] = js/onLoad.min.js
+scripts[] = js/cufon-yui.js
 
 
 settings[skin] = 0
