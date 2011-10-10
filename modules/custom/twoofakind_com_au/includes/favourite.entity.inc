@@ -266,6 +266,9 @@ function favourite_load_all($conditions = array(), $reset = FALSE) {
  * 
  * @return
  *   The entity or FALSE
+ * 
+ * @todo
+ *   Work out how to dynamically grab the $cid for cache clearing
  */
 function favourite_create($favourite_uid) {
 
@@ -287,6 +290,13 @@ function favourite_create($favourite_uid) {
   $entity = entity_create('favourite', $container);
   if($entity) {
     entity_get_controller('favourite')->save($entity);
+    
+    // clear the cache here
+    // there should be a function call here to return the cid
+    // I spent about an hour but couldn't figure it out quickly
+    // to do for later
+    cache_clear_all('ctools_export:views_view:favourites', 'cache_views');
+    
     return $entity;
   }  
   return FALSE;

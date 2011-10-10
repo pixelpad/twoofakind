@@ -251,6 +251,9 @@ function wink_load_from_winker_winkee($winker_uid, $winkee_uid) {
  * 
  * @return
  *   The entity or FALSE
+ * 
+ * @todo
+ *   Work out how to dynamically grab the $cid for cache clearing
  */
 function wink_create($wink_uid) {
 
@@ -273,6 +276,14 @@ function wink_create($wink_uid) {
   $entity = entity_create('wink', $container);
   if($entity) {
     entity_get_controller('wink')->save($entity);
+    
+    // clear the cache here
+    // there should be a function call here to return the cid
+    // I spent about an hour but couldn't figure it out quickly
+    // to do for later
+    cache_clear_all('ctools_export:views_view:winks', 'cache_views');
+    cache_clear_all('ctools_export:views_view:winks_received', 'cache_views');
+    
     return $entity;
   }  
   return FALSE;
