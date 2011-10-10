@@ -550,6 +550,7 @@ div.views-page-users div.views-row div.group-left {
 div.views-page-users div.views-row div.group-middle {
 	width: 90px;
   margin-bottom: 10px;
+  float: left; /* only required as ds stuff not being included in cached versions */
 }
 div.views-page-users div.views-row div.group-middle div.field-item {
 	font-weight: bold;
@@ -563,6 +564,7 @@ div.views-page-users div.views-row div.group-right {
 div.views-page-users div.views-row div.group-footer {
 	overflow: hidden;
   margin-top: -20px;
+  clear: both; /* only required as ds stuff not being included in cached versions */
 }
 div.views-page-users div.views-row div.group-footer div.field {
 	float: right;
