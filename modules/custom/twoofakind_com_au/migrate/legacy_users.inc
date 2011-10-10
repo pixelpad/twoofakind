@@ -322,9 +322,6 @@ class LegacyUserMigration extends TwooofakindMigration {
     if (!$current_row->active) {
       $current_row->roles[] = 7; // deactivated
     }
-    
-    // fix date of birth
-    $current_row->birth_date = strtotime($current_row->birth_date);
 
     // this row is OK
     return TRUE;
@@ -656,6 +653,17 @@ class LegacyUserMigration extends TwooofakindMigration {
     }
     else {
       $account->field_heard_about_us[LANGUAGE_NONE][0]['value'] = 'other';
+    }
+    
+    // fix date of birth
+    if (!empty($row->birth_date)) {
+      $birth_date_parts = explode('-', $row->birth_date);
+      if (count($birth_date_parts) == 3) {
+        $year = $birth_date_parts[0];
+        $month = (int) $birth_date_parts[1];
+        $day = (int) $birth_date_parts[2];
+        $account->field_date_of_birth[LANGUAGE_NONE][0]['value'] = mktime(0, 0, 0, $month, $day, $year);
+      }
     }
 
     // add location information
