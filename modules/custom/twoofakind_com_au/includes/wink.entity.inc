@@ -413,7 +413,7 @@ function wink_has_winked($wink_uid) {
   // match favourite_uid and current uid
   $query->propertyCondition('uid', $user->uid, '=');
   $query->propertyCondition('wink_uid', $wink_uid, '=');
-  $query->propertyCondition('created', date('Y:m:d 00:00:00'), '>');
+  $query->propertyCondition('wink_created', date('Y:m:d 00:00:00'), '>');
 
   // execute
   $result = $query->execute();
