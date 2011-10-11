@@ -954,3 +954,11 @@ div.region-footer div#block-menu-footer-other ul li a {
 fieldset.locations legend {
   font-weight: bold;
 }
+
+/* Profile form cancel button
+-------------------------------------------------------------- */
+
+div#user-cancel-link input,
+div#user-cancel-link button {
+  display: none;
+}
