@@ -4,13 +4,12 @@ description = Tow of a kind custom theme
 base theme = unitebusiness
 core = 7.x
 
-scripts[] = js/jquery.overlabel.js
 scripts[] = js/jquery.overlabel.min.js
 scripts[] = js/twoofakind-custom.js
 scripts[] = js/demo.js
 scripts[] = js/onLoad.min.js
 scripts[] = js/cufon-yui.js
-
+scripts[] = js/jquery.fancybox-1.2.6.pack.js
 
 settings[skin] = 0
 settings[slide_shows] = 0

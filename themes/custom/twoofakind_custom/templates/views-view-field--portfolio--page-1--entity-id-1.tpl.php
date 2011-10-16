@@ -1,0 +1,2 @@
+<?php print str_replace(array('<a ', '<img '),array('<a class="img zoom colorbox" rel="portfolio" ', '<img class="portfolio-image" '),$output); ?>
+<?php //print '<pre>'. str_replace(';',';<br />',check_plain(serialize($output))) .'</pre>'; ?>

@@ -68,7 +68,7 @@ $content['links']['#weight'] = 10;
 	<?php if (!$page): ?><h1><a href="<?php print $node_url ?>" title="<?php print $title ?>"><?php print $title ?></a></h1><?php endif; ?>
 	<?php if (isset($content['body']['#object']->field_image['und'][0])) { ?>
 	<div class="blogPostImage">
-	<a href="<?php print file_create_url($content['body']['#object']->field_image['und'][0]['uri']); ?>" title="<?php print $content['body']['#object']->field_image['und'][0]['title'] ?>" class="img zoom" rel="blogpostimage"><?php print theme('image_style', array('style_name' => 'blog_teaser', 'path' => $content['body']['#object']->field_image['und'][0]['uri'], 'alt' => $content['body']['#object']->field_image['und'][0]['alt'], 'title' => $content['body']['#object']->field_image['und'][0]['title'], 'attributes' => array('class' => 'img'),'getsize' => false) );?></a>
+	<a href="<?php print file_create_url($content['body']['#object']->field_image['und'][0]['uri']); ?>" title="<?php print $content['body']['#object']->field_image['und'][0]['title'] ?>" class="img zoom colorbox" rel="blogpostimage"><?php print theme('image_style', array('style_name' => 'blog_teaser', 'path' => $content['body']['#object']->field_image['und'][0]['uri'], 'alt' => $content['body']['#object']->field_image['und'][0]['alt'], 'title' => $content['body']['#object']->field_image['und'][0]['title'], 'attributes' => array('class' => 'img'),'getsize' => false) );?></a>
 	</div>
 	<?php } ?>
   <?php

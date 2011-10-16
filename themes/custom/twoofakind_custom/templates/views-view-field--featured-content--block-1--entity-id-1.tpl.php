@@ -1,0 +1,1 @@
+<?php print str_replace(array('<a '),array('<a class="featuredImg img zoom colorbox" rel="featured" '),$output); ?>
