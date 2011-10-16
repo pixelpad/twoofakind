@@ -62,6 +62,28 @@
         }
       });
       
+      /* block titles in RH column need to click through to more link */
+      $('div.region-sidebar-right div.block').each(function() {
+        var more_link = $('div.more-link a', $(this));
+        var more_link_href = '';
+        if (more_link.size() > 0) {
+          more_link_href = more_link.attr('href');
+        }
+        else {
+          more_link = $('div.user-picture a', $(this));
+          if (more_link.size() > 0) {
+            more_link_href = more_link.attr('href');
+          }
+        }
+        if (more_link_href != '') {
+          $('h4.title', $(this)).bind({
+            click: function() {
+              window.open(more_link_href, '_self');
+            }
+          });
+        }
+      });
+      
       /* adding a form navigate confirm */
       var form_user_profile = $('form#user-profile-form');
       if (form_user_profile.size() > 0) {

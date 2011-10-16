@@ -1996,9 +1996,16 @@ function theme_ds_abusive_user_field($field) {
 
 /**
  * Turns the block subject in to a link that is directed to the more link href
+ * 
+ * This function has ceased to work
+ * The content array doesn't include anything but markup any more
+ * I've added some jQuery to make the headings clickable
  */
 function _twoofakind_com_au_subject_more(&$data) {
 
+  // return
+  return;
+  
   // grab view information
   $view_path = false;
   if (isset($data['content']['#views_contextual_links_info']['views_ui']['view_name'])) {
