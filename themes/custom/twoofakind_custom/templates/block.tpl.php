@@ -73,9 +73,11 @@
 <?php }
   else { ?>
 
+<div class="block">
 <?php if ($block->subject): ?><h4 class="title"><?php print $block->subject ?></h4><?php endif;?>
-<div>
-<?php print $content ?>
+  <div class="block-content">
+  <?php print $content ?>
+  </div>
 </div>
 
 <?php } ?>

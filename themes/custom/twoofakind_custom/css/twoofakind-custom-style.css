@@ -121,6 +121,8 @@ div.region-sidebar-right h4.title {
   margin-top: 10px;
   padding-bottom: 10px;
   position: relative;
+  color: #ed1c24;
+  cursor: pointer;
 }
 
 a.block-expand {
