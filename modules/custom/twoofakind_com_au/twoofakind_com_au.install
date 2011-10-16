@@ -1,0 +1,722 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the two of a kind distro module.
+ */
+
+/**
+ * Implement hook_install().
+ * 
+ * Create some fields and instances on users
+ * and content
+ */
+function twoofakind_com_au_install() {
+
+  // admin notes
+  _twoofakind_com_au_install_field_admin_notes();
+  
+  // heard about us field
+  _twoofakind_com_au_install_field_heard_about_us();
+  
+  // custom email system variables
+  _twoofakind_com_au_install_variables_email_templates();
+  
+}
+
+/**
+ * Create admin notes field
+ * 
+ * @param none
+ * @return none
+ */
+function _twoofakind_com_au_install_field_admin_notes() {
+ 
+  // create field if it doesn't exist already
+  if (!field_info_field(TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES)) {
+    // Create custom field for the archived status
+    $field_info = array(
+      'field_name' => TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES,
+      'type' => 'text_long',
+      'entity_types' => array('user'),
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      'translatable' => 1,
+      'locked' => TRUE,
+      'description' => st('Admin notes'),
+    );
+    _field_info_collate_types(TRUE); // quick work around the reported bug: http://drupal.org/node/1168214
+    $field = field_create_field($field_info);
+  }
+  
+  // build instance data
+  $instance_info = array(
+    'field_name' => TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES,
+    'entity_type' => 'user',
+    'bundle' => 'user',
+    'label' => st('Admin notes'),
+    'description' => st('Add notes about this user'),
+    'widget' => array(
+      'type' => 'text_textarea'
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'hidden'
+      ),
+      'teaser' => array(
+        'label' => 'hidden',
+        'type' => 'hidden'
+      ),
+    ),
+  );
+  
+  // create instance
+  if (!field_info_instance('user', TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES, 'user')) {
+    field_create_instance($instance_info);
+  }
+  
+}
+
+/**
+ * Create imported uid field
+ * 
+ * @param none
+ * @return none
+ */
+function _twoofakind_com_au_install_field_heard_about_us() {
+ 
+  // create field if it doesn't exist already
+  if (!field_info_field(TWOOFAKIND_COM_AU_FIELD_NAME_HEARD_ABOUT_US)) {
+    // Create custom field for the archived status
+    $field_info = array(
+      'field_name' => TWOOFAKIND_COM_AU_FIELD_NAME_HEARD_ABOUT_US,
+      'type' => 'list_text',
+      'entity_types' => array('user'),
+      'cardinality' => 1,
+      'translatable' => TRUE,
+      'locked' => TRUE,
+      'description' => st('Where the user heard about us'),
+      'settings' => array(
+        'allowed_values' => array(
+          'email|You emailed us',
+          'internet|We foud you on the Internet',
+          'friend|A friend told me',
+          'chat|I heard about you in a chat room',
+          'organisation|Your organisation',
+          'google|Google',
+          'other|Other'
+        )
+      ),
+    );
+    _field_info_collate_types(TRUE); // quick work around the reported bug: http://drupal.org/node/1168214
+    $field = field_create_field($field_info);
+  }
+  
+  // build instance data
+  $instance_info = array(
+    'field_name' => TWOOFAKIND_COM_AU_FIELD_NAME_HEARD_ABOUT_US,
+    'entity_type' => 'user',
+    'bundle' => 'user',
+    'label' => st('Where did you hear about us?'),
+    'description' => st('Where the user heard about us'),
+    'widget' => array(
+      'type' => 'options_select'
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'hidden'
+      ),
+      'teaser' => array(
+        'label' => 'hidden',
+        'type' => 'hidden'
+      ),
+    ),
+  );
+  
+  // create instance
+  if (!field_info_instance('user', TWOOFAKIND_COM_AU_FIELD_NAME_HEARD_ABOUT_US, 'user')) {
+    field_create_instance($instance_info);
+  }
+  
+}
+
+/**
+ * Create custom email template variables
+ * 
+ * @param none
+ * @return none
+ */
+function _twoofakind_com_au_install_variables_email_templates() {
+  
+  $emails_custom = _twoofakind_com_au_custom_email_templates();
+  foreach ($emails_custom as $key => $data) {
+    variable_set('user_mail_' . $key . '_subject', $data['subject']);
+    variable_set('user_mail_' . $key . '_body', $data['body']);
+    variable_set('user_mail_' . $key . '_notify', TRUE);
+  }
+  
+}
+
+/**
+ * Implement hook_schema().
+ */
+function twoofakind_com_au_schema() {
+
+  $schema = array();
+  $schema += _twoofakind_com_au_schema_matches();
+  $schema += _twoofakind_com_au_schema_winks();
+  $schema += _twoofakind_com_au_schema_recent_views();
+  $schema += _twoofakind_com_au_schema_favourites();
+  $schema += _twoofakind_com_au_schema_featured_users();
+  
+  return $schema;
+}
+
+/**
+ * @see hook_schema()
+ */
+function _twoofakind_com_au_schema_matches() {
+  
+  $schema['matches'] = array (
+    'description' => 'Table for matches',
+    'fields' => array(
+      'mid' => array(
+        'description' => 'Primary key for matches',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id that we are finding matches for',
+      ),
+      'match_uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of user matches',
+      ),
+      'match_created' => array(
+        'mysql_type' => 'timestamp',
+        'pgsql_type' => 'timestamp without time zone',
+        'type' => 'timestamp',
+        'not null' => TRUE,
+        'description' => 'Date the match was created',
+      ),
+      'viewed_uid' => array(
+        'mysql_type' => 'boolean',
+        'pgsql_type' => 'boolean',
+        'type' => 'boolean',
+        'not null' => TRUE,
+        'default' => '0',
+        'description' => 'Whether or not this match has been viewed by the matcher',
+      ),
+      'viewed_match_uid' => array(
+        'mysql_type' => 'boolean',
+        'pgsql_type' => 'boolean',
+        'type' => 'boolean',
+        'not null' => TRUE,
+        'default' => '0',
+        'description' => 'Whether or not this match has been viewed by the matchee',
+      ),
+    ),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'match_uid' => array('match_uid'),
+    ),
+    'foreign keys' => array(
+      'uid' => array('users' => 'uid'),
+      'match_uid' => array('users' => 'uid'),
+    ), 
+    'primary key' => array('mid'),
+  );
+  
+  return $schema;
+  
+}
+
+/**
+ * @see hook_schema()
+ */
+function _twoofakind_com_au_schema_winks() {
+  
+  $schema['winks'] = array (
+    'description' => 'Table for winks',
+    'fields' => array(
+      'wid' => array(
+        'description' => 'Primary key for winks',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the winker',
+      ),
+      'wink_uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the wink receiver',
+      ),
+      'wink_created' => array(
+        'mysql_type' => 'timestamp',
+        'pgsql_type' => 'timestamp without time zone',
+        'type' => 'timestamp',
+        'not null' => TRUE,
+        'description' => 'Date the wink was created',
+      ),
+      'viewed' => array(
+        'mysql_type' => 'boolean',
+        'pgsql_type' => 'boolean',
+        'type' => 'boolean',
+        'not null' => TRUE,
+        'default' => '0',
+        'description' => 'Whether or not this wink has been viewed',
+      ),
+    ),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'wink_uid' => array('wink_uid'),
+    ),
+    'foreign keys' => array(
+      'uid' => array('users' => 'uid'),
+      'wink_uid' => array('users' => 'uid'),
+    ), 
+    'primary key' => array('wid'),
+  );
+  
+  return $schema;
+  
+}
+
+/**
+ * @see hook_schema()
+ */
+function _twoofakind_com_au_schema_recent_views() {
+  
+  $schema['recent_views'] = array (
+    'description' => 'Table for recent_views',
+    'fields' => array(
+      'vid' => array(
+        'description' => 'Primary key for recent_views',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the viewer',
+      ),
+      'recent_view_uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the person viewed',
+      ),
+      'recent_view_created' => array(
+        'mysql_type' => 'timestamp',
+        'pgsql_type' => 'timestamp without time zone',
+        'type' => 'timestamp',
+        'not null' => TRUE,
+        'description' => 'Date the user was viewed',
+      ),
+      'viewed' => array(
+        'mysql_type' => 'boolean',
+        'pgsql_type' => 'boolean',
+        'type' => 'boolean',
+        'not null' => TRUE,
+        'default' => '0',
+        'description' => 'Whether or not this recent view has been acknowledged / viewed by the person being viewed',
+      ),
+    ),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'recent_view_uid' => array('recent_view_uid'),
+    ),
+    'foreign keys' => array(
+      'uid' => array('users' => 'uid'),
+      'recent_view_uid' => array('users' => 'uid'),
+    ), 
+    'primary key' => array('vid'),
+  );
+  
+  return $schema;
+  
+}
+
+/**
+ * @see hook_schema()
+ */
+function _twoofakind_com_au_schema_favourites() {
+  
+  $schema['favourites'] = array (
+    'description' => 'Table for favourites',
+    'fields' => array(
+      'fid' => array(
+        'description' => 'Primary key for favourites',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the person favourite\'ing',
+      ),
+      'favourite_uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the person who was favourite\'ed',
+      ),
+      'favourite_created' => array(
+        'mysql_type' => 'timestamp',
+        'pgsql_type' => 'timestamp without time zone',
+        'type' => 'timestamp',
+        'not null' => TRUE,
+        'description' => 'Date the favourite was created',
+      ),
+      'viewed' => array(
+        'mysql_type' => 'boolean',
+        'pgsql_type' => 'boolean',
+        'type' => 'boolean',
+        'not null' => TRUE,
+        'default' => '0',
+        'description' => 'Whether or not this favourite\'ing has been acknowledged / viewed by the person being favourited',
+      ),
+    ),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'favourite_uid' => array('favourite_uid'),
+    ),
+    'foreign keys' => array(
+      'uid' => array('users' => 'uid'),
+      'favourite_uid' => array('users' => 'uid'),
+    ), 
+    'primary key' => array('fid'),
+  );
+  
+  return $schema;
+  
+}
+
+/**
+ * @see hook_schema()
+ */
+function _twoofakind_com_au_schema_featured_users() {
+  
+  $schema['featured_users'] = array (
+    'description' => 'Table for featured users',
+    'fields' => array(
+      'fid' => array(
+        'description' => 'Primary key for featured',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the person featuring',
+      ),
+      'featured_user_uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User id of the person who was featured',
+      ),
+      'featured_user_created' => array(
+        'mysql_type' => 'timestamp',
+        'pgsql_type' => 'timestamp without time zone',
+        'type' => 'timestamp',
+        'not null' => TRUE,
+        'description' => 'Date the featured was created',
+      )
+    ),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'featured_user_uid' => array('featured_user_uid'),
+    ),
+    'foreign keys' => array(
+      'uid' => array('users' => 'uid'),
+      'featured_user_uid' => array('users' => 'uid'),
+    ), 
+    'primary key' => array('fid'),
+  );
+  
+  return $schema;
+  
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * This update is to modify the viewed field to be
+ * viewed by matchee and adding another field which
+ * will represent viewed by match
+ */
+function twoofakind_com_au_update_7001() {
+  
+  // change current field
+  db_change_field('matches', 'viewed', 'viewed_uid', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0',
+    'description' => 'Whether or not this match has been viewed by the matcher',
+  ));
+  
+  // add new field
+  db_add_field('matches', 'viewed_match_uid', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0',
+    'description' => 'Whether or not this match has been viewed by the matchee',
+  ));
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * This update adds the winks table
+ */
+function twoofakind_com_au_update_7002() {
+  
+  // grab the schema
+  $schema = twoofakind_com_au_schema();
+  
+  // add wink table
+  db_create_table('winks', $schema['winks']);
+  
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * This update adds the recent views and favourites tables
+ */
+function twoofakind_com_au_update_7003() {
+  
+  // grab the schema
+  $schema = twoofakind_com_au_schema();
+  
+  // add recent views table
+  db_create_table('recent_views', $schema['recent_views']);
+  
+  // add favourites table
+  db_create_table('favourites', $schema['favourites']);
+  
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * Fixing schema so that all fields have a type
+ * definition, whether they have the mysql and
+ * pgsql or not. Throws error otherwise.
+ */
+function twoofakind_com_au_update_7004() {
+  
+  // matches
+  db_change_field('matches', 'created', 'created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the match was created',
+  ));
+  
+  db_change_field('matches', 'viewed_uid', 'viewed_uid', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0',
+    'description' => 'Whether or not this match has been viewed by the matcher',
+  ));
+  
+  db_change_field('matches', 'viewed_match_uid', 'viewed_match_uid', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0',
+    'description' => 'Whether or not this match has been viewed by the matchee',
+  ));
+  
+  // winks
+  db_change_field('winks', 'created', 'created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the wink was created',
+  ));
+  
+  db_change_field('winks', 'viewed', 'viewed', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0',
+    'description' => 'Whether or not this wink has been viewed',
+  ));
+  
+  // recent_views
+  db_change_field('recent_views', 'created', 'created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the user was viewed',
+  ));
+  
+  db_change_field('recent_views', 'viewed', 'viewed', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0',
+    'description' => 'Whether or not this recent view has been acknowledged / viewed by the person being viewed',
+  ));
+  
+  // favourites
+  db_change_field('favourites', 'created', 'created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the favourite was created',
+  ));
+  
+  db_change_field('favourites', 'viewed', 'viewed', array(
+    'mysql_type' => 'boolean',
+    'pgsql_type' => 'boolean',
+    'type' => 'boolean',
+    'not null' => TRUE,
+    'default' => '0',
+    'description' => 'Whether or not this favourite\'ing has been acknowledged / viewed by the person being favourited',
+  ));
+  
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * This update adds the featured table
+ */
+function twoofakind_com_au_update_7005() {
+  
+  // grab the schema
+  $schema = twoofakind_com_au_schema();
+  
+  // add wink table
+  db_create_table('featured_users', $schema['featured_users']);
+  
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * Changing all "created" fields to be "entity"_created
+ * Having issues in views whereby you can't include
+ * two sorts that both use a created field even if they
+ * are from different tables
+ */
+function twoofakind_com_au_update_7006() {
+  
+  // matches
+  db_change_field('matches', 'created', 'match_created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the match was created',
+  ));
+  
+  // winks
+  db_change_field('winks', 'created', 'wink_created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the wink was created',
+  ));
+  
+  // recent_views
+  db_change_field('recent_views', 'created', 'recent_view_created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the user was viewed',
+  ));
+  
+  // favourites
+  db_change_field('favourites', 'created', 'favourite_created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the favourite was created',
+  ));
+  
+  // featured_users
+  db_change_field('featured_users', 'created', 'featured_user_created', array(
+    'mysql_type' => 'timestamp',
+    'pgsql_type' => 'timestamp without time zone',
+    'type' => 'timestamp',
+    'not null' => TRUE,
+    'description' => 'Date the featured was created',
+  ));
+  
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * Install admin notes field
+ */
+function twoofakind_com_au_update_7007() {
+  _twoofakind_com_au_install_field_admin_notes();
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * Install custom emails variables
+ */
+function twoofakind_com_au_update_7008() {
+  module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
+  _twoofakind_com_au_install_variables_email_templates();
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * Install custom emails variables again - need notify value
+ */
+function twoofakind_com_au_update_7009() {
+  module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
+  _twoofakind_com_au_install_variables_email_templates();
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * Install heard about us field
+ */
+function twoofakind_com_au_update_7010() {
+  _twoofakind_com_au_install_field_heard_about_us();
+}

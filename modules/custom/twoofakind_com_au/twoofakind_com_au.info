@@ -1,0 +1,35 @@
+; $Id$
+name = Two of a kind custom mods
+description = Site module
+core = 7.x
+version = 0.1
+
+; dependencies
+dependencies[] = views
+dependencies[] = privatemsg
+dependencies[] = ds
+dependencies[] = entity
+dependencies[] = flag
+dependencies[] = block
+dependencies[] = user
+dependencies[] = menu
+dependencies[] = boxes
+dependencies[] = terms_of_use
+dependencies[] = nodequeue
+dependencies[] = migrate
+dependencies[] = number
+dependencies[] = text
+dependencies[] = list
+
+; module files
+files[] = twoofakind_com_au.module
+
+; entity files
+files[] = includes/twoofakind_com_au.controller.inc
+
+; Views handlers
+files[] = views/handlers/twoofakind_com_au_handler_filter_date_age.inc
+files[] = views/handlers/twoofakind_com_au_handler_filter_datestamp_age.inc
+
+; migrate files
+files[] = migrate/legacy_users.inc

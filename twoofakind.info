@@ -46,51 +46,69 @@ dependencies[] = update
 ; CONTRIB MODULES
 ; ---------------
 
-;dependencies[] = apachesolr
+;dependencies[] = apachesolr_search
 dependencies[] = boxes
-dependencies[] = colorbox
+;dependencies[] = colorbox
 dependencies[] = context
 dependencies[] = ctools
 dependencies[] = date
 dependencies[] = email
-dependencies[] = entity
+;dependencies[] = entity
 dependencies[] = features
+dependencies[] = field_group
 dependencies[] = flag
 dependencies[] = globalredirect
 ;dependencies[] = google_analytics
-dependencies[] = jquery_update
-dependencies[] = link
-dependencies[] = logintoboggan
-dependencies[] = markdown
-dependencies[] = media
-dependencies[] = menu_block
-dependencies[] = messaging
-dependencies[] = mollom
-dependencies[] = multiform
-dependencies[] = nodequeue
-dependencies[] = notifications
-dependencies[] = page_title
+;dependencies[] = jquery_update
+dependencies[] = libraries
+;dependencies[] = link
+dependencies[] = location
+dependencies[] = location_cck
+;dependencies[] = logintoboggan
+;dependencies[] = markdown
+;dependencies[] = media
+;dependencies[] = menu_block
+;dependencies[] = messaging
+;dependencies[] = metatags_quick
+;dependencies[] = mollom
+;dependencies[] = multiform
+;dependencies[] = node_reference
+;dependencies[] = nodequeue
+;dependencies[] = notifications
+;dependencies[] = page_title
 dependencies[] = pathauto
 dependencies[] = privatemsg
+;dependencies[] = question_answer
 dependencies[] = redirect
-dependencies[] = rules
-dependencies[] = site_map
+dependencies[] = references
+;dependencies[] = rules
+;dependencies[] = site_map
 dependencies[] = strongarm
 dependencies[] = styles
 dependencies[] = token
 dependencies[] = transliteration
-dependencies[] = typekit
+;dependencies[] = typekit
+dependencies[] = user_reference
 dependencies[] = views
-dependencies[] = webform
+;dependencies[] = views_slideshow
+;dependencies[] = webform
 dependencies[] = wysiwyg
-dependencies[] = xmlsitemap
+;dependencies[] = xmlsitemap
 
 ; CUSTOM MODULES
 ; --------------
 
-;dependencies[] = twoofakind
+dependencies[] = twoofakind_custom
+dependencies[] = wink
 
 ; CUSTOM FEATURES
 ; ---------------
 
-;dependencies[] = twoofakind
+;dependencies[] = dating_suite
+;dependencies[] = simple_article
+;dependencies[] = simple_event
+;dependencies[] = simple_faq
+;dependencies[] = simple_page
+;dependencies[] = simple_site_benefit
+;dependencies[] = theme_unite_config
+;dependencies[] = two_of_a_kind_conf

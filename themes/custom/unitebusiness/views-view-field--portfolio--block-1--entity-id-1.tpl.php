@@ -1,0 +1,1 @@
+<?php print str_replace(array('<a '),array('<a class="img zoom portfolio_block" rel="portfolio" '),$output); ?>

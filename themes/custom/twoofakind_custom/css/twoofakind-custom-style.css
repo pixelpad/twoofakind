@@ -1,0 +1,964 @@
+
+/* Basic Typography & Colors
+-------------------------------------------------------------- */
+/* Add general site styling here for typography and background */
+body {
+   /* also set in fusion_starter.info: settings[base-font-size] = font-size-12 */
+}
+
+/* Default link styles - separate a:visited for a different visited link style */
+a,
+a:link,
+a:visited {
+}
+
+/* Hover/active link styles. Don't forget :focus for accessibility */
+a:hover,
+a:focus,
+a:active {
+}
+
+h1 a,
+h1 a:link,
+h1 a:visited,
+h2 a,
+h2 a:link,
+h2 a:visited,
+h3 a,
+h3 a:link,
+h3 a:visited,
+div.region-sidebar-right h4 a,
+div.region-sidebar-right h4 a:link,
+div.region-sidebar-right h4 a:visited {
+    color: #ed1c24;
+}
+
+h1 a:hover,
+h2 a:hover,
+h3 a:hover,
+div.region-sidebar-right h4 a:hover {
+  text-decoration: underline;
+}
+
+div.region-sidebar-right div#matches_form h4 a,
+div.region-sidebar-right div#matches_form h4 a:link,
+div.region-sidebar-right div#matches_form h4 a:visited,
+div.region-content div#sort_form h4 a,
+div.region-content div#sort_form h4 a:link,
+div.region-content div#sort_form h4 a:visited {
+  color: #2FA694;
+  text-decoration: none;
+}
+
+li.node-readmore a {
+/*  color: #ed1c24;*/
+}
+li.node-readmore a:hover {
+/*    color: #2FA694;*/
+  text-decoration: underline;
+}
+
+div.two-thirds div.more-link a {
+  display: block;
+  height: 32px;
+  padding-right: 20px;
+  float: right;
+  background: url("../images/block.arrow.right.png") no-repeat scroll 100% 0 transparent;
+  line-height: 28px;
+  font-size: 1.5em;
+}
+
+div.two-thirds div.more-link a:hover {
+  color: #ed1c24;
+}
+
+/* Overriding styles
+-------------------------------------------------------------- */
+
+div#MenuWrapper .sf-menu a {
+  padding: 16px 0.55em 15px;
+}
+div#MenuWrapper ul#MmOtherLinks a {
+  padding: 16px 0 15px;
+  color: #ed1c24;
+}
+div#MenuWrapper ul#MmOtherLinks a:hover {
+  text-decoration: underline;
+}
+
+div.mmDivider {
+  margin: 7px 5px 0 0px;
+}
+
+/* adding a little sauce to the people link */
+div#MenuWrapper .sf-menu a.user-search-highlight {
+  color: #ed1c24;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+div#MenuWrapper .sf-menu a.user-search-highlight:hover {
+  text-decoration: underline;
+}
+
+.ribbon span.blogDate { 
+	font-size: 1.4em; 
+	margin: 16px 0 0;
+}
+
+#MmBody {
+	min-width: 200px;
+}
+
+.headline {
+  margin-bottom: 0.1em;
+}
+
+/*
+ * Modifying the expand link for expandable blocks
+ */
+div.region-sidebar-right h4.title {
+  border-bottom: 1px solid #d6d7d8;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  position: relative;
+}
+
+a.block-expand {
+  font-size: 1px;
+  text-indent: -1000px;
+  overflow: hidden;
+  background: url("../images/block.arrow.sprite.png") no-repeat scroll 0 0 transparent;
+  display: block;
+  width: 30px;
+  height: 20px;
+  writing-mode: lr-tb;
+  -webkit-transform: rotate(0deg);	
+  -moz-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+  position: absolute;
+  top: 5px;
+  right: 0;
+}
+
+a.block-expand.block-expanded {
+  background-position: 0 -30px;
+}
+
+/* Logo
+-------------------------------------------------------------- */
+
+#Logo {
+    float: left;
+    margin: -70px 0 24px 10px;
+    position: absolute;
+}
+
+#Logo a {
+	background: url("../images/logo.png") no-repeat scroll 0 0 transparent;
+  height: 126px;
+  width: 410px;
+}
+
+/* two thirds area
+-------------------------------------------------------------- */
+
+.two-thirds {
+  margin-top: -10px;
+}
+
+/* one third area
+-------------------------------------------------------------- */
+
+.one-third {
+  margin-top: -15px;
+}
+
+/* Implementing button styles to links
+-------------------------------------------------------------- */
+
+a.btn {
+	display: block;
+  width: auto;
+  position: relative;
+	cursor: pointer;
+	overflow: visible; /* removes extra side padding in IE */
+	border: 0; 
+	padding: 0;
+	outline: none;
+	margin-left: -6px; /* corrects for shadow to make left edge look aligned */
+	padding: 0 35px 0 0; 
+	margin-right:5px; 
+	font-size: 1em; 
+	text-align: center; 
+	background: transparent url("../images/button-sprite.gif") no-repeat right -92px;}
+	
+a.btn span {
+	position: relative;
+	display: block; 
+	white-space: nowrap;
+	padding: 13px 0 0 35px; 
+	height: 29px; 
+	background: transparent url("../images/button-sprite.gif") no-repeat left top; 
+	color: #a2a2a2;
+	line-height: 1.2;
+	text-shadow: #000 -1px -1px 0px;
+}
+	
+a.btn:hover { background-position: right -138px;} /* extra class used for sucky browsers (stupid IE) */
+	
+a.btn:hover span {
+	background-position: 0 -46px;
+	color: #fff;
+	text-shadow: #333 -1px -1px 1px;
+}
+
+/* Menu : Major user actions
+-------------------------------------------------------------- */
+
+div#block-menu-user-major-actions {
+  overflow: hidden;
+}
+
+div#block-menu-user-major-actions ul {
+  list-style: none inside;
+  margin: 0px 0px 0px 5px;
+  padding: 0px;
+}
+
+div#block-menu-user-major-actions ul li {
+  list-style: none inside;
+  margin: 0px;
+  padding: 0px;
+}
+
+div#block-menu-user-major-actions ul li a {
+  width: 240px;
+  float: left;
+}
+
+/* Search block modifications
+-------------------------------------------------------------- */
+
+div#SearchOptions {
+  clear: right;
+  float: right;
+  margin: -20px 30px 0 0;
+}
+
+div#SearchOptions a {
+  color: #ed1c24;
+}
+div#SearchOptions a:hover {
+/*    color: #2FA694;*/
+  text-decoration: underline;
+}
+body.not-logged-in div#SearchOptions {
+  display: none;
+}
+
+/* Profile block
+-------------------------------------------------------------- */
+
+div#block-twoofakind-profile {
+  overflow: hidden;
+}
+
+div#block-twoofakind-profile div.user-picture,
+div#block-twoofakind-profile div.item-list {
+  float: left;
+}
+
+/* Matches view exposed filter form
+-------------------------------------------------------------- */
+
+div.region-sidebar-right div#matches_form,
+div.region-content div#sort_form {
+  display: none;
+  background: none repeat scroll 0 0 #2C2C2C;
+/*  position: absolute;
+  top: 170px;*/
+  margin: -20px 0 10px;
+  width: 273px;
+  z-index: 100;
+  padding: 10px;
+  -moz-border-radius-topright: 5px;
+  -moz-border-radius-topleft: 5px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border: 1px solid #F4F5F6;
+}
+
+body.front div.region-sidebar-right div#matches_form {
+  margin-top: 10px;
+}
+
+/* show the search form for non-logged in users */
+body.not-logged-in div.region-sidebar-right div#matches_form {
+  display: block;
+}
+
+/* differentiate sort form and matches form */
+div.region-content div#sort_form {
+  display: block;
+  width: auto;
+  margin: 0px 0px 10px 0px;
+}
+
+/* hide the first one */
+div.region-sidebar-right div#matches_form div#edit-name-search-wrapper {
+  display: none;
+}
+
+div.region-sidebar-right div#matches_form div.less-options {
+  float: right;
+  margin-top: -5px;
+}
+div.region-sidebar-right div#matches_form div.less-options a {
+  color: #ed1c24;
+}
+div.region-sidebar-right div#matches_form div.less-options a:hover {
+/*    color: #2FA694;*/
+  text-decoration: underline;
+}
+
+body.not-logged-in div.region-sidebar-right div#matches_form div.less-options {
+  display: none;
+}
+
+div.region-sidebar-right div#matches_form input.form-text {
+  width: 260px;
+}
+
+div.region-sidebar-right div#matches_form label {
+  color: #CACACA;
+  margin-top: 5px;
+}
+
+div.region-sidebar-right html.js fieldset.collapsible .fieldset-legend {
+  background-image: url("../images/arrowdown.gif");
+  width: 260px;
+  overflow: hidden;
+  background-position: 2px 8px;
+}
+
+html.js div.region-sidebar-right fieldset.collapsible.collapsed .fieldset-legend {
+  background-image: url("../images/arrowright.gif");
+  background-position: 5px 5px; 
+}
+
+html.js div.region-sidebar-right fieldset.collapsed {
+  margin-bottom: 5px;
+}
+
+html.js div.region-sidebar-right fieldset.collapsible .fieldset-legend a {
+  border-bottom: none;
+  display: block;
+  margin-left: -10px;
+  padding: 2px 0px 5px 10px;
+  width: 254px;
+}
+
+html.js div.region-sidebar-right fieldset.collapsible.collapsed .fieldset-legend a {
+  border-bottom: 1px dotted #CACACA;
+}
+
+div.region-sidebar-right .fieldset-legend span.summary {
+  display: none;
+}
+
+div.region-sidebar-right div#matches_form button.btn,
+div.region-sidebar-right div#matches_form button.btn span,
+div.region-content div#sort_form button.btn,
+div.region-content div#sort_form button.btn span {
+  background-image: url("../images/button-sprite-dark.gif");
+}
+
+div.region-sidebar-right div#matches_form button#edit-submit-user-search,
+div.region-content div#sort_form button#edit-submit-user-search,
+div.region-sidebar-right div#matches_form div.views-reset-button,
+div.region-content div#sort_form div.views-reset-button,
+div.region-content div#sort_form div.form-type-select {
+  float: left;
+}
+
+div.region-content div#sort_form div.form-type-select {
+  line-height: 40px;
+  margin-right: 20px;
+}
+
+div.region-content div#sort_form div.form-type-select label {
+  display: none;
+}
+
+div.region-content div#sort_form button.btn {
+  margin-top: 0;
+}
+
+/* This is purely here for the above floated buttons */
+div.region-sidebar-right div#matches_form div.views-exposed-widgets {
+  overflow: visible;
+}
+
+div.bef-select-all-none {
+  border-bottom: 1px dotted #CACACA;
+}
+
+div.bef-select-all-none a.bef-toggle {
+  padding-left: 15px;
+}
+
+div.bef-select-all-none ul.bef-tree {
+  list-style: none inside none;
+  margin: 0 0 5px -15px;
+}
+
+div.bef-select-all-none ul.bef-tree li {
+  background: none repeat scroll 0 0 transparent;
+}
+
+/* Profile list in blocks in right sidebar
+-------------------------------------------------------------- */
+
+/* reinstating menu styles */
+div.region-sidebar-right div.item-list ul.menu {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	border: none;
+	text-align:left; /* LTR */
+}
+div.region-sidebar-right div.item-list ul.menu li,
+div.region-sidebar-right div.more-link {
+ 	font-size: 14px;
+	/*background: none;*/
+	padding: 0;
+	margin: 0;
+	background: transparent url("../images/side-navigation-repeat.gif") repeat-y 0 0;
+	list-style-type: none;
+	list-style-image: none;
+	text-align: right;
+	color: #000000;
+}
+div.region-sidebar-right div.item-list ul.menu li a,
+div.region-sidebar-right div.more-link a {
+	font-size: 14px;
+	display: block;
+	padding: 0.5em 5px 0.5em 25px;
+	margin: 0;	
+	border-bottom: 1px dotted #DBDBDC;
+	text-decoration: none;
+	text-shadow: #fff 1px 1px 0px;
+	text-align: left;
+}
+
+div.region-sidebar-right ul.menu li div.field-name-ds-user-picture a.active {
+   color: #2C2C2C;
+   border-bottom: 1px solid #fff;
+   background: transparent url("../images/side-navigation-active.gif") no-repeat 0 0;
+}
+
+div.region-sidebar-right ul.menu li div.field-name-name a.active {
+   background-position: -60px 0;
+   margin-left: -5px;
+}
+
+/* more link */
+div.region-sidebar-right div.more-link,
+div.region-sidebar-right div.more-link a {
+	text-align: right;
+}
+
+/* profile list */
+div.region-sidebar-right ul.menu li.views-row div.group-left {
+	width: 75px;
+}
+div.region-sidebar-right ul.menu li.views-row div.group-right {
+	width: 195px;
+}
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-name div.field-item a {
+	padding-left: 10px;
+  line-height: 54px;
+}
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-name div.field-item a.active {
+  line-height: 53px;
+}
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-name {
+  margin-bottom: -20px;
+}
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-age,
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-field-sex,
+div.region-sidebar-right ul.menu li.views-row div.group-right div.field-name-location-city {
+  float: right;
+  padding-right: 5px;
+}
+
+/* (Full) Profile list content area
+-------------------------------------------------------------- */
+
+div.views-page-users div.view-content {
+  background: url("../images/side-navigation-top.gif") no-repeat scroll 0 0 transparent;
+  padding: 35px 0 0 0;
+  margin-top: -10px;
+}
+/* row */
+div.views-page-users div.views-row {
+	padding: 10px 0px 0px 0px;
+	margin: 0;
+	background: transparent url("../images/side-navigation-repeat.gif") repeat-y 0 0;
+	list-style-type: none;
+	list-style-image: none;
+  border-bottom: 1px dotted #DBDBDC;
+}
+div.views-page-users div.views-row.views-row-odd {
+	
+}
+div.views-page-users div.views-row.views-row-even {
+	
+}
+div.views-page-users div.views-row div.user-profile {
+	padding-left: 20px;
+}
+/* row : header */
+div.views-page-users div.views-row div.group-header {
+	overflow: hidden;
+}
+div.views-page-users div.views-row div.group-header div.field {
+	float: left;
+}
+/* row : header : username */
+div.views-page-users div.views-row div.group-header div.field-name-name {
+  line-height: 20px;
+  padding-right: 10px;
+}
+/* row : header : headline */
+div.views-page-users div.views-row div.group-header div.field-name-field-headline div.field-item {
+  font-size: 1.3em;
+  line-height: 25px;
+}
+/* row : left */
+div.views-page-users div.views-row div.group-left {
+	width: 110px;
+  height: 110px;
+}
+/* row : middle */
+div.views-page-users div.views-row div.group-middle {
+	width: 90px;
+  margin-bottom: 10px;
+  float: left; /* only required as ds stuff not being included in cached versions */
+}
+div.views-page-users div.views-row div.group-middle div.field-item {
+	font-weight: bold;
+}
+/* row : right */
+div.views-page-users div.views-row div.group-right {
+	float: none;
+  width: auto;
+}
+/* row : footer */
+div.views-page-users div.views-row div.group-footer {
+	overflow: hidden;
+  margin-top: -20px;
+  clear: both; /* only required as ds stuff not being included in cached versions */
+}
+div.views-page-users div.views-row div.group-footer div.field {
+	float: right;
+  margin-left: 10px;
+}
+
+div.views-page-users div.group-footer div.field-name-favourite a,
+div.views-page-users div.group-footer div.field-name-wink a,
+div.views-page-users div.group-footer div.field-name-privatemsg a,
+div.views-page-users div.group-footer div.field-name-featured-user a {
+  color: #ed1c24;
+}
+div.views-page-users div.group-footer div.field-name-favourite a:hover,
+div.views-page-users div.group-footer div.field-name-wink a:hover,
+div.views-page-users div.group-footer div.field-name-privatemsg a:hover,
+div.views-page-users div.group-footer div.field-name-featured-user a:hover {
+/*    color: #2FA694;*/
+  text-decoration: underline;
+}
+
+div.views-page-users div.more-link {
+  padding-top: 10px;
+}
+
+/* Comments
+-------------------------------------------------------------- */
+
+div.comment {
+  overflow: hidden;
+  float: none !important;
+}
+
+div.comment div.content {
+  margin-left: 55px;
+}
+
+/* Featured question Comments
+-------------------------------------------------------------- */
+
+div.view-questions.view-display-id-block div.more-link {
+  margin-top: -50px;
+}
+
+/* Profile
+-------------------------------------------------------------- */
+
+div.user-profile.view-mode-full div.group-header {
+  overflow: visible;
+}
+
+div.user-profile.view-mode-full div.group-header div.group_actions {
+  float: right;
+  margin-top: -25px;
+}
+
+div.user-profile.view-mode-full div.group-header div.group_actions div.field {
+  float: right;
+  margin-left: 10px;
+}
+
+div.user-profile.view-mode-full div.group-header div.group_actions div.field div.field-item {
+  text-align: right;
+}
+
+div.user-profile.view-mode-full div.group-header div.group_actions div.field div.field-item a {
+  color: #ed1c24;
+}
+div.user-profile.view-mode-full div.group-header div.group_actions div.field div.field-item a:hover {
+/*    color: #2FA694;*/
+  text-decoration: underline;
+}
+
+div.user-profile.view-mode-full div.group-header div.field-name-field-headline {
+  padding-right: 160px;
+}
+
+div.user-profile.view-mode-full div.group-left {
+  clear: left;
+  width: 235px;
+  position: relative;
+}
+
+div.user-profile.view-mode-full div.group-left div.group_basics_one,
+div.user-profile.view-mode-full div.group-left div.group_basics_two {
+  background-color: #2c2c2c;
+  overflow: hidden;
+  position: absolute;
+  width: 220px;
+  opacity: 0.5;
+  height: 20px;
+  line-height: 20px;
+}
+div.user-profile.view-mode-full div.group-left div.group_basics_one {
+  top: 180px;
+}
+
+div.user-profile.view-mode-full div.group-left div.group_basics_two {
+  top: 200px;
+}
+
+div.user-profile.view-mode-full div.group-left div.group_basics_one div.field,
+div.user-profile.view-mode-full div.group-left div.group_basics_two div.field {
+  float: left;
+  padding-left: 5px;
+}
+
+div.user-profile.view-mode-full div.group-left div.group_basics_one div.field div.field-item,
+div.user-profile.view-mode-full div.group-left div.group_basics_two div.field div.field-item {
+  color: #FFFFFF;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+div.user-profile.view-mode-full div.group-left div.field-name-ds-user-picture {
+  clear: left;
+  width: 235px;
+  height: 235px;
+}
+
+div.user-profile.view-mode-full div.group-left div.field-name-ds-user-picture div.field-item {
+  padding-right: 15px;
+}
+
+div.user-profile.view-mode-full div.group-left fieldset.fieldset {
+  width: 220px;
+}
+
+div.user-profile.view-mode-full div.group-left fieldset.fieldset.collapsible {
+  border-bottom: 1px solid #D6D7D8;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+
+div.user-profile.view-mode-full div.group-left fieldset.fieldset.collapsed {
+  border-bottom: none;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  padding-top: 5px;
+}
+
+div.user-profile.view-mode-full div.group-left fieldset.fieldset legend {
+  border-bottom: 1px solid #D6D7D8;
+  padding-bottom: 5px;
+  width: 220px;
+}
+
+div.user-profile.view-mode-full div.group-left fieldset.fieldset legend span {
+  background: url("../images/block.arrow.sml.sprite.png") no-repeat scroll 0px 5px transparent;
+}
+
+div.user-profile.view-mode-full div.group-left fieldset.fieldset.collapsible legend span {
+  background-position: 0px -10px;
+}
+
+div.user-profile.view-mode-full div.group-left fieldset.fieldset.collapsed legend span {
+  background-position: 0px 5px;
+}
+
+div.user-profile.view-mode-full div.group-left fieldset.fieldset legend span a {
+  color: #ed1c24;
+  padding-left: 5px;
+}
+div.user-profile.view-mode-full div.group-left fieldset.fieldset legend span a:hover {
+/*    color: #2FA694;*/
+  text-decoration: underline;
+}
+
+div.user-profile.view-mode-full div.group-left fieldset.fieldset div.fieldset-wrapper div.field {
+  overflow: hidden;
+}
+
+div.user-profile.view-mode-full div.group-left fieldset.fieldset div.fieldset-wrapper div.field-label {
+  color: #2C2C2C;
+  float: left;
+}
+
+div.user-profile.view-mode-full div.group-left fieldset.fieldset div.fieldset-wrapper div.field-item {
+  float: left;
+  padding-right: 5px;
+}
+
+div.user-profile.view-mode-full div.group-right {
+  width: 340px;
+}
+
+div.user-profile.view-mode-full div.group-right div.field-label {
+  background-color: #2C2C2C;
+  color: #FFFFFF;
+  margin: 5px 0;
+  padding: 2px 5px;
+}
+
+div.user-profile.view-mode-full div.group-right div.field.field-name-field-images {
+  margin-top: 15px;
+}
+
+div.user-profile.view-mode-full div.group-right div.field.field-name-field-images div.field-item {
+  padding-right: 5px;
+  float: left;
+}
+
+div#user-cancel-link {
+  float: right;
+}
+
+/* Slide show
+-------------------------------------------------------------- */
+
+div.region-slide-shows {
+  overflow: hidden;
+  width: 990px;
+}
+
+div.region-slide-shows div.slideshow-wrapper {
+  position: relative;
+}
+
+div.region-slide-shows div.slideshow-wrapper div.view-content {
+  margin-bottom: 20px;
+}
+
+div.region-slide-shows div.slideshow-wrapper div.view-content div.skin-default {
+  position: relative;
+  width: 938px;
+  height: 240px;
+  margin: 0px 26px;
+  overflow: visible;
+  background-color: #2c2c2c;
+}
+
+div.skin-default div.views-slideshow-controls-top {
+  width: 990px;
+  height: 4px;
+  overflow: visible;
+  position: absolute;
+  z-index: 10;
+  top: 0px;
+  left: -26px;
+  background: transparent url("../images/pageBg-slideTop.png") no-repeat 0 0;
+}
+
+div.skin-default div.views-slideshow-controls-top span.views-slideshow-controls-text-previous,
+div.skin-default div.views-slideshow-controls-top span.views-slideshow-controls-text-next {
+  cursor: pointer;
+  display: block;
+  height: 64px;
+  position: absolute;
+  text-indent: -1000px;
+  top: 65px;
+  width: 51px;
+  z-index: 10;
+}
+
+div.skin-default div.views-slideshow-controls-top span.views-slideshow-controls-text-previous {
+  left: 11px;
+  background: transparent url("../images/slide-previous.png") no-repeat 0 0;
+}
+
+div.skin-default div.views-slideshow-controls-top span.views-slideshow-controls-text-pause {
+  display: none;
+}
+
+div.skin-default div.views-slideshow-controls-top span.views-slideshow-controls-text-next {
+  right: 11px;
+  background: transparent url("../images/slide-next.png") no-repeat 0 0;
+}
+
+div.region-slide-shows div.slideshow-wrapper div.view-content div.skin-default div.views_slideshow_cycle_main {
+  position: relative;
+  z-index: 5;
+}
+
+div.region-slide-shows div.slideshow-wrapper div.view-footer {
+  width: 990px;
+  position: absolute;
+  top: 185px;
+  left: 0px;
+  z-index: 10;
+	height: 55px;
+	overflow: hidden;
+	background: transparent url("../images/pageBg-slideBottom.png") no-repeat 0 0;
+}
+
+div.node.view-mode-slideshow,
+div.user-profile.view-mode-slideshow {
+  width: 100%;
+}
+
+div.node.view-mode-slideshow div.group-left,
+div.user-profile.view-mode-slideshow div.group-left {
+  width: 480px;
+}
+
+div.node.view-mode-slideshow div.group-right,
+div.user-profile.view-mode-slideshow div.group-right {
+  width: 435px;
+  padding: 10px 0px
+}
+
+div.node.view-mode-slideshow div.group-right div.field,
+div.user-profile.view-mode-slideshow div.group-right div.field {
+  margin: 0px 10px;
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-body div.field-items div.field-item,
+div.user-profile.view-mode-slideshow div.group-right div.field-name-field-self-summary div.field-items div.field-item {
+  color: #ffffff;
+}
+
+div.node.view-mode-slideshow div.group-right div.field-name-node-link div.field-items div.field-item a {
+  color: #ed1c24;
+}
+div.node.view-mode-slideshow div.group-right div.field-name-node-link div.field-items div.field-item a:hover {
+/*    color: #2FA694;*/
+  text-decoration: underline;
+}
+
+div.node.view-mode-slideshow div.group-right ul.links {
+  margin: 0;
+  padding: 0;
+}
+
+div.user-profile.view-mode-slideshow div.group-right div.field-name-field-headline div.field-items div.field-item h3 {
+  color: #2FA694;
+}
+
+div.user-profile.view-mode-slideshow div.group-right div.group-basics {
+  float: left;
+  width: 110px;
+  padding-bottom: 10px;
+}
+
+div.user-profile.view-mode-slideshow div.group-right div.group-basics div.field-items div.field-item {
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Breadcrumbs
+-------------------------------------------------------------- */
+
+/* Hide on home */
+
+body.front div.breadcrumb {
+  display: none;
+}
+
+/* Footer
+-------------------------------------------------------------- */
+
+/* logo symbol in footer */
+.logoMark {
+	width: 95px;
+	height: 90px;
+	background: transparent url("../images/logo.mini_version.png") no-repeat 0 0;
+}
+
+/* copyright */
+div.region-footer {
+  overflow: hidden;
+}
+
+div.region-footer div.boxes-box {
+  float: left;
+}
+
+div.region-footer div#block-menu-footer-other ul,
+div.region-footer div#block-menu-footer-other ul li {
+  list-style: none outside;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+div.region-footer div#block-menu-footer-other ul li {
+  float: left;
+  margin-top: -2px;
+}
+
+div.region-footer div#block-menu-footer-other ul li a {
+  font-size: 0.9em;
+  padding-left: 10px;
+}
+
+/* Register / profile location fieldset
+-------------------------------------------------------------- */
+
+fieldset.locations legend {
+  font-weight: bold;
+}
+
+/* Profile form cancel button
+-------------------------------------------------------------- */
+
+div#user-cancel-link input,
+div#user-cancel-link button {
+  display: none;
+}

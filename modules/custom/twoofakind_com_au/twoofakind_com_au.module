@@ -1,0 +1,2356 @@
+<?php
+
+/**
+ * @file
+ * Custom site mods for two of a kind
+ */
+/**
+ * Required constants
+ */
+define('TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES', 'field_admin_notes');
+define('TWOOFAKIND_COM_AU_FIELD_NAME_HEARD_ABOUT_US', 'field_heard_about_us');
+
+/**
+ * Required includes
+ */
+/* entities */
+module_load_include('inc', 'twoofakind_com_au', 'includes/match.entity');
+module_load_include('inc', 'twoofakind_com_au', 'includes/wink.entity');
+module_load_include('inc', 'twoofakind_com_au', 'includes/recent_view.entity');
+module_load_include('inc', 'twoofakind_com_au', 'includes/favourite.entity');
+module_load_include('inc', 'twoofakind_com_au', 'includes/featured_user.entity');
+
+/* * ****************************************************************************
+ * Menu functions
+ * **************************************************************************** */
+
+/**
+ * Implements hook_menu().
+ */
+function twoofakind_com_au_menu() {
+
+  $items = array();
+
+  // favourites
+  _favourite_menu($items);
+
+  // featured
+  _featured_user_menu($items);
+
+  // winks
+  _wink_menu($items);
+
+  // boxes
+  module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.boxes');
+  _twoofakind_com_au_boxes_menu($items);
+
+  // nodequeue
+  module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.nodequeue');
+  _twoofakind_com_au_nodequeue_menu($items);
+
+  // page_error
+  module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.page_error');
+  _twoofakind_com_au_page_error_menu($items);
+
+  // user
+  module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
+  _twoofakind_com_au_user_menu($items);
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function twoofakind_com_au_menu_alter(&$items) {
+
+  // admin
+  module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.admin');
+  _twoofakind_com_au_admin_menu_alter($items);
+
+  // nodequeue
+  module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.nodequeue');
+  _twoofakind_com_au_nodequeue_menu_alter($items);
+}
+
+/**
+ * Redirect to the right places
+ *
+ * @param $items
+ *   Menu items array
+ * 
+ * @see hook_menu()
+ */
+function _twoofakind_com_au_menu_redirect() {
+
+  drupal_goto('admin/people/custom');
+}
+
+/* * ****************************************************************************
+ * Init functions
+ * **************************************************************************** */
+
+/**
+ * Implements hook_init().
+ */
+function twoofakind_com_au_init() {
+
+  global $user;
+
+  // add required js and css
+  drupal_add_js(drupal_get_path('module', 'twoofakind_com_au') . '/js/twoofakind_com_au.js', 'file');
+  drupal_add_css(drupal_get_path('module', 'twoofakind_com_au') . '/css/twoofakind_com_au.css', 'file');
+
+  // add ajax and cookie, I don't know why it isn't there already
+  drupal_add_library('system', 'drupal.ajax');
+  drupal_add_library('system', 'jquery.cookie');
+
+  // set some session variables utilised in hook_form_alter below
+  if (!empty($user->uid)) {
+    // only for auth users
+    $GLOBALS['UserSearchFormProcessed'] = 0;
+  }
+}
+
+/* * ****************************************************************************
+ * Block functions
+ * **************************************************************************** */
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function twoofakind_com_au_block_view_alter(&$data, $block) {
+
+  // sidebar management
+  if ($block->region == 'sidebar_right') {
+    // modify view blocks that have a subject
+    if ($block->module == 'views' && !empty($data['subject'])) {
+      // add any count information to the subject
+      // and make the subject a link to the page
+      if ($block->delta == 'matches-block') {
+        // my matches
+        $count = match_count_matcher_unviewed_matches();
+        $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'matches_me-block') {
+        // match me
+        $count = match_count_matchee_unviewed_matches();
+        $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'winks-block') {
+        // winked at
+        // don't need count for this one
+        // however, this is how it would be done
+        //      $count = wink_count_winker_unviewed_winks();
+        //      $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'winks_received-block') {
+        // winks received
+        $count = wink_count_winkee_unviewed_winks();
+        $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'favourites-block') {
+        // favourites
+        // don't need count for this one
+        // however, this is how it would be done
+        //      $count = favourite_count_favouriteer_unviewed_favourites();
+        //      $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'favourites_received-block') {
+        // favourites received
+        $count = favourite_count_favouriteee_unviewed_favourites();
+        $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'recent_views-block') {
+        // recently viewed
+        // don't need count for this one
+        // however, this is how it would be done
+        //      $count = recent_view_count_recent_viewer_unviewed_recent_views();
+        //      $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'recent_views_received-block') {
+        // recently viewed received
+        $count = recent_view_count_recent_viewee_unviewed_recent_views();
+        $data['subject'] .= " ($count)";
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'users_online-block') {
+        // who's online
+        _twoofakind_com_au_subject_more($data);
+      }
+      elseif ($block->delta == 'users_new-block') {
+        // who's new
+        _twoofakind_com_au_subject_more($data);
+      }
+    }
+    // add the down arrow to all blocks in ride hand side
+    _twoofakind_com_au_block_expand($data, $block);
+  }
+}
+
+/**
+ * Implementation of hook_block_info()
+ */
+function twoofakind_com_au_block_info() {
+  $blocks = array();
+
+  // recent messages block
+  $blocks['twoofakind_privatemsg_messages'] = array(
+    'info' => t('Two of a kind : PrivateMsg : Recent messages'),
+  );
+
+  // profile block
+  $blocks['twoofakind_profile'] = array(
+    'info' => t('Two of a kind : Profile block'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implementation of hook_block_view()
+ * 
+ * note: http://drupal.org/project/efq_views
+ * wasn't stable enough to be used (04/2011)
+ */
+function twoofakind_com_au_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+
+    case 'twoofakind_privatemsg_messages':
+      $block = _twoofakind_com_au_block_recent_messages();
+      break;
+
+    case 'twoofakind_profile':
+      module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
+      $block = _twoofakind_com_au_block_profile();
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Render the recent messages block
+ * 
+ * Grabs up to 5 most recent messages and adds the unread count to the block subject
+ * 
+ * this was inspired by http://drupal.org/node/624528 but that example is not functional
+ * (at least not in D7).
+ * 
+ * @todo
+ * It would be nicer if we could get the username to be used instead of the email
+ * subject for consistency with other blocks. May be too much overhead at this time so 
+ * will wait until it is requested by client. Would also be difficult to get the sex.
+ * The only way might be to expose the messages to views and do the blocks in a similar way
+ * TOO MUCH EFFORT FOR THE TIME BEING
+ * 
+ * @return
+ *   A completed block array with subject and content
+ */
+function _twoofakind_com_au_block_recent_messages() {
+  global $user;
+
+  // Generate the query to load the messages.
+  $query = _privatemsg_assemble_query('list', $user);
+
+  // Replace 'inbox' with 'sent' to display sent messages or 'list' to display all messages.
+  // $query = _privatemsg_assemble_query('list', $user, 'inbox');
+  // @todo - inbox/sent gets ignored. Cannot get inbox or sent get via the gui either. 
+  //         is it how D7 version works?
+  // Load 5 messages/threads. Replace 5 if you want to display a different amount of messages.
+  $result = $query->limit(5)->execute();
+
+  $list = array();
+  foreach ($result as $thread) {
+    // Generate a link with the subject as title that points to the view message page.
+    // limit the subject to a certain number of characters
+    $alter = array(
+      'max_length' => 150,
+      'word_boundary' => TRUE,
+      'ellipsis' => '...',
+      'html' => FALSE
+    );
+    $thread_subject = views_trim_text($alter, $thread->subject);
+    // work out if the message has been read or not
+    $options = array(
+      'attributes' => array(
+        'title' => $thread->subject
+      )
+    );
+    if ($thread->is_new) {
+      $options['attributes']['class'] = 'unread';
+    }
+    $list[] = l($thread_subject, 'messages/view/' . $thread->thread_id, $options);
+  }
+
+  // grab count of unread messages
+  $count = privatemsg_unread_count();
+
+  // put the block together
+  // set up title as link
+  $subject = t('Messages') . " ($count)";
+  $options = array(
+    'attributes' => array(
+      'title' => $subject
+    )
+  );
+  $block = array(
+    'subject' => l($subject, 'messages', $options)
+  );
+  // add the list to the content
+  $block['content'] = theme('item_list', array(
+    'items' => $list,
+    'type' => 'ul',
+    'attributes' => array(
+      'class' => 'menu'
+    )
+      )
+  );
+  // and a more link to the content
+  $block['content'] .= '<div class="more-link">';
+  $options = array(
+    'attributes' => array(
+      'title' => 'VIew more messages'
+    )
+  );
+  $block['content'] .= l(t('more'), 'messages', $options);
+  $block['content'] .= '</div>';
+
+  // add a wrapper
+  $block['content'] = '<div class="view">' . $block['content'] . '</div>';
+
+  return $block;
+}
+
+/* * ****************************************************************************
+ * Form functions
+ * **************************************************************************** */
+
+/**
+ * Implementation of hook_form_alter()
+ */
+function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
+  switch ($form_id) {
+
+    case 'views_exposed_form':
+      switch ($form['#id']) {
+        case 'views-exposed-form-user-search-page-user-search':
+          _twoofakind_com_au_form_views_exposed_form_user_search($form, $form_state);
+          break;
+        case 'views-exposed-form-people-page':
+          _twoofakind_com_au_form_views_exposed_form_people_page($form, $form_state);
+          break;
+        default :
+          _twoofakind_com_au_form_views_exposed_form($form, $form_state);
+          break;
+      }
+      break;
+
+    case 'user_profile_form':
+      module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
+      _twoofakind_com_au_form_user_profile_form($form, $form_state);
+      _twoofakind_com_au_form_fix_location_fieldset($form, $form_state);
+      break;
+
+    case 'user_register_form':
+      _twoofakind_com_au_form_alter_user_register_form($form, $form_state);
+      _twoofakind_com_au_form_fix_location_fieldset($form, $form_state);
+      break;
+    
+    case 'user_login' :
+      _twoofakind_com_au_form_alter_user_login_form($form, $form_state);
+      break;
+
+    case 'comment_node_question_form':
+      _twoofakind_com_au_form_comment_form($form, $form_state);
+      break;
+  }
+}
+
+/**
+ * Alter the views exposed form for user search
+ * 
+ * Adding users match criteria to the form
+ * if no criteria has been entered manually
+ * 
+ * @param $form
+ *   A form
+ * 
+ * @param $form_state
+ */
+function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_state) {
+
+  global $user;
+
+  // defaults
+  // title link
+  $title = t('Search');
+  $path = substr($form['#action'], 1);
+  $options = array(
+    'attributes' => array(
+      'title' => $title
+    ),
+    'alias' => TRUE
+  );
+  $link_title = l($title, $path, $options);
+  // show less options link
+  $title = t('Less search options');
+  $options = array(
+    'attributes' => array(
+      'title' => $title
+    ),
+    'alias' => TRUE
+  );
+  $link_less_options = l($title, $path, $options);
+
+  // wrap the whole form in a div
+  $form['#prefix'] = '<div id="matches_form">';
+  // add a show less options link
+  $form['#prefix'] .= '<div class="less-options">' . $link_less_options . '</div>';
+  // add a title that links through to search results
+  $form['#prefix'] .= '<h4 class="title">' . $link_title . '</h4>';
+
+  // close the div
+  $form['#suffix'] = '</div>';
+
+  // remove some fields for anonymous users
+  _twoofakind_com_au_form_user_search_remove_fields($form);
+
+  // check if we're clearing
+  if (isset($_GET['op']) && $_GET['op'] == 'Clear') {
+    // we are, don't populate from match criteria
+    // and add a value to the session to indicate this
+    $_SESSION['UserSearchFormClear'] = TRUE;
+    return;
+  }
+
+  // check the session for clear value
+  // I'm going to retain the clear value for the remainder of the session
+  // otherwise with each load match criteria will be reinstated
+  if (isset($_SESSION['UserSearchFormClear'])) {
+    return;
+  }
+
+  // THIS HAS BEEN SHELVED FOR THE TIME BEING
+  // IT IS NOT POSSIBLE WITHOUT CREATING A NEW TABLE
+  // TO STORE THE FORM STATE BETWEEN PAGE LOADS
+  // WILL REQUIRE THE SESSION_API AND MORE WORK THAN I 
+  // HAVE TIME FOR AT THIS POINT
+  // we need to store each form state in to a session variable
+  // so we can compare this form_state against the last
+  // the reason for this being that if a user empties a field
+  // or it's options we need to retain that emptiness and not
+  // reinstate match criteria values
+  // this is because this hook is run twice for some reason
+  // at this point I could find no other differentiator
+  // in the form_state
+//  if (!empty($user->uid)) {
+//    $form_session_processed = 0;
+//    if (isset($GLOBALS['UserSearchFormProcessed'])) {
+//      $form_session_processed = $GLOBALS['UserSearchFormProcessed'];
+//    }
+//    ++$form_session_processed;
+//    $GLOBALS['UserSearchFormProcessed'] = $form_session_processed;
+//
+//    // if we're at step 1 or 2 we want to compare the values of this
+//    // form state against the session
+//    $form_state_session = $form_state;
+//    if (isset($_SESSION['UserSearchFormState'])) {
+//      $form_state_session = $_SESSION['UserSearchFormState'];
+//    }
+//    // if this is the second time the form is processing then
+//    // we want to replace the session form state with current one
+//    if ($form_session_processed == 2) {
+//      $_SESSION['UserSearchFormState'] = $form_state;
+//    }
+//  }
+  // grab the match criteria of the currently logged in user
+  // if any exist
+  $match_criteria = _twoofakind_com_au_user_match_criteria();
+  foreach ($match_criteria as $key => $value) {
+
+    // now, if the search key value is empty (in the form state)
+    // populate it with the value from the users match criteria
+    if (array_key_exists($key, $form)) {
+
+      // Should we override
+      // see other function for more information
+      if (_twoofakind_com_au_form_user_search_override_field($form_state, $key)) {
+
+        // override form value
+        $form_state['input'][$key] = $value;
+        $form_state['view']->exposed_input[$key] = $value;
+        $form[$key]['#default_value'] = $value;
+        $form[$key]['#value'] = $value;
+      }
+    }
+  }
+}
+
+/**
+ * Grab a match fields from user object and return as array
+ * 
+ * @param integer $uid (optional)
+ *   A user id
+ */
+function _twoofakind_com_au_user_match_criteria($uid = NULL) {
+
+  // if empty use logged in user
+  if (empty($uid)) {
+    global $user;
+    $uid = $user->uid;
+  }
+
+  // init array
+  $match_criteria = array();
+
+  // grab full user object and cast as array
+  $user_complete = (array) user_load($uid);
+  $langcode = _get_language_from_object($user_complete);
+  foreach ($user_complete as $key => $data) {
+
+    // we only want fields data
+    // and only those that pertain to matches
+    if (strpos($key, 'field_match') === false) {
+      continue;
+    }
+
+    // ignore if field is empty
+    if (empty($data[$langcode])) {
+      continue;
+    }
+
+    // convert the match key to the profile key
+    $min_max = FALSE;
+    if ($key == 'field_match_user_location') {
+      $profile_key = 'city';
+    }
+    elseif ($key == 'field_match_age_min' || $key == 'field_match_age_max') {
+      $min_max = substr($key, -3);
+      $profile_key = 'field_date_of_birth_value';
+    }
+    else {
+      $profile_key = str_replace('field_match', 'field', $key) . '_value';
+    }
+
+    // convert to simpler format that can be
+    // used in various locations
+    // i.e. form and view input
+    foreach ($data[$langcode] as $value) {
+      // check for age value
+      if ($profile_key == 'field_date_of_birth_value') {
+        // it is, throw in min or max and then bug out
+        $match_criteria[$profile_key][$min_max] = $value['value'];
+        break;
+      }
+      // check to see if this is a text based value
+      elseif (array_key_exists('format', $value) || array_key_exists('safe_value', $value)) {
+        // it is, grab one value only and bug out
+        $match_criteria[$profile_key] = $value['value'];
+        break;
+      }
+      if (!isset($match_criteria[$profile_key])) {
+        $match_criteria[$profile_key] = array();
+      }
+      $match_criteria[$profile_key][] = $value['value'];
+    }
+  }
+
+  return $match_criteria;
+}
+
+/**
+ * Remove some fields from the search form for anon users
+ * 
+ * @param $form
+ *   A form
+ */
+function _twoofakind_com_au_form_user_search_remove_fields(&$form) {
+
+  global $user;
+
+  // if logged in don't remove
+  if ($user->uid) {
+    return;
+  }
+
+  // we need to remove some options from the form if 
+  // the user is not logged in
+  // there is some JS that goes along with this
+  // stupid labels were still appearing
+  // #title_display didn't help
+  $disabled_fields = array(
+    'field_star_sign_value',
+    'field_personality_value',
+    'field_eye_colour_value',
+    'field_hair_colour_value',
+    'field_height_value',
+    'field_body_type_value',
+//    'field_kosher_value',
+    'field_smoker_value',
+    'field_drinking_value',
+    'field_have_kids_value',
+    'field_headline_value',
+    'field_self_summary_value',
+    'field_friend_summary_value',
+    'field_passionate_about_value',
+    'picture',
+    'reset' // and the clear button
+  );
+  foreach ($disabled_fields as $field_name) {
+    if (array_key_exists($field_name, $form)) {
+      $form[$field_name]['#access'] = FALSE;
+    }
+  }
+}
+
+/**
+ * A check to see if we should overwrite this value with match criteria
+ * 
+ * @param $form_state
+ *   A form state
+ * 
+ * @param $field
+ *   The field we're looking to override
+ * 
+ * @param $min_max
+ *   A special addition for BETWEEN values
+ * 
+ * @todo It would be better to do the session handling in this function as well
+ */
+function _twoofakind_com_au_form_user_search_override_field($form_state, $field_key) {
+
+  // if a value is set in the form state we won't replace it
+  if (array_key_exists($field_key, $form_state['input'])) {
+    // the only caveat is DOB as it populates form state with
+    // empty min and mx
+    if (is_array($form_state['input'][$field_key])) {
+      // check for min or max key
+      if (array_key_exists('min', $form_state['input'][$field_key]) || array_key_exists('max', $form_state['input'][$field_key])) {
+        // this is a BETWEEN value i.e. DOB
+        // check to see if the min or max value is actually not empty
+        if (!empty($form_state['input'][$field_key]['min']) || !empty($form_state['input'][$field_key]['max'])) {
+          return FALSE;
+        }
+      }
+      // otherwise normal array of values, if not empty don't replace
+      elseif (!empty($form_state['input'][$field_key])) {
+        return FALSE;
+      }
+    }
+    // otherwise just text, again if not empty don't replace
+    elseif (!empty($form_state['input'][$field_key])) {
+      return FALSE;
+    }
+  }
+
+  return TRUE;
+}
+
+/**
+ * Alter the views exposed form for people page
+ * 
+ * Add some help text
+ * And modify some form elements
+ * And add another submit function
+ * 
+ * Modifying to checkbox and submit functions were taking too long
+ * 
+ * @param $form
+ *   A form
+ * 
+ * @param $form_state
+ *   And it's for  state
+ */
+function _twoofakind_com_au_form_views_exposed_form_people_page(&$form, &$form_state) {
+
+  // modify the option text for status
+  if (isset($form['status']['#options'])) {
+    $form['status']['#options'][0] = 'Blocked';
+    $form['status']['#options'][1] = 'Active';
+  }
+
+  // modify the new user field to a checkbox
+//  $form['access_new_checkbox'] = array(
+//    '#type' => 'checkbox',
+//    '#title' => t('New Users'),
+//    '#return_value' => 0,
+//    '#description' => t('Check to see new users only'),
+//    '#weight' => -10
+//  );
+//  $form['#info']['fitler-access_new_checkbox'] =
+//  dsm($form);
+//  if (isset($form_state['values']['access_new'])) {
+//    if () {
+//      
+//    }
+//  }
+  // add your own submit function to deal with checkbox modification
+//  $form['#submit'] = array(
+//    '_twoofakind_com_au_form_views_exposed_form_people_page_submit',
+//    $form['#submit'][0]
+//  );
+//  dsm($form);
+}
+
+/**
+ * Add some additional submit processing
+ * 
+ * @param $form
+ *   A form
+ * 
+ * @param $form_state
+ *   And it's for  state
+ */
+//function _twoofakind_com_au_form_views_exposed_form_people_page_submit(&$form, &$form_state) {
+// modify the for state value for the new_user field
+//  if (array_key_exists('access_new', $form_state['values'])) {
+//dsm($form_state, 'Post');
+//    if ($form_state['values']['access_new'] == 1) {
+//      $form_state['values']['access_new'] = 0;
+//    } else {
+//      $form_state['values']['access_new'] = '';
+//    }
+//  }
+//}
+
+/**
+ * Alter the views exposed form for all other views
+ * 
+ * @param $form
+ *   A form
+ * 
+ * @param $form_state
+ *  A form's state
+ */
+function _twoofakind_com_au_form_views_exposed_form(&$form, &$form_state) {
+
+  // defaults
+  $title = t('Sort your results');
+  $path = substr($form['#action'], 1);
+  $options = array(
+    'attributes' => array(
+      'title' => $title
+    ),
+    'alias' => TRUE
+  );
+  $link = l($title, $path, $options);
+
+  // wrap the whole form in a div
+  $form['#prefix'] = '<div id="sort_form">';
+  // add a title that links through to search results
+  $form['#prefix'] .= '<h4 class="title">' . $link . '</h4>';
+
+  // close the div
+  $form['#suffix'] = '</div>';
+}
+
+/**
+ * Alter the comment form for question
+ * 
+ * @param $form
+ *   A form
+ * 
+ * @param $form_state
+ *  A form's state
+ */
+function _twoofakind_com_au_form_comment_form(&$form, &$form_state) {
+
+  // only for questions
+  if ($form['#node']->type == 'question') {
+
+    // hide name field
+    $form['author']['_author']['#type'] = 'hidden';
+
+    // change submit to Answer
+    $form['actions']['submit']['#value'] = 'Respond';
+  }
+}
+
+/**
+ * Fix location fieldset as it's ridiculous
+ * 
+ * @param $form
+ *   A form
+ * 
+ * @param $form_state
+ *   The form's state
+ */
+function _twoofakind_com_au_form_fix_location_fieldset(&$form, &$form_state) {
+
+  if (isset($form['locations'])) {
+    $form['locations']['#title'] = NULL;
+    $form['locations'][0]['#title'] = t('Where are you?');
+  }
+}
+
+/**
+ * Modifies the user login form
+ * Simply adding another validator
+ * 
+ * @param array $form
+ *   The form to alter
+ * 
+ * @param array $form_state
+ *   It's current state
+ * 
+ * @return <none>
+ * 
+ * @see hook_form_alter().
+ */
+function _twoofakind_com_au_form_alter_user_login_form(&$form, &$form_state) {
+
+  if (!is_array($form['#validate'])) {
+    $form['#validate'] = array($form['#validate']);
+  }
+  array_unshift($form['#validate'], '_twoofakind_com_au_form_validate_user_login_form_users_roles');
+}
+
+/**
+ * Modifies the user registration form
+ * Simply adding another validator
+ * 
+ * @param array $form
+ *   The form to alter
+ * 
+ * @param array $form_state
+ *   It's current state
+ * 
+ * @return <none>
+ * 
+ * @see hook_form_alter().
+ */
+function _twoofakind_com_au_form_alter_user_register_form(&$form, &$form_state) {
+
+  if (!is_array($form['#validate'])) {
+    $form['#validate'] = array($form['#validate']);
+  }
+  array_unshift($form['#validate'], '_twoofakind_com_au_form_validate_user_register_form_users_roles');
+}
+
+/**
+ * Additional validation for user login form
+ * We're throwing one more in to deal with 
+ * users who might want to reactivate
+ * 
+ * @param array $form
+ *   The form to alter
+ * 
+ * @param array $form_state
+ *   It's current state
+ * 
+ * @return <none>
+ * 
+ * @see hook_form_alter().
+ */
+function _twoofakind_com_au_form_validate_user_login_form_users_roles(&$form, &$form_state) {
+
+  // check if we actually have a name value
+  if (!isset($form_state['values']['name'])) {
+    return;
+  }
+
+  // roles to check
+  $roles_to_check = _twoofakind_com_au_form_validate_users_roles_messages();
+  foreach ($roles_to_check as $role_name => $data) {
+    $result_object = _twoofakind_com_au_user_has_role($role_name, $form_state['values']['name']);
+    if ($result_object) {
+      $uid = $result_object->uid;
+      $message_callback = $data['message callback'];
+      break;
+    }
+  }
+  
+  // did they match one of the roles?
+  if (!isset($message_callback)) {
+    // no, then we'll use the standard login process and messages
+    return;
+  }
+
+  // they match one of the roles
+  // now emulate user is blocked functionality
+  // but give them a special message
+  // because they're special
+  if (user_is_blocked($form_state['values']['name'])) {
+    // Blocked in user administration.
+    // grab message
+    $message = $message_callback($uid, $form_state['values']['name']);
+    form_set_error('name', t($message));
+  }
+  
+}
+
+/**
+ * Additional validation for user register form
+ * We're throwing one more in to deal with 
+ * users who might want to reactivate
+ * 
+ * @param array $form
+ *   The form to alter
+ * 
+ * @param array $form_state
+ *   It's current state
+ * 
+ * @return <none>
+ * 
+ * @see hook_form_alter().
+ */
+function _twoofakind_com_au_form_validate_user_register_form_users_roles(&$form, &$form_state) {
+
+  // check if we actually have a mail value
+  if (!isset($form_state['values']['mail']) || empty($form_state['values']['mail'])) {
+    return;
+  }
+
+  // roles to check
+  $roles_to_check = _twoofakind_com_au_form_validate_users_roles_messages();
+  foreach ($roles_to_check as $role_name => $data) {
+    $result_object = _twoofakind_com_au_user_has_role($role_name, null, $form_state['values']['mail']);
+    if ($result_object) {
+      $uid = $result_object->uid;
+      $message_callback = $data['message callback'];
+      break;
+    }
+  }
+  
+  // did they match one of the roles?
+  if (!isset($message_callback)) {
+    // no, then we'll use the standard registration process and messages
+    return;
+  }
+  
+  // set form error
+  $message = $message_callback($uid, $form_state['values']['name']);
+  form_set_error('mail', t($message));
+  
+}
+
+/**
+ * Roles we'll be checking and their respective messages
+ * 
+ * @param none
+ * 
+ * @return array
+ *   roles and messages
+ */
+function _twoofakind_com_au_form_validate_users_roles_messages() {
+  return array(
+    'Abusive' => array(
+      'message callback' => '_twoofakind_com_au_user_login_message_abusive'
+    ),
+    'Deactivated' => array(
+      'message callback' => '_twoofakind_com_au_user_login_message_deactivated'
+    )
+  );
+}
+
+/**
+ * Returns a message for abusive users
+ * 
+ * @param string $uid
+ *   UID of the user
+ * 
+ * @param string $name
+ *   Username of the user
+ * 
+ * @return string
+ *   Message for the user
+ * 
+ * @todo
+ *   At some point we could replace the static content with a box
+ */
+function _twoofakind_com_au_user_login_message_abusive($uid, $name) {
+  $link_contact = l('contact us', 'contact', array('attributes' => array('title' => 'Contact us to discuss this further')));
+  return "Your account has been marked as abusive and has hence been blocked. If you would like to discuss this further please $link_contact.";
+}
+
+/**
+ * Returns a message for deactivated users
+ * 
+ * @param string $uid
+ *   UID of the user
+ * 
+ * @param string $name
+ *   Username of the user
+ * 
+ * @return string
+ *   Message for the user
+ * 
+ * @todo
+ *   At some point we could replace the static content with a box
+ */
+function _twoofakind_com_au_user_login_message_deactivated($uid, $name) {
+  $link_reactivate= l('reactivate your account', sprintf('user/%d/reactivate', $uid), array('attributes' => array('title' => 'Reactivate your account with us')));
+  return "Your account has been deactivated due to inactivity. You are always welcome to $link_reactivate.";
+}
+
+/* * ****************************************************************************
+ * Theme functions
+ * **************************************************************************** */
+
+//function twoofakind_com_au_theme_form($variables) {
+//  $element = $variables['element'];
+//  if (isset($element['#action'])) {
+//    $element['#attributes']['action'] = drupal_strip_dangerous_protocols($element['#action']);
+//  }
+//  element_set_attributes($element, array('method', 'id'));
+//  if (empty($element['#attributes']['accept-charset'])) {
+//    $element['#attributes']['accept-charset'] = "UTF-8";
+//  }
+//  // Anonymous DIV to satisfy XHTML compliance.
+//  return '<form' . drupal_attributes($element['#attributes']) . '><div>' . $element['#children'] . '</div></form>';
+//}
+
+/* * ****************************************************************************
+ * View functions
+ * **************************************************************************** */
+
+/**
+ * Implements hook_views_api().
+ */
+function twoofakind_com_au_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'twoofakind_com_au') . '/views',
+  );
+}
+
+/* * ****************************************************************************
+ * Action functions
+ * **************************************************************************** */
+
+/**
+ * Implements hook_action_info().
+ */
+function twoofakind_com_au_action_info() {
+  return array(
+    'twoofakind_com_au_unblock_user_action' => array(
+      'label' => t('Approve user'),
+      'type' => 'user',
+      'configurable' => FALSE,
+      'triggers' => array('any'),
+    ),
+    'twoofakind_com_au_notify_admin_of_abusive_user_action' => array(
+      'label' => t('Notify admin of abusive user'),
+      'type' => 'user',
+      'configurable' => FALSE,
+      'triggers' => array('any'),
+    ),
+    'twoofakind_com_au_abusive_user_action' => array(
+      'label' => t('Block abusive user'),
+      'type' => 'user',
+      'configurable' => FALSE,
+      'triggers' => array('any'),
+    ),
+    'twoofakind_com_au_deactivate_user_action' => array(
+      'label' => t('Deactivate user'),
+      'type' => 'user',
+      'configurable' => FALSE,
+      'triggers' => array('any'),
+    ),
+    'twoofakind_com_au_reactivate_user_action' => array(
+      'label' => t('Reactivate user'),
+      'type' => 'user',
+      'configurable' => FALSE,
+      'triggers' => array('any'),
+    ),
+  );
+}
+
+/**
+ * UnBlocks the current user.
+ * 
+ * For some reason this action does not exist in the user module
+ *
+ * @ingroup actions
+ */
+function twoofakind_com_au_unblock_user_action(&$entity, $context = array()) {
+  // First priority: If there is a $entity->uid, unblock that user.
+  // This is most likely a user object or the author if a node or comment.
+  if (isset($entity->uid)) {
+    $uid = $entity->uid;
+  }
+  elseif (isset($context['uid'])) {
+    $uid = $context['uid'];
+  }
+  // If neither of those are valid, then unblock the current user.
+  else {
+    $uid = $GLOBALS['user']->uid;
+  }
+  $account = user_load($uid);
+  $account = user_save($account, array('status' => 1));
+  watchdog('action', 'Approved user %name.', array('%name' => $account->name));
+}
+
+/**
+ * Notify admin of abusive user
+ *
+ * @ingroup actions
+ */
+function twoofakind_com_au_notify_admin_of_abusive_user_action(&$entity, $context = array()) {
+
+  global $user, $base_url;
+
+  // find the user
+  if (isset($entity->uid)) {
+    $uid = $entity->uid;
+  }
+  elseif (isset($context['uid'])) {
+    $uid = $context['uid'];
+  }
+  // If neither of those are valid, then unblock the current user.
+  else {
+    $uid = $GLOBALS['user']->uid;
+  }
+  $account = user_load($uid);
+
+  // add a note to the abusive users account indicating who marked them as aubsive
+  $langid = _object_language($account);
+  if (
+      !isset($account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES})
+      || empty($account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES})
+  ) {
+    $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES} = array(
+      $langcode => array()
+    );
+  }
+  $user_link = l($user->name, 'user/' . $user->uid);
+  $account_link = l($account->name, 'user/' . $account->uid);
+  $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES}[$langid][] = array(
+    'value' => date('F jS Y') . ' - ' . sprintf('This user was reported abusive by %s', $user_link)
+  );
+
+  // save the user
+  $account = user_save($account);
+
+  // notify the administrator
+  // set up email basics
+  $to = variable_get('site_mail', 'support@whatsthatweb.com.au');
+  $from = $to;
+  $subject = $base_url . ' : Abusive user';
+  $key = 'twoofakind_com_au_notify_admin_of_abusive_user_action';
+
+  // throw together the message
+  $message = array();
+  $message[] = 'The following user has been reported as abusive : ' . $base_url . $account_link;
+  $message[] = 'By : ' . $base_url . $user_link;
+
+  $params = array(
+    'subject' => $base_url . ' : Abusive user',
+    'message' => implode("\n", $message)
+  );
+
+  $message = drupal_mail('twoofakind_com_au', $key, $to, language_default(), $params, $from);
+  if ($message['result']) {
+    watchdog('twoofakind_com_au', 'Successfully sent abusive user email to admin %recipient', array('%recipient' => $to));
+  }
+}
+
+/**
+ * Marks user as abusive and contacts them.
+ *
+ * @ingroup actions
+ */
+function twoofakind_com_au_abusive_user_action(&$entity, $context = array()) {
+  // First priority: If there is a $entity->uid, unblock that user.
+  // This is most likely a user object or the author if a node or comment.
+  if (isset($entity->uid)) {
+    $uid = $entity->uid;
+  }
+  elseif (isset($context['uid'])) {
+    $uid = $context['uid'];
+  }
+  // If neither of those are valid, then block the current user.
+  else {
+    $uid = $GLOBALS['user']->uid;
+  }
+  $account = user_load($uid);
+  $edit = array('status' => 0);
+  $role_abusive = user_role_load_by_name('Abusive');
+  if ($role_abusive) {
+    $account->roles[$role_abusive->rid] = $role_abusive->name;
+    $edit['roles'] = $account->roles;
+  }
+  // add a note to the abusive users account indicating they have been marked as abusive
+  $langid = _object_language($account);
+  $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES}[$langid][] = array(
+    'value' => date('F jS Y') . ' - ' . t('User confirmed as abusive and blocked by administrator')
+  );
+  $edit[TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES] = $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES};
+  
+  // save account
+  $account = user_save($account, $edit);
+  
+  // notify user
+  _user_mail_notify('abusive_user', $account);
+  
+  watchdog('action', 'User %name marked as abusive.', array('%name' => $account->name));
+}
+
+/**
+ * Deactivates user and notifies them
+ *
+ * @ingroup actions
+ */
+function twoofakind_com_au_deactivate_user_action(&$entity, $context = array()) {
+  // First priority: If there is a $entity->uid, unblock that user.
+  // This is most likely a user object or the author if a node or comment.
+  if (isset($entity->uid)) {
+    $uid = $entity->uid;
+  }
+  elseif (isset($context['uid'])) {
+    $uid = $context['uid'];
+  }
+  // If neither of those are valid, then deactivate the current user.
+  else {
+    $uid = $GLOBALS['user']->uid;
+  }
+  $account = user_load($uid);
+  $edit = array('status' => 0);
+  $role_deactivate= user_role_load_by_name('Deactivated');
+  if ($role_deactivate) {
+    $account->roles[$role_deactivate->rid] = $role_deactivate->name;
+    $edit['roles'] = $account->roles;
+  }
+  $role_reactivate= user_role_load_by_name('Reactivate');
+  if ($role_reactivate && isset($account->roles[$role_reactivate->rid])) {
+    unset($account->roles[$role_reactivate->rid]);
+    $edit['roles'] = $account->roles;
+  }
+  $account = user_save($account, $edit);
+  
+  // notify user
+  _user_mail_notify('deactivate_user', $account);
+  
+  watchdog('action', 'User %name deactivated.', array('%name' => $account->name));
+}
+
+/**
+ * Reactivates user and notifies them
+ *
+ * @ingroup actions
+ */
+function twoofakind_com_au_reactivate_user_action(&$entity, $context = array()) {
+  // First priority: If there is a $entity->uid, unblock that user.
+  // This is most likely a user object or the author if a node or comment.
+  if (isset($entity->uid)) {
+    $uid = $entity->uid;
+  }
+  elseif (isset($context['uid'])) {
+    $uid = $context['uid'];
+  }
+  // If neither of those are valid, then reactivate the current user.
+  else {
+    $uid = $GLOBALS['user']->uid;
+  }
+  $account = user_load($uid);
+  $edit = array('status' => 1);
+  $role_deactivate= user_role_load_by_name('Deactivated');
+  if ($role_deactivate && isset($account->roles[$role_deactivate->rid])) {
+    unset($account->roles[$role_deactivate->rid]);
+    $edit['roles'] = $account->roles;
+  }
+  $role_reactivate= user_role_load_by_name('Reactivate');
+  if ($role_reactivate && isset($account->roles[$role_reactivate->rid])) {
+    unset($account->roles[$role_reactivate->rid]);
+    $edit['roles'] = $account->roles;
+  }
+  $account = user_save($account, $edit);
+  
+  // notify user
+  _user_mail_notify('reactivate_user', $account);
+  
+  watchdog('action', 'User %name reactivated.', array('%name' => $account->name));
+}
+
+/* * ****************************************************************************
+ * Entity functions
+ * **************************************************************************** */
+
+/**
+ * Implement hook_entity_info().
+ */
+function twoofakind_com_au_entity_info() {
+  $return = array();
+  $return['match'] = array(
+    'label' => t('Match'),
+    'controller class' => 'MatchController',
+    'base table' => 'matches',
+    'fieldable' => FALSE,
+    'exportable' => FALSE,
+    'entity keys' => array(
+      'id' => 'mid',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'match_uri',
+    'static cache' => TRUE
+  );
+  $return['wink'] = array(
+    'label' => t('Wink'),
+    'controller class' => 'WinkController',
+    'base table' => 'winks',
+    'fieldable' => FALSE,
+    'exportable' => FALSE,
+    'entity keys' => array(
+      'id' => 'wid',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'wink_uri',
+    'static cache' => TRUE
+  );
+  $return['recent_view'] = array(
+    'label' => t('Recent View'),
+    'controller class' => 'RecentViewController',
+    'base table' => 'recent_views',
+    'fieldable' => FALSE,
+    'exportable' => FALSE,
+    'entity keys' => array(
+      'id' => 'vid',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'recent_view_uri',
+    'static cache' => TRUE
+  );
+  $return['favourite'] = array(
+    'label' => t('Favourite'),
+    'controller class' => 'FavouriteController',
+    'base table' => 'favourites',
+    'fieldable' => FALSE,
+    'exportable' => FALSE,
+    'entity keys' => array(
+      'id' => 'fid',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'favourite_uri',
+    'static cache' => TRUE
+  );
+  $return['featured_user'] = array(
+    'label' => t('Featured user'),
+    'controller class' => 'FeaturedUserController',
+    'base table' => 'featured_users',
+    'fieldable' => FALSE,
+    'exportable' => FALSE,
+    'entity keys' => array(
+      'id' => 'fid',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'featured_user_uri',
+    'static cache' => TRUE
+  );
+  return $return;
+}
+
+/* * ****************************************************************************
+ * User functions
+ * **************************************************************************** */
+
+/**
+ * Implements hook_user_view().
+ * 
+ * This needs to be here and not the user include
+ * 
+ * @todo
+ *   Improve the process matches section
+ *   Ideally there should only ever be one match record
+ *   We do not need the for loop etc
+ */
+function twoofakind_com_au_user_view($account, $view_mode, $langcode) {
+
+  // Add a recent view record
+  if ($view_mode == 'full') {
+
+    // add a recent view
+    recent_view_create($account->uid);
+
+    // process winks
+    $winks = wink_load_from_account_to_current($account->uid);
+    if (count($winks)) {
+      foreach ($winks as $wink_id => $wink) {
+        if (!$wink->viewed) {
+          $wink->viewed = 1;
+          wink_update($wink);
+        }
+      }
+    }
+
+    // process matches
+    $matches = match_load_from_current_to_account($account->uid);
+    if (count($matches)) {
+      foreach ($matches as $match_id => $match) {
+        if (!$match->viewed_uid) {
+          $match->viewed_uid = 1;
+          match_update($match);
+        }
+      }
+    }
+    $matches = match_load_from_account_to_current($account->uid);
+    if (count($matches)) {
+      foreach ($matches as $match_id => $match) {
+        if (!$match->viewed_match_uid) {
+          $match->viewed_match_uid = 1;
+          match_update($match);
+        }
+      }
+    }
+
+    // pass the build mode to the preprocess function
+    $account->content['view_mode'] = array(
+      '#type' => 'hidden',
+      '#title' => t('View mode'),
+      '#markup' => $view_mode
+    );
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ * 
+ * This needs to be here and not the user include
+ */
+function twoofakind_com_au_user_login(&$edit, $account) {
+
+  // if access = 0 then throw them a message telling them to complete their profile
+  if (empty($account->access)) {
+
+    // set up some basic defaults
+    $defaults = array(
+      'login_welcome' => array(
+        'subject' => 'Welcome to Two of a Kind',
+        'content' => '<p>Please complete your profile and match criteria for the best results.<p>',
+        'weight' => -0
+      ),
+    );
+
+    // grab welcome content from box
+    $box = boxes_block_view('login_welcome');
+    $box_title = '';
+    $box_content = '';
+    if ($box) {
+      $box_title = $box['subject'];
+      $box_content = $box['content'];
+    }
+    else {
+      $box_title = $defaults['login_welcome']['subject'];
+      $box_content = $defaults['login_welcome']['content'];
+    }
+
+    // link to edit profile and match criteria
+    $url_edit = "user/$account->uid/edit";
+    $link_title = t('Edit your profile');
+    $link_options = array(
+      'fragment' => 'profile',
+      'attributes' => array(
+        'title' => $link_title
+      ),
+    );
+    $link_profile = l($link_title, $url_edit, $link_options);
+    $link_title = t('Tell us what you\'re looking for');
+    $link_options['fragment'] = 'match';
+    $link_options['attributes']['title'] = $link_title;
+    $link_match = l($link_title, $url_edit, $link_options);
+
+    // build output
+    $output = array();
+    if (!empty($box_title)) {
+      $output[] = '<h2>' . $box_title . '</h2>';
+    }
+    $output[] = $box_content;
+    $output[] = '<ul>';
+    $output[] = '<li>' . $link_profile . '</li>';
+    $output[] = '<li>' . $link_match . '</li>';
+    $output[] = '</ul>';
+
+    drupal_set_message(implode("\n", $output));
+  }
+}
+
+/* * ****************************************************************************
+ * Field functions
+ * **************************************************************************** */
+
+/**
+ * Implements hook_field_formatter_info
+ * 
+ * @see hook_field_formatter_info_alter()
+ * @see hook_field_formatter_view()
+ * @see hook_field_formatter_prepare_view()
+ */
+function twoofakind_com_au_field_formatter_info() {
+  return array(
+    'text_wrapper' => array(
+      'label' => t('Wrapper'),
+      'field types' => array('text'),
+      'settings' => array('wrapper' => '', 'class' => ''),
+    ),
+    'age' => array(
+      'label' => t('Age'),
+      'field types' => array('date', 'datestamp')
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function twoofakind_com_au_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $element = array();
+
+  if ($display['type'] == 'text_wrapper') {
+    $element['wrapper'] = array(
+      '#title' => t('Wrapper'),
+      '#type' => 'textfield',
+      '#size' => 20,
+      '#description' => 'Eg: h1, h2, p',
+      '#default_value' => $settings['wrapper'],
+      '#required' => FALSE,
+    );
+    $element['class'] = array(
+      '#title' => t('Class'),
+      '#type' => 'textfield',
+      '#size' => 20,
+      '#description' => 'Put a class on the wrapper. Eg: block-title',
+      '#default_value' => $settings['class'],
+      '#required' => FALSE,
+    );
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function twoofakind_com_au_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $summary = '';
+
+  if ($display['type'] == 'text_wrapper') {
+    $summary = t('Wrapper') . ': ' . $settings['wrapper'];
+    $summary .= '<br />';
+    $summary .= t('Class') . ': ' . $settings['class'];
+  }
+
+  return $summary;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function twoofakind_com_au_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  if ($display['type'] == 'text_wrapper') {
+    foreach ($items as $delta => $item) {
+      $content = strip_tags($item['value']);
+      if (!empty($display['settings']['wrapper'])) {
+        $content = '<' . check_plain($display['settings']['wrapper']) . '%s>' . $content . '</' . check_plain($display['settings']['wrapper']) . '>';
+        $class = '';
+        if (!empty($display['settings']['class'])) {
+          $class = ' class="' . $display['settings']['class'] . '"';
+        }
+        $content = sprintf($content, $class);
+      }
+      $element[$delta] = array('#markup' => $content);
+    }
+  }
+  elseif ($display['type'] == 'age') {
+    foreach ($items as $delta => $item) {
+      $dob = $item['value'];
+      if (!is_numeric($item['value'])) {
+        $dob = strtotime($dob);
+      }
+      $now = time();
+      $output = sprintf("%d", floor(abs($now - $dob) / 60 / 60 / 24 / 365));
+      $element[$delta] = array('#markup' => $output);
+    }
+  }
+
+  return $element;
+}
+
+/* * ****************************************************************************
+ * Display Suite functions
+ * **************************************************************************** */
+
+/**
+ * Implements hook_ds_fields_info
+ *
+ * @param $entity_type
+ *   The name of the entity which we are requesting fields for, e.g. 'node'.
+ *
+ * @return $fields
+ *   A collection of fields which keys are the entity type name and values
+ *   a collection fields.
+ *
+ * @see ds_get_fields()
+ */
+function twoofakind_com_au_ds_fields_info($entity_type) {
+
+  $fields = array();
+
+  // user fields
+  if ($entity_type == 'user') {
+
+    // favourites
+    $fields['favourite'] = array(
+      'title' => t('Favourite'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
+//      'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/favourite.entity.inc',
+      'function' => 'theme_ds_favourite_field',
+      'properties' => array(
+        'favourite_path' => TWOOFAKIND_PATH_FAVOURITE . '/nojs',
+        'unfavourite_path' => TWOOFAKIND_PATH_UNFAVOURITE . '/nojs',
+        'entity_id_key' => 'uid',
+        'entity_render_key' => 'name',
+      )
+    );
+
+    // featured users
+    $fields['featured_user'] = array(
+      'title' => t('Featured User'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
+//      'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/featured_user.entity.inc',
+      'function' => 'theme_ds_featured_user_field',
+      'properties' => array(
+        'feature_user_path' => TWOOFAKIND_PATH_FEATURED_USER . '/nojs',
+        'unfeature_user_path' => TWOOFAKIND_PATH_UNFEATURED_USER . '/nojs',
+        'entity_id_key' => 'uid',
+        'entity_render_key' => 'name',
+      )
+    );
+
+    // winks
+    $fields['wink'] = array(
+      'title' => t('Wink'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
+//      'file' => drupal_get_path('module', 'twoofakind_com_au') . '/includes/wink.entity.inc',
+      'function' => 'theme_ds_wink_field',
+      'properties' => array(
+        'wink_path' => TWOOFAKIND_PATH_WINK . '/nojs',
+        'entity_id_key' => 'uid',
+        'entity_render_key' => 'name',
+      )
+    );
+
+    // abusive user
+    $fields['abusive_user'] = array(
+      'title' => t('Abusive user'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
+      'function' => 'theme_ds_abusive_user_field',
+      'properties' => array(
+        'entity_id_key' => 'uid',
+        'flag_name' => 'abusive_user'
+      )
+    );
+
+    // pvt message
+    $fields['privatemsg'] = array(
+      'title' => t('Private Message'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
+      'function' => 'theme_ds_privatemsg_field',
+      'properties' => array(
+        'privatemsg_path' => 'messages/new',
+        'entity_id_key' => 'uid',
+        'entity_render_key' => 'name',
+      )
+    );
+
+    // age
+    $fields['age'] = array(
+      'title' => t('Age'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
+      'function' => 'theme_ds_age_field'
+    );
+
+    // location
+    $fields['location_city'] = array(
+      'title' => t('Location : City'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block', 'user|slideshow'),
+      'function' => 'theme_ds_location_field'
+    );
+
+    // admin notes
+    $fields['admin_notes_protected'] = array(
+      'title' => t('Admin notes'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|default'),
+      'function' => 'theme_ds_admin_notes_protected_field'
+    );
+  }
+
+  return array($entity_type => $fields);
+}
+
+/**
+ * Implemements hook_ds_fields_info_alter
+ *
+ * @param $fields
+ *   An array with fields which can be altered just before they get cached.
+ * @param $entity_type
+ *   The name of the entity type.
+ */
+function twoofakind_com_au_ds_fields_info_alter(&$fields, $entity_type) {
+  if (isset($fields['ds_user_picture'])) {
+    $fields['ds_user_picture']['function'] = '_twoofakind_com_au_ds_render_user_picture';
+    $fields['ds_user_picture']['module'] = 'twoofakind_com_au';
+  }
+}
+
+/**
+ * Copy of ds_render_user_picture with some minor modifications
+ */
+function _twoofakind_com_au_ds_render_user_picture($field) {
+
+  // if view mode isn't full then default to the normal function
+  $picture = ds_return_picture($field['entity']);
+  if ($field['view_mode'] != 'full' || !isset($picture->uri)) {
+    return ds_render_user_picture($field);
+  }
+
+  $picture = ds_return_picture($field['entity']);
+  if (!empty($picture)) {
+    $vars = array();
+    $filepath = (isset($picture->uri)) ? $picture->uri : $picture;
+    $name = !empty($field['entity']->name) ? $field['entity']->name : variable_get('anonymous', t('Anonymous'));
+    $alt = t("@user's picture", array('@user' => $name));
+    $vars = array('path' => $filepath, 'alt' => $alt, 'title' => $alt);
+
+    // If the image does not have a valid Drupal scheme (for eg. HTTP),
+    // don't load image styles.
+    if (module_exists('image') && file_valid_uri($filepath)) {
+      $vars['style_name'] = str_replace('ds_picture_', '', $field['formatter']);
+      $image = theme('image_style', $vars);
+    }
+    else {
+      $image = theme('image', $vars);
+    }
+
+    if (!empty($field['entity']->uid) && user_access('access user profiles')) {
+
+      // grab large image style path
+      $url_large = image_style_url('large', $picture->uri);
+
+      // build link
+      $options = array(
+        'attributes' => array(
+          'class' => array(
+            'active',
+            'colorbox',
+            'imagefield',
+            'imagefield-imagelink'
+          ),
+//          'rel' => 'gallery-nid',
+          'title' => $field['entity']->name
+        ),
+        'html' => TRUE
+      );
+
+      return l($image, $url_large, $options);
+    }
+    else {
+      return $image;
+    }
+  }
+}
+
+/**
+ * Theme field for age DS field
+ *
+ * @param $field
+ *   The field to be output
+ *
+ * @return 
+ *   The rendered field
+ *
+ * @see hook_ds_fields_info()
+ */
+function theme_ds_age_field($field) {
+
+  // initialise output
+  $output = '';
+
+  // look for DOB field
+  if (isset($field['entity']->field_date_of_birth[LANGUAGE_NONE][0]['value'])) {
+
+    $dob = $field['entity']->field_date_of_birth[LANGUAGE_NONE][0]['value'];
+    $now = time();
+    $output = sprintf("%d", floor(abs($now - $dob) / 60 / 60 / 24 / 365));
+  }
+
+  return $output;
+}
+
+/**
+ * Theme field for location DS field
+ *
+ * @param $field
+ *   The field to be output
+ *
+ * @return 
+ *   The rendered field
+ *
+ * @see hook_ds_fields_info()
+ */
+function theme_ds_location_field($field) {
+
+  // initialise output
+  $output = '';
+
+  // look for DOB field
+  if (isset($field['entity']->location) && !empty($field['entity']->location) && !empty($field['entity']->location['city'])) {
+    $output = $field['entity']->location['city'];
+  }
+
+  return $output;
+}
+
+/**
+ * Theme field for admin_notes_protected DS field
+ *
+ * @param $field
+ *   The field to be output
+ *
+ * @return 
+ *   The rendered field
+ *
+ * @see hook_ds_fields_info()
+ */
+function theme_ds_admin_notes_protected_field($field) {
+
+  // check permissions
+  if (!user_access('administer users')) {
+    return;
+  }
+
+  // initialise output
+  $output = '';
+
+  // look for admin notes field
+  if (isset($field['entity']->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES}[LANGUAGE_NONE][0]['value'])) {
+
+    // build an item list
+    $items = array();
+    foreach ($field['entity']->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES}[LANGUAGE_NONE] as $note) {
+      $items[] = $note['value'];
+    }
+
+    // build a themed item list
+    $variables = array(
+      'items' => $items,
+      'type' => 'ul',
+      'title' => 'Admin notes',
+      'attributes' => array()
+    );
+    $output = theme_item_list($variables);
+  }
+
+  return $output;
+}
+
+/**
+ * Theme field for private msg DS field
+ *
+ * @param $field
+ *   The field to be output
+ *
+ * @return 
+ *   The rendered field
+ *
+ * @see hook_ds_fields_info()
+ */
+function theme_ds_privatemsg_field($field) {
+
+  if (!user_access('access user profiles')) {
+    return '';
+  }
+
+  // initialise output
+  $output = '';
+
+  // entity id
+  if (isset($field['properties']['entity_id_key']) && isset($field['entity']->{$field['properties']['entity_id_key']})) {
+    $entity_id = $field['entity']->{$field['properties']['entity_id_key']};
+  }
+  else {
+    $entity_id = FALSE;
+  }
+
+  // no id no link
+  if (empty($entity_id)) {
+    return;
+  }
+
+  // Put together text for link
+  if (isset($field['properties']['entity_render_key']) && isset($field['entity']->{$field['properties']['entity_render_key']})) {
+    $render = $field['entity']->{$field['properties']['entity_render_key']};
+  }
+  else {
+    $render = FALSE;
+  }
+
+  // no output no link
+  if (empty($render)) {
+    return;
+  }
+
+  // path
+  if (isset($field['properties']['privatemsg_path'])) {
+    $privatemsg_path = $field['properties']['privatemsg_path'];
+  }
+  else {
+    $privatemsg_path = FALSE;
+  }
+
+  // no path no link
+  if (empty($privatemsg_path)) {
+    return;
+  }
+
+  // finalise path
+  $path = $privatemsg_path . '/' . $entity_id;
+
+  // options
+  $options = array(
+    'attributes' => array(
+      'title' => 'Send a message to ' . $render
+    )
+  );
+
+  // put it all together
+  $output = l('Message', $path, $options);
+
+  // wrap it in a div
+  $output = "<div id=\"message-$entity_id\">$output</div>";
+
+  return $output;
+}
+
+/**
+ * Theme field for abusive user DS field
+ *
+ * @param $field
+ *   The field to be output
+ *
+ * @return 
+ *   The rendered field
+ *
+ * @see hook_ds_fields_info()
+ */
+function theme_ds_abusive_user_field($field) {
+
+  if (!user_access('access user profiles')) {
+    return '';
+  }
+
+  // initialise output
+  $output = '';
+
+  // entity id
+  if (isset($field['properties']['entity_id_key']) && isset($field['entity']->{$field['properties']['entity_id_key']})) {
+    $entity_id = $field['entity']->{$field['properties']['entity_id_key']};
+  }
+  else {
+    $entity_id = FALSE;
+  }
+
+  // no id no link
+  if (empty($entity_id)) {
+    return;
+  }
+
+  // path
+  if (isset($field['properties']['flag_name'])) {
+    $flag_name = $field['properties']['flag_name'];
+  }
+  else {
+    $flag_name = FALSE;
+  }
+
+  $output = flag_create_link($flag_name, $entity_id);
+
+  return $output;
+}
+
+/* * ****************************************************************************
+ * Utility functions
+ * **************************************************************************** */
+
+/**
+ * Turns the block subject in to a link that is directed to the more link href
+ */
+function _twoofakind_com_au_subject_more(&$data) {
+
+  // grab view information
+  $view_path = false;
+  if (isset($data['content']['#views_contextual_links_info']['views_ui']['view_name'])) {
+
+    // grab the view name and display
+    $view_name = $data['content']['#views_contextual_links_info']['views_ui']['view_name'];
+    $view = views_get_view($view_name);
+
+    // from the view grab the page path
+    if ($view) {
+      foreach ($view->display as $display) {
+        if ($display->display_plugin != 'page' || !array_key_exists('path', $display->display_options)) {
+          continue;
+        }
+        $view_path = $display->display_options['path'];
+        break;
+      }
+    }
+  }
+
+  // did we find a view path
+  if ($view_path) {
+    $options = array(
+      'attributes' => array(
+        'title' => $data['subject']
+      )
+    );
+    $data['subject'] = l($data['subject'], $view_path, $options);
+  }
+}
+
+/**
+ * Adds an expansion link to the subject
+ */
+function _twoofakind_com_au_block_expand(&$data, $block) {
+
+  // if the block has no subject then do nothing
+  if (!isset($data['subject']) || empty($data['subject']) || $data['subject'] == '<none>') {
+    return;
+  }
+
+  // grab the delta of the block
+  // modify it so it resembles other CSS ID's / classes
+  $block_delta_id = 'block-' . str_replace('_', '-', $block->delta);
+  $block_div_replacement = '<div id="' . $block_delta_id . '"';
+
+  // make sure the content includes this div ID
+  if (is_array($data['content']) && isset($data['content']['#markup'])) {
+    // handle views
+    // content is still an array
+    $data['content']['#markup'] = substr_replace($data['content']['#markup'], $block_div_replacement, 0, 4);
+  }
+  else {
+    // handle normal blocks
+    // content already text
+    $data['content'] = substr_replace($data['content'], $block_div_replacement, 0, 4);
+  }
+
+  // build the expand link and throw it in to the title
+  $options = array(
+    'attributes' => array(
+      'title' => 'Click to expand',
+      'class' => 'block-expand block-open'
+    ),
+    'html' => TRUE
+  );
+  $data['subject'] .= l('&raquo;', $block_delta_id, $options);
+}
+
+/**
+ * Simple ajax link wrapper
+ */
+function _twoofakind_com_au_user_ajax_link($user, $path, $title) {
+
+  // path
+  $path = $path . '/nojs/' . $user->uid;
+
+  // options
+  $options = array(
+    'attributes' => array(
+      'title' => sprintf($title, $user->name),
+      'class' => array('use-ajax')
+    )
+  );
+
+  // create link
+  return l(sprintf($title, ''), $path, $options);
+}
+
+/**
+ * Simple ajax response wrapper
+ */
+function _twoofakind_com_au_user_ajax_response($user, $entity_type, $message, $link = '') {
+
+  // wrap message in span
+  $message = "<span class=\"ajax-message\">$message</span>";
+
+  // wrap it all in a div
+  $output = "<div id=\"$entity_type-{$user->uid}\">$link $message</div>";
+
+  // send it back  
+  $page = array(
+    '#type' => 'ajax',
+    '#commands' => array(
+      ajax_command_replace("#$entity_type-{$user->uid}", $output)
+    ),
+  );
+
+  return ajax_deliver($page);
+}
+
+/**
+ * Simple nojs response wrapper
+ */
+function _twoofakind_com_au_user_nojs_response($message, $redirect, $status = 'error') {
+
+  // set message and redirect
+  drupal_set_message($message, $status);
+  drupal_goto($redirect);
+}
+
+/**
+ * Grabs langcode as string from object
+ *
+ * @param object $object
+ *   Object to extract it from
+ * 
+ * @return string
+ *   Langcode
+ */
+function _get_language_from_object($object) {
+  if (!is_object($object)) {
+    return LANGUAGE_NONE;
+  }
+  return (isset($object->language) && !empty($object->language)) ? $object->language : LANGUAGE_NONE;
+}
+
+/* * ****************************************************************************
+ * cron functions
+ * **************************************************************************** */
+
+/**
+ * Implementation of hook_cron_queue_info()
+ */
+function twoofakind_com_au_cron_queue_info() {
+  $queues = array();
+  $queues['user_matches'] = array(
+    'worker callback' => '_twoofakind_com_au_cron_process_user_matches',
+    'time' => 60
+  );
+  return $queues;
+}
+
+/**
+ * Implementation of hook_cron()
+ */
+function twoofakind_com_au_cron() {
+
+  // user
+  // matches
+  $uids = _twoofakind_com_au_users_to_match();
+  $queue_matches = DrupalQueue::get('user_matches');
+  foreach ($uids as $uid) {
+    $queue_matches->createItem($uid);
+  }
+}
+
+/**
+ * Grabs a list of UID's or User objects that we will create matches for
+ * 
+ * At the moment it does nothing but return published users
+ * At some later point we could add criteria if we need to
+ * 
+ * @param boolean $objects
+ *   Do you want the return array to include id's or objects
+ * 
+ * @return array
+ *   Array of ids or objects
+ */
+function _twoofakind_com_au_users_to_match($objects = FALSE) {
+
+  // set up the query   
+  $query = new EntityFieldQuery();
+  // we only want users
+  $query->entityCondition('entity_type', 'user', '=');
+  $query->propertyCondition('status', 1, '=');
+
+  // execute
+  $result = $query->execute();
+
+  // return result
+  if (isset($result['user']) && count($result['user'])) {
+    $return = array_keys($result['user']);
+    if ($objects) {
+      return user_load_multiple($return);
+    }
+    return $return;
+  }
+
+  return array();
+}
+
+/**
+ * Process matches for an individual user
+ * 
+ * @param $uid
+ *   User id of user to be archived
+ */
+function _twoofakind_com_au_cron_process_user_matches($uid) {
+
+  // grab the match criteria for this user
+  $match_criteria = _twoofakind_com_au_user_match_criteria($uid);
+
+  // if they have no match criteria then bug out
+  if (empty($match_criteria)) {
+    return;
+  }
+
+  // use the user_search view to grab results
+  // this way if we were to alter filters in the search
+  // we can do the same for the cron search
+  // and we won't ever have to change this - yay!
+  $view = views_get_view('user_search', TRUE);
+  $view->set_display('matches_cron');
+  $view->set_exposed_input($match_criteria);
+  $view->pre_execute();
+  $view->execute();
+  $results = $view->result;
+  $view->destroy();
+  // have we any new matches for this user?
+  if (!count($results)) {
+    return;
+  }
+
+  // grab users already matched
+  $match_uids_current = match_load_users_from_matcher($uid);
+
+  // grab all match uids for this user
+  // this will be all matches, old and new
+  // at this point I can't figure out
+  // how to add the match_uids values to the
+  // view via filters...
+  $match_uids_new = array();
+  foreach ($results as $result) {
+    $match_uids_new[] = $result->uid;
+  }
+
+  // grab the difference only (for processing)
+  $match_uids = array_diff($match_uids_new, $match_uids_current);
+
+  // create new matches for this user
+  foreach ($match_uids as $match_uid) {
+    match_create($match_uid, $uid);
+  }
+}
+
+/* * ****************************************************************************
+ * Location functions
+ * **************************************************************************** */
+
+/**
+ * Implements hook_views_api().
+ */
+function twoofakind_com_au_locationapi(&$obj, $op, $a3 = NULL, $a4 = NULL, $a5 = NULL) {
+  switch ($op) {
+    case 'fields':
+      return array('name' => t('Location name'), 'street' => t('Street location'), 'additional' => t('Additional'), 'city' => t('Suburb'), 'province' => t('State/Province'), 'postal_code' => t('Postal code'), 'country' => t('Country'), 'locpick' => t('Coordinate Chooser'));
+
+    case 'field_expand':
+      switch ($a3) {
+
+        case 'city':
+          return array(
+            '#type' => 'textfield',
+            '#title' => t('Suburb'),
+            '#default_value' => $obj,
+            '#size' => 64,
+            '#maxlength' => 255,
+            '#description' => NULL,
+            '#attributes' => NULL,
+            '#required' => ($a4 == 2),
+          );
+      }
+      break;
+  }
+}
+
+/* * ****************************************************************************
+ * Migrate functions
+ * **************************************************************************** */
+
+/*
+ * You must implement hook_migrate_api(), setting the API level to 2, for
+ * your migration classes to be recognized by the Migrate module.
+ */
+function twoofakind_com_au_migrate_api() {
+  $api = array(
+    'api' => 2,
+  );
+  return $api;
+}
+
+/* * ****************************************************************************
+ * Utility functions
+ * **************************************************************************** */
+
+/**
+ * Grabs langcode as string from object
+ *
+ * @param object $object
+ *   Object to extract it from
+ * 
+ * @return string
+ *   Langcode
+ */
+function _object_language($object) {
+  if (!is_object($object)) {
+    return LANGUAGE_NONE;
+  }
+  return (isset($object->language) && !empty($object->language)) ? $object->language : LANGUAGE_NONE;
+}
+
+/**
+ * Checks if a user has a role
+ * I've copied the concept from user_is_blocked
+ * 
+ * @param string $name
+ *   Username of the user
+ * 
+ * @param string $role_name
+ *   Name of the role
+ * 
+ * @return object
+ * 
+ * @see user_is_blocked()
+ */
+function _twoofakind_com_au_user_has_role($role_name, $name = null, $mail = null) {
+  
+  if (empty($name) && empty ($mail)) {
+    return FALSE;
+  }
+  
+  $query = db_select('users', 'u');
+  $query->addJoin('LEFT', 'users_roles', 'ur', 'u.uid = %alias.uid');
+  $query->addJoin('LEFT', 'role', 'r', 'ur.rid = %alias.rid');
+  if (!empty($name)) {
+    $query->condition('u.name', db_like($name), 'LIKE'); 
+  }
+  else if (!empty($mail)) {
+    $query->condition('u.mail', db_like($mail), 'LIKE'); 
+  }
+  $query->condition('r.name', db_like($role_name), 'LIKE'); 
+  $query->fields('u', array('uid' => 'uid'));
+  return $query->execute()->fetchObject();
+}

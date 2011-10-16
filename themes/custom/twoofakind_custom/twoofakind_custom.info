@@ -1,0 +1,30 @@
+
+name = Two of a kind custom
+description = Tow of a kind custom theme
+base theme = unitebusiness
+core = 7.x
+
+scripts[] = js/jquery.overlabel.min.js
+scripts[] = js/twoofakind-custom.js
+scripts[] = js/demo.js
+scripts[] = js/onLoad.min.js
+scripts[] = js/cufon-yui.js
+scripts[] = js/jquery.fancybox-1.2.6.pack.js
+
+settings[skin] = 0
+settings[slide_shows] = 0
+
+regions[sidebar_right] = Sidebar Right
+regions[content_top] = Content Top
+regions[content] = Content
+regions[portfolio_top_img] = Portfolio Top Images
+regions[portfolio_top_txt] = Portfolio Top Text
+regions[home_banner_1] = Home Banner 1
+regions[home_banner_2] = Home Banner 2
+regions[home_banner_3] = Home Banner 3
+regions[featured_content] = Featured Content
+regions[footer_1] = Footer 1
+regions[footer_2] = Footer 2
+regions[footer_3] = Footer 3
+regions[footer] = Footer
+regions[slide_shows] = Slide Shows
