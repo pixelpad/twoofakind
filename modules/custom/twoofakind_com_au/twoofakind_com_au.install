@@ -94,7 +94,7 @@ function _twoofakind_com_au_install_field_heard_about_us() {
       'entity_types' => array('user'),
       'cardinality' => 1,
       'translatable' => TRUE,
-      'locked' => TRUE,
+      'locked' => FALSE,
       'description' => st('Where the user heard about us'),
       'settings' => array(
         'allowed_values' => array(
@@ -118,7 +118,7 @@ function _twoofakind_com_au_install_field_heard_about_us() {
     'entity_type' => 'user',
     'bundle' => 'user',
     'label' => st('Where did you hear about us?'),
-    'description' => st('Where the user heard about us'),
+    'description' => st('How did you find us?'),
     'widget' => array(
       'type' => 'options_select'
     ),
