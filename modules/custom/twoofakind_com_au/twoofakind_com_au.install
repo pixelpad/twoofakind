@@ -159,6 +159,27 @@ function _twoofakind_com_au_install_variables_email_templates() {
 }
 
 /**
+ * Create active user role
+ * 
+ * @param none
+ * @return none
+ */
+function _twoofakind_com_au_install_role_create_active_user() {
+  
+  $results = array();
+  
+  // create the role
+  $role_active_user = (object) array(
+    'name' => 'Active user'
+  );
+  $results[] = user_role_save($role_active_user);
+  
+  // return the results
+  return $results;
+  
+}
+
+/**
  * Implement hook_schema().
  */
 function twoofakind_com_au_schema() {
@@ -719,4 +740,13 @@ function twoofakind_com_au_update_7009() {
  */
 function twoofakind_com_au_update_7010() {
   _twoofakind_com_au_install_field_heard_about_us();
+}
+
+/**
+ * Implement hook_update_N().
+ * 
+ * Create active user role
+ */
+function twoofakind_com_au_update_7011() {
+  return _twoofakind_com_au_install_role_create_active_user();
 }
