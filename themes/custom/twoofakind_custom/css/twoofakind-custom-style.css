@@ -964,3 +964,10 @@ div#user-cancel-link input,
 div#user-cancel-link button {
   display: none;
 }
+
+/* HACKS
+-------------------------------------------------------------- */
+
+div#edit-field-heard-about-us div.description {
+  display: none;
+}
