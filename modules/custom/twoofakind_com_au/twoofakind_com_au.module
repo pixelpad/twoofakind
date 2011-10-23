@@ -9,6 +9,7 @@
  */
 define('TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES', 'field_admin_notes');
 define('TWOOFAKIND_COM_AU_FIELD_NAME_HEARD_ABOUT_US', 'field_heard_about_us');
+define('TWOOFAKIND_COM_AU_ROLE_ACTIVE_USER', 'Active User');
 
 /**
  * Required includes
@@ -1178,6 +1179,11 @@ function twoofakind_com_au_abusive_user_action(&$entity, $context = array()) {
     $account->roles[$role_abusive->rid] = $role_abusive->name;
     $edit['roles'] = $account->roles;
   }
+  $role_active = user_role_load_by_name(TWOOFAKIND_COM_AU_ROLE_ACTIVE_USER);
+  if ($role_active && isset($account->roles[$role_active->rid])) {
+    unset($account->roles[$role_active->rid]);
+    $edit['roles'] = $account->roles;
+  }
   // add a note to the abusive users account indicating they have been marked as abusive
   $langid = _object_language($account);
   $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES}[$langid][] = array(
@@ -1222,6 +1228,11 @@ function twoofakind_com_au_deactivate_user_action(&$entity, $context = array()) 
   $role_reactivate= user_role_load_by_name('Reactivate');
   if ($role_reactivate && isset($account->roles[$role_reactivate->rid])) {
     unset($account->roles[$role_reactivate->rid]);
+    $edit['roles'] = $account->roles;
+  }
+  $role_active = user_role_load_by_name(TWOOFAKIND_COM_AU_ROLE_ACTIVE_USER);
+  if ($role_active && isset($account->roles[$role_active->rid])) {
+    unset($account->roles[$role_active->rid]);
     $edit['roles'] = $account->roles;
   }
   $account = user_save($account, $edit);
@@ -1468,6 +1479,24 @@ function twoofakind_com_au_user_login(&$edit, $account) {
     $output[] = '</ul>';
 
     drupal_set_message(implode("\n", $output));
+  }
+}
+
+/**
+ * Implements hook_user_presave().
+ */
+function twoofakind_com_au_user_presave(&$edit, $account, $category) {
+  
+  // add Active User role
+  if (isset($account->is_new) && !empty($account->is_new)) {
+    
+    $roles_to_add = array();
+    $role_active = user_role_load_by_name(TWOOFAKIND_COM_AU_ROLE_ACTIVE_USER);
+    if ($role_active) {
+      $roles_to_add[$role_active->rid] = $role_active->name;
+    }
+    
+    $edit['roles'] = $roles_to_add + $edit['roles'];
   }
 }
 
@@ -2156,6 +2185,10 @@ function twoofakind_com_au_cron_queue_info() {
     'worker callback' => '_twoofakind_com_au_cron_process_user_matches',
     'time' => 60
   );
+  $queues['user_notify'] = array(
+    'worker callback' => '_twoofakind_com_au_cron_process_user_notify',
+    'time' => 60
+  );
   return $queues;
 }
 
@@ -2165,12 +2198,21 @@ function twoofakind_com_au_cron_queue_info() {
 function twoofakind_com_au_cron() {
 
   // user
+
   // matches
   $uids = _twoofakind_com_au_users_to_match();
   $queue_matches = DrupalQueue::get('user_matches');
   foreach ($uids as $uid) {
     $queue_matches->createItem($uid);
   }
+  
+  // notify new users
+  $uids = _twoofakind_com_au_users_to_notify();
+  $queue_notify = DrupalQueue::get('user_notify');
+  foreach ($uids as $uid) {
+    $queue_notify->createItem($uid);
+  }
+  
 }
 
 /**
@@ -2209,10 +2251,42 @@ function _twoofakind_com_au_users_to_match($objects = FALSE) {
 }
 
 /**
+ * Grabs a list of UID's or User objects that we need to notify
+ * 
+ * @param boolean $objects
+ *   Do you want the return array to include id's or objects
+ * 
+ * @return array
+ *   Array of ids or objects
+ */
+function _twoofakind_com_au_users_to_notify($objects = FALSE) {
+
+  $query = db_select('users', 'u');
+  $query->fields('u', array('uid' => 'uid'));
+  $query->addJoin('LEFT', 'users_roles', 'ur', 'u.uid = %alias.uid');
+  $query->addJoin('LEFT', 'role', 'r', 'ur.rid = %alias.rid');
+  $query->where('r.name NOT IN (\'Active User\', \'Deactivated\', \'Abusive\', \'Administrator\', \'Editor\') OR r.name IS NULL');
+  $query->condition('u.status', 1);
+  $query->condition('u.uid', 1, '!=');
+  $result = $query->execute()->fetchAllAssoc('uid');
+
+  // return result
+  if (count($result)) {
+    $return = array_keys($result);
+    if ($objects) {
+      return user_load_multiple($return);
+    }
+    return $return;
+  }
+
+  return array();
+}
+
+/**
  * Process matches for an individual user
  * 
  * @param $uid
- *   User id of user to be archived
+ *   User id of user to be matched
  */
 function _twoofakind_com_au_cron_process_user_matches($uid) {
 
@@ -2260,6 +2334,33 @@ function _twoofakind_com_au_cron_process_user_matches($uid) {
   foreach ($match_uids as $match_uid) {
     match_create($match_uid, $uid);
   }
+}
+
+/**
+ * Process notifying an individual user
+ * 
+ * @param $uid
+ *   User id of user to be notified
+ */
+function _twoofakind_com_au_cron_process_user_notify($uid) {
+
+  // load the account
+  $account = user_load($uid);
+  
+  // add the active user role to their account
+  $edit = array();
+  $role_active = user_role_load_by_name(TWOOFAKIND_COM_AU_ROLE_ACTIVE_USER);
+  if ($role_active) {
+    $account->roles[$role_active->rid] = $role_active->name;
+    $edit['roles'] = $account->roles;
+    
+    // save account
+    $account = user_save($account, $edit);
+
+    // notify them
+    _user_mail_notify('status_activated', $account);
+  }
+
 }
 
 /* * ****************************************************************************
