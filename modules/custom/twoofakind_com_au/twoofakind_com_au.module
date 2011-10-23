@@ -2183,11 +2183,11 @@ function twoofakind_com_au_cron_queue_info() {
   $queues = array();
   $queues['user_matches'] = array(
     'worker callback' => '_twoofakind_com_au_cron_process_user_matches',
-    'time' => 60
+    'time' => 20
   );
   $queues['user_notify'] = array(
     'worker callback' => '_twoofakind_com_au_cron_process_user_notify',
-    'time' => 60
+    'time' => 20
   );
   return $queues;
 }
