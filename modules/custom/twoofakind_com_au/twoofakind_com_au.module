@@ -2207,11 +2207,11 @@ function twoofakind_com_au_cron() {
   }
   
   // notify new users
-  $uids = _twoofakind_com_au_users_to_notify();
-  $queue_notify = DrupalQueue::get('user_notify');
-  foreach ($uids as $uid) {
-    $queue_notify->createItem($uid);
-  }
+//  $uids = _twoofakind_com_au_users_to_notify();
+//  $queue_notify = DrupalQueue::get('user_notify');
+//  foreach ($uids as $uid) {
+//    $queue_notify->createItem($uid);
+//  }
   
 }
 
