@@ -2185,10 +2185,10 @@ function twoofakind_com_au_cron_queue_info() {
     'worker callback' => '_twoofakind_com_au_cron_process_user_matches',
     'time' => 20
   );
-  $queues['user_notify'] = array(
-    'worker callback' => '_twoofakind_com_au_cron_process_user_notify',
-    'time' => 20
-  );
+//  $queues['user_notify'] = array(
+//    'worker callback' => '_twoofakind_com_au_cron_process_user_notify',
+//    'time' => 20
+//  );
   return $queues;
 }
 
@@ -2270,6 +2270,9 @@ function _twoofakind_com_au_users_to_notify($objects = FALSE) {
   $query->condition('u.uid', 1, '!=');
   $result = $query->execute()->fetchAllAssoc('uid');
 
+  // this implemented as a double check to make sure people aren't being emailed continually
+  return array();
+  
   // return result
   if (count($result)) {
     $return = array_keys($result);
