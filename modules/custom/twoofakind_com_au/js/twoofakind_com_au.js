@@ -98,6 +98,13 @@
         }
       });
       
+      /* add links that will perform the clear search button action */
+      $('a.clear-action').bind('click', function(e) {
+        e.preventDefault();
+        $('button#edit-reset').click();
+        return false;
+      });
+      
     }
   }
 
