@@ -13,7 +13,7 @@
         
         /* grab the input field the search will be replacing */
         var input_username = $('input#edit-name-search', context);
-        var dummy_text = 'Enter a username';
+        var dummy_text = 'Search for username or just...';
         
         /* send the value of this input field to the relevant field in
          * the matches exposed filters form
