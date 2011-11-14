@@ -123,6 +123,7 @@ div.region-sidebar-right h4.title {
   position: relative;
   color: #ed1c24;
   cursor: pointer;
+  margin-bottom: 100px;
 }
 
 a.block-expand {
@@ -281,6 +282,7 @@ div.region-content div#sort_form {
   background: none repeat scroll 0 0 #2C2C2C;
 /*  position: absolute;
   top: 170px;*/
+  position: relative;
   margin: -20px 0 10px;
   width: 273px;
   z-index: 100;
@@ -372,6 +374,30 @@ html.js div.region-sidebar-right fieldset.collapsible.collapsed .fieldset-legend
 
 div.region-sidebar-right .fieldset-legend span.summary {
   display: none;
+}
+
+div.views-exposed-widget.views-widget-sort-by {
+  position: absolute;
+  top: 60px;
+  left: 10px;
+}
+
+div.views-exposed-widget.views-widget-sort-order {
+  position: absolute;
+  top: 60px;
+  left: 150px;
+}
+
+div.views-exposed-widget.views-submit-button {
+  position: absolute;
+  top: 90px;
+  left: 15px;
+}
+
+div.views-exposed-widget.views-reset-button {
+  position: absolute;
+  top: 90px;
+  left: 155px;
 }
 
 div.region-sidebar-right div#matches_form button.btn,
@@ -970,4 +996,17 @@ div#user-cancel-link button {
 
 div#edit-field-heard-about-us div.description {
   display: none;
+}
+
+/* Search help
+-------------------------------------------------------------- */
+
+div#SearchHelp {
+  position: absolute;
+  right: 30px;
+  top: 80px;
+}
+
+div#SearchHelp h2 {
+  font-size: 1.0em;
 }

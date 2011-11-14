@@ -80,6 +80,11 @@
 					<div id="MmRight"></div>
 				</div>
 			</div>
+      
+      <!-- Search help -->
+      <div id="SearchHelp">
+        <h2>To find <strong><a href="/user-search" title="To find Jewish people click on People or Search">People</a></strong> simply click on <strong><a href="/user-search" title="To find Jewish people click on People or Search">People</a></strong> above or try the <strong><a href="/user-search" title="To find Jewish people click on People or Search">Search</a></strong> and <strong><a href="/user-search" title="To find Jewish people click on People or Search">Search</a></strong> options below.</h2>
+      </div>
 			
 			<!-- Search -->
 			<div id="Search">
