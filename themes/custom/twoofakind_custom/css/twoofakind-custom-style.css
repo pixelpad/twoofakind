@@ -123,6 +123,9 @@ div.region-sidebar-right h4.title {
   position: relative;
   color: #ed1c24;
   cursor: pointer;
+}
+
+div.region-sidebar-right div#matches_form h4.title {
   margin-bottom: 100px;
 }
 
