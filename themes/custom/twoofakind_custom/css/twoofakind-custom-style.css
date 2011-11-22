@@ -884,12 +884,14 @@ div.user-profile.view-mode-slideshow {
 div.node.view-mode-slideshow div.group-left,
 div.user-profile.view-mode-slideshow div.group-left {
   width: 480px;
+  float: left;
 }
 
 div.node.view-mode-slideshow div.group-right,
 div.user-profile.view-mode-slideshow div.group-right {
   width: 435px;
-  padding: 10px 0px
+  padding: 10px 0px;
+  float: left;
 }
 
 div.node.view-mode-slideshow div.group-right div.field,
