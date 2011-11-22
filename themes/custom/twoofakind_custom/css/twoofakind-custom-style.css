@@ -123,6 +123,9 @@ div.region-sidebar-right h4.title {
   position: relative;
   color: #ed1c24;
   cursor: pointer;
+}
+
+div.region-sidebar-right div#matches_form h4.title {
   margin-bottom: 100px;
 }
 
@@ -884,12 +887,14 @@ div.user-profile.view-mode-slideshow {
 div.node.view-mode-slideshow div.group-left,
 div.user-profile.view-mode-slideshow div.group-left {
   width: 480px;
+  float: left;
 }
 
 div.node.view-mode-slideshow div.group-right,
 div.user-profile.view-mode-slideshow div.group-right {
   width: 435px;
-  padding: 10px 0px
+  padding: 10px 0px;
+  float: left;
 }
 
 div.node.view-mode-slideshow div.group-right div.field,
