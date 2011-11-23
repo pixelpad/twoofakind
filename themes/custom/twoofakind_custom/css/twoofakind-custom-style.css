@@ -379,25 +379,25 @@ div.region-sidebar-right .fieldset-legend span.summary {
   display: none;
 }
 
-div.views-exposed-widget.views-widget-sort-by {
+div.region-sidebar-right div.views-exposed-widget.views-widget-sort-by {
   position: absolute;
   top: 60px;
   left: 10px;
 }
 
-div.views-exposed-widget.views-widget-sort-order {
+div.region-sidebar-right div.views-exposed-widget.views-widget-sort-order {
   position: absolute;
   top: 60px;
   left: 150px;
 }
 
-div.views-exposed-widget.views-submit-button {
+div.region-sidebar-right div.views-exposed-widget.views-submit-button {
   position: absolute;
   top: 90px;
   left: 15px;
 }
 
-div.views-exposed-widget.views-reset-button {
+div.region-sidebar-right div.views-exposed-widget.views-reset-button {
   position: absolute;
   top: 90px;
   left: 155px;
