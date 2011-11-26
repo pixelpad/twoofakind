@@ -423,6 +423,17 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
 
   // remove some fields for anonymous users
   _twoofakind_com_au_form_user_search_remove_fields($form);
+  
+  // This exposed search view filter block is picking up all filters / sorts passed via GET
+  // we need to make sure it is passed only what it knows it can accept then it at least plays nice
+  // the the view who is supposed to accept the input does so and away we go
+  if (!array_key_exists($form_state['input']['sort_by'], $form['sort_by']['#options'])) {
+    $default_sort_by = key($form['sort_by']['#options']); // not really default, just first
+    $form_state['view']->exposed_input['sort_by'] = $default_sort_by;    
+    $form_state['input']['sort_by'] = $default_sort_by;
+    $form_state['values']['sort_by'] = $default_sort_by;
+    $form_state['complete form']['sort_by']['#value'] = $default_sort_by;
+  }
 
   // check if we're clearing
   if (isset($_GET['op']) && $_GET['op'] == 'Clear') {
