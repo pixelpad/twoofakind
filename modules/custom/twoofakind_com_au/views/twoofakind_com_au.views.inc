@@ -49,6 +49,11 @@ function twoofakind_com_au_views_default_views() {
   module_load_include('inc', 'twoofakind_com_au', 'views/twoofakind_com_au.views.winks_received');
   $view = _twoofakind_com_au_views_default_views_winks_received();
   $views[$view->name] = $view;
+  
+  // user search view
+  module_load_include('inc', 'twoofakind_com_au', 'views/twoofakind_com_au.views.user_search');
+  $view = _twoofakind_com_au_views_default_views_user_search();
+  $views[$view->name] = $view;
 
   return $views;
   

@@ -17,7 +17,7 @@ $view->tag = 'default';
 $view->base_table = 'users';
 $view->human_name = 'Matches Me';
 $view->core = 7;
-$view->api_version = '3.0-alpha1';
+$view->api_version = '3.0';
 $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
 /* Display: Master */
@@ -27,7 +27,9 @@ $handler->display->display_options['use_more'] = TRUE;
 $handler->display->display_options['use_more_always'] = TRUE;
 $handler->display->display_options['access']['type'] = 'perm';
 $handler->display->display_options['access']['perm'] = 'access user profiles';
-$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['cache']['type'] = 'time_per_user';
+$handler->display->display_options['cache']['results_lifespan'] = '21600';
+$handler->display->display_options['cache']['output_lifespan'] = '21600';
 $handler->display->display_options['query']['type'] = 'views_query';
 $handler->display->display_options['query']['options']['query_comment'] = FALSE;
 $handler->display->display_options['exposed_form']['type'] = 'better_exposed_filters';
@@ -134,6 +136,7 @@ $handler->display->display_options['filters']['rid']['reduce_duplicates'] = 1;
 $handler = $view->new_display('page', 'Page', 'page');
 $handler->display->display_options['defaults']['css_class'] = FALSE;
 $handler->display->display_options['css_class'] = 'views-page-users';
+$handler->display->display_options['defaults']['use_ajax'] = FALSE;
 $handler->display->display_options['path'] = 'matches-me';
 
 /* Display: Block */
