@@ -47,11 +47,16 @@
         /* matches form stuff */
         var matchesForm = $('div#matches_form', sidebar);
 
-        /* Init search form */
+        /* Init search form i.e. open the search form based on certain criteria */
         if (search_open()) {
+          /* the cookie is set, keep it open */
           matchesForm.fadeToggle();
         }
-
+        else if (window.location.pathname.indexOf('user-search') > -1) {
+          /* we're on the search page, keep it open */
+          matchesForm.fadeToggle();
+        }
+        
         /* "show less options" link functionality */
         matchesForm.each(function() {
           var matches_form = $(this);
