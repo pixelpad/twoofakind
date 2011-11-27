@@ -483,6 +483,17 @@ $handler->display->display_options['filters']['city']['expose']['identifier'] = 
 $handler->display->display_options['filters']['city']['expose']['required'] = 0;
 $handler->display->display_options['filters']['city']['expose']['remember'] = 1;
 $handler->display->display_options['filters']['city']['expose']['multiple'] = FALSE;
+/* Filter criterion: Location: Province */
+$handler->display->display_options['filters']['province']['id'] = 'province';
+$handler->display->display_options['filters']['province']['table'] = 'location';
+$handler->display->display_options['filters']['province']['field'] = 'province';
+$handler->display->display_options['filters']['province']['group'] = 0;
+$handler->display->display_options['filters']['province']['exposed'] = TRUE;
+$handler->display->display_options['filters']['province']['expose']['operator_id'] = 'province_op';
+$handler->display->display_options['filters']['province']['expose']['label'] = 'State';
+$handler->display->display_options['filters']['province']['expose']['operator'] = 'province_op';
+$handler->display->display_options['filters']['province']['expose']['identifier'] = 'province';
+$handler->display->display_options['filters']['province']['expose']['remember'] = 1;
 /* Filter criterion: User: Picture */
 $handler->display->display_options['filters']['picture']['id'] = 'picture';
 $handler->display->display_options['filters']['picture']['table'] = 'users';
@@ -705,6 +716,7 @@ $handler->display->display_options['filters']['rid']['value'] = array(
   3 => '3',
   4 => '4',
 );
+$handler->display->display_options['filters']['rid']['group'] = 0;
 $handler->display->display_options['filters']['rid']['reduce_duplicates'] = 1;
 
 /* Display: User Search Page */
