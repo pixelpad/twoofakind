@@ -186,7 +186,7 @@ $handler->display->display_options['fields']['views_bulk_operations']['vbo']['op
     'label' => '',
   ),
   'system_block_ip_action' => array(
-    'selected' => 1,
+    'selected' => 0,
     'use_queue' => 0,
     'skip_confirmation' => 0,
     'override_label' => 0,
@@ -234,6 +234,13 @@ $handler->display->display_options['fields']['views_bulk_operations']['vbo']['op
     'override_label' => 0,
     'label' => '',
   ),
+  'flag_user_action' => array(
+    'selected' => 0,
+    'use_queue' => 0,
+    'skip_confirmation' => 0,
+    'override_label' => 0,
+    'label' => '',
+  ),
   'views_bulk_operations_user_roles_action' => array(
     'selected' => 0,
     'use_queue' => 1,
@@ -245,7 +252,7 @@ $handler->display->display_options['fields']['views_bulk_operations']['vbo']['op
     'selected' => 0,
     'use_queue' => 0,
     'skip_confirmation' => 0,
-    'override_label' => 1,
+    'override_label' => 0,
     'label' => '',
   ),
   'views_bulk_operations_argument_selector_action' => array(
@@ -253,6 +260,9 @@ $handler->display->display_options['fields']['views_bulk_operations']['vbo']['op
     'skip_confirmation' => 0,
     'override_label' => 0,
     'label' => '',
+    'settings' => array(
+      'url' => '',
+    ),
   ),
   'twoofakind_com_au_reactivate_user_action' => array(
     'selected' => 1,
@@ -276,6 +286,7 @@ $handler->display->display_options['fields']['views_bulk_operations']['vbo']['op
     'label' => '',
   ),
 );
+$handler->display->display_options['fields']['views_bulk_operations']['vbo']['enable_select_all_pages'] = 1;
 $handler->display->display_options['fields']['views_bulk_operations']['vbo']['display_type'] = '0';
 $handler->display->display_options['fields']['views_bulk_operations']['vbo']['display_result'] = 1;
 $handler->display->display_options['fields']['views_bulk_operations']['vbo']['merge_single_action'] = 0;
