@@ -689,11 +689,11 @@ div.user-profile.view-mode-full div.group-left div.group_basics_two {
   line-height: 20px;
 }
 div.user-profile.view-mode-full div.group-left div.group_basics_one {
-  top: 180px;
+  margin-top: -45px;
 }
 
 div.user-profile.view-mode-full div.group-left div.group_basics_two {
-  top: 200px;
+  margin-top: -25px;
 }
 
 div.user-profile.view-mode-full div.group-left div.group_basics_one div.field,
@@ -712,7 +712,6 @@ div.user-profile.view-mode-full div.group-left div.group_basics_two div.field di
 div.user-profile.view-mode-full div.group-left div.field-name-ds-user-picture {
   clear: left;
   width: 235px;
-  height: 235px;
 }
 
 div.user-profile.view-mode-full div.group-left div.field-name-ds-user-picture div.field-item {
