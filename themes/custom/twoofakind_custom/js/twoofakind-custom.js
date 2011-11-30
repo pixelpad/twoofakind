@@ -87,7 +87,11 @@
       /* adding a form navigate confirm */
       var form_user_profile = $('form#user-profile-form');
       if (form_user_profile.size() > 0) {
-        form_user_profile.FormNavigate('Have you saved your changes?');
+        /* form_user_profile.FormNavigate('Have you saved your changes?'); */
+        /* hack - this doesn't work, had to remove for the time being */
+        form_user_profile.find('button#edit-submit').click(function () {
+          global_formNavigate = true;
+        });
       }
     }
   }
