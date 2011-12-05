@@ -449,6 +449,10 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
   if (isset($_SESSION['UserSearchFormClear'])) {
     return;
   }
+  
+  // we are now no longer overriding  search fields with personal options
+  // we may bring this back in on a button push at some point for the more intelligent people
+  return;
 
   // THIS HAS BEEN SHELVED FOR THE TIME BEING
   // IT IS NOT POSSIBLE WITHOUT CREATING A NEW TABLE
