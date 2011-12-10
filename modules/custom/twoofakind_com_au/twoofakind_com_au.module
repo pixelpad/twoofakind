@@ -105,6 +105,13 @@ function twoofakind_com_au_init() {
   // add ajax and cookie, I don't know why it isn't there already
   drupal_add_library('system', 'drupal.ajax');
   drupal_add_library('system', 'jquery.cookie');
+  
+  // add some settings
+  $logged_in = FALSE;
+  if ($user->uid) {
+    $logged_in = TRUE;
+  }
+  drupal_add_js(array('logged_in' => $logged_in), 'setting');
 
   // set some session variables utilised in hook_form_alter below
   if (!empty($user->uid)) {
