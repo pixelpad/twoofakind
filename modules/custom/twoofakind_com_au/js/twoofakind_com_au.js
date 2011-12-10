@@ -48,7 +48,10 @@
         var matchesForm = $('div#matches_form', sidebar);
 
         /* Init search form i.e. open the search form based on certain criteria */
-        if (search_open()) {
+        if (!Drupal.settings.logged_in) {
+          matchesForm.fadeIn();
+        }
+        else if (search_open()) {
           /* the cookie is set, keep it open */
           matchesForm.fadeToggle();
         }

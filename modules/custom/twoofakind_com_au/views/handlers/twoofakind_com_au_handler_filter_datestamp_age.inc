@@ -28,9 +28,17 @@ class twoofakind_com_au_handler_filter_datestamp_age extends views_handler_filte
   }
   
   function __queryAddAgeField($fieldName = 'age') {
+
+    $field_age = <<<EOF
+(YEAR(CURDATE())
+  -YEAR(DATE_ADD(FROM_UNIXTIME(0), INTERVAL $this->table_alias.$this->real_field SECOND)))
+  - (RIGHT(CURDATE(),5)<RIGHT(DATE_ADD(FROM_UNIXTIME(0),
+  INTERVAL $this->table_alias.$this->real_field SECOND),5)) AS age
+EOF;
     
     $this->field_alias = $this->query->add_field(NULL,
-      "TIMESTAMPDIFF(YEAR, FROM_UNIXTIME($this->table_alias.$this->real_field), now())",
+//      "TIMESTAMPDIFF(YEAR, FROM_UNIXTIME($this->table_alias.$this->real_field), now())",
+      $field_age,
       $fieldName);
     
   }
