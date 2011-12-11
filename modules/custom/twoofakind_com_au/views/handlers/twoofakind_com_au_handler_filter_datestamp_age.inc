@@ -33,7 +33,7 @@ class twoofakind_com_au_handler_filter_datestamp_age extends views_handler_filte
 (YEAR(CURDATE())
   -YEAR(DATE_ADD(FROM_UNIXTIME(0), INTERVAL $this->table_alias.$this->real_field SECOND)))
   - (RIGHT(CURDATE(),5)<RIGHT(DATE_ADD(FROM_UNIXTIME(0),
-  INTERVAL $this->table_alias.$this->real_field SECOND),5)) AS age
+  INTERVAL $this->table_alias.$this->real_field SECOND),5))
 EOF;
     
     $this->field_alias = $this->query->add_field(NULL,
