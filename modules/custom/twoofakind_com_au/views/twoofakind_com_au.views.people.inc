@@ -1306,6 +1306,15 @@ $handler->display->display_options['filters']['status']['expose']['use_operator'
 $handler->display->display_options['filters']['status']['expose']['operator'] = 'status_op';
 $handler->display->display_options['filters']['status']['expose']['identifier'] = 'status';
 $handler->display->display_options['filters']['status']['expose']['multiple'] = FALSE;
+/* Filter criterion: User: Roles */
+$handler->display->display_options['filters']['rid']['id'] = 'rid';
+$handler->display->display_options['filters']['rid']['table'] = 'users_roles';
+$handler->display->display_options['filters']['rid']['field'] = 'rid';
+$handler->display->display_options['filters']['rid']['operator'] = 'not';
+$handler->display->display_options['filters']['rid']['value'] = array(
+  7 => '7',
+);
+$handler->display->display_options['filters']['rid']['reduce_duplicates'] = 0;
 $handler->display->display_options['path'] = 'admin/people/new-applicants';
 $handler->display->display_options['menu']['type'] = 'tab';
 $handler->display->display_options['menu']['title'] = 'New';
