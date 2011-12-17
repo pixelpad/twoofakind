@@ -1849,6 +1849,11 @@ $handler->display->display_options['filters']['rid']['value'] = array(
   7 => '7',
 );
 $handler->display->display_options['filters']['rid']['reduce_duplicates'] = 1;
+/* Filter criterion: User: Active */
+$handler->display->display_options['filters']['status']['id'] = 'status';
+$handler->display->display_options['filters']['status']['table'] = 'users';
+$handler->display->display_options['filters']['status']['field'] = 'status';
+$handler->display->display_options['filters']['status']['value'] = '0';
 $handler->display->display_options['path'] = 'admin/people/reactivate';
 $handler->display->display_options['menu']['type'] = 'tab';
 $handler->display->display_options['menu']['title'] = 'Reactivate';
