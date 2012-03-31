@@ -5,7 +5,7 @@
  */
 
 /**
- * Implementation of hook_field_default_fields().
+ * Implements hook_field_default_fields().
  */
 function simple_faq_field_default_fields() {
   $fields = array();
@@ -45,7 +45,7 @@ function simple_faq_field_default_fields() {
       'description' => '',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'hidden',
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
@@ -55,10 +55,10 @@ function simple_faq_field_default_fields() {
           'label' => 'hidden',
           'module' => 'text',
           'settings' => array(
-            'trim_length' => 600,
+            'trim_length' => '200',
           ),
           'type' => 'text_summary_or_trimmed',
-          'weight' => 0,
+          'weight' => '0',
         ),
       ),
       'entity_type' => 'node',
@@ -117,7 +117,7 @@ function simple_faq_field_default_fields() {
       'description' => '',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'hidden',
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
@@ -127,7 +127,7 @@ function simple_faq_field_default_fields() {
           'label' => 'above',
           'settings' => array(),
           'type' => 'hidden',
-          'weight' => 0,
+          'weight' => '1',
         ),
       ),
       'entity_type' => 'node',
@@ -185,20 +185,16 @@ function simple_faq_field_default_fields() {
       'description' => '',
       'display' => array(
         'default' => array(
-          'label' => 'above',
-          'module' => 'image',
-          'settings' => array(
-            'image_link' => '',
-            'image_style' => '',
-          ),
-          'type' => 'image',
-          'weight' => 2,
-        ),
-        'teaser' => array(
-          'label' => 'above',
+          'label' => 'hidden',
           'settings' => array(),
           'type' => 'hidden',
-          'weight' => 0,
+          'weight' => '2',
+        ),
+        'teaser' => array(
+          'label' => 'hidden',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '2',
         ),
       ),
       'entity_type' => 'node',
@@ -209,9 +205,9 @@ function simple_faq_field_default_fields() {
         'alt_field' => 1,
         'file_directory' => 'content_types/faq',
         'file_extensions' => 'png gif jpg jpeg',
-        'max_filesize' => '200KB',
-        'max_resolution' => '800x600',
-        'min_resolution' => '400x400',
+        'max_filesize' => '480KB',
+        'max_resolution' => '800x800',
+        'min_resolution' => '480x480',
         'title_field' => 1,
         'user_register_form' => FALSE,
       ),
