@@ -79,7 +79,7 @@ function twoofakind_com_au_menu_alter(&$items) {
  *
  * @param $items
  *   Menu items array
- * 
+ *
  * @see hook_menu()
  */
 function _twoofakind_com_au_menu_redirect() {
@@ -105,7 +105,7 @@ function twoofakind_com_au_init() {
   // add ajax and cookie, I don't know why it isn't there already
   drupal_add_library('system', 'drupal.ajax');
   drupal_add_library('system', 'jquery.cookie');
-  
+
   // add some settings
   $logged_in = FALSE;
   if ($user->uid) {
@@ -224,7 +224,7 @@ function twoofakind_com_au_block_info() {
 
 /**
  * Implementation of hook_block_view()
- * 
+ *
  * note: http://drupal.org/project/efq_views
  * wasn't stable enough to be used (04/2011)
  */
@@ -246,19 +246,19 @@ function twoofakind_com_au_block_view($delta = '') {
 
 /**
  * Render the recent messages block
- * 
+ *
  * Grabs up to 5 most recent messages and adds the unread count to the block subject
- * 
+ *
  * this was inspired by http://drupal.org/node/624528 but that example is not functional
  * (at least not in D7).
- * 
+ *
  * @todo
  * It would be nicer if we could get the username to be used instead of the email
- * subject for consistency with other blocks. May be too much overhead at this time so 
+ * subject for consistency with other blocks. May be too much overhead at this time so
  * will wait until it is requested by client. Would also be difficult to get the sex.
  * The only way might be to expose the messages to views and do the blocks in a similar way
  * TOO MUCH EFFORT FOR THE TIME BEING
- * 
+ *
  * @return
  *   A completed block array with subject and content
  */
@@ -270,7 +270,7 @@ function _twoofakind_com_au_block_recent_messages() {
 
   // Replace 'inbox' with 'sent' to display sent messages or 'list' to display all messages.
   // $query = _privatemsg_assemble_query('list', $user, 'inbox');
-  // @todo - inbox/sent gets ignored. Cannot get inbox or sent get via the gui either. 
+  // @todo - inbox/sent gets ignored. Cannot get inbox or sent get via the gui either.
   //         is it how D7 version works?
   // Load 5 messages/threads. Replace 5 if you want to display a different amount of messages.
   $result = $query->limit(5)->execute();
@@ -371,7 +371,7 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
       _twoofakind_com_au_form_alter_user_register_form($form, $form_state);
       _twoofakind_com_au_form_fix_location_fieldset($form, $form_state);
       break;
-    
+
     case 'user_login' :
       _twoofakind_com_au_form_alter_user_login_form($form, $form_state);
       break;
@@ -380,17 +380,31 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
       _twoofakind_com_au_form_comment_form($form, $form_state);
       break;
   }
+
+  // is a bad way of checking for the abusive user form id
+  // there is a better way
+  if (
+    strpos($form_id, 'webform_client_form') !== FALSE
+    && isset($form['submitted']['username'])
+  ) {
+    // we don't want to do this for the contact form
+    // we only need this function for the abusive user form
+    $params = drupal_get_query_parameters();
+    if (isset($params['username'])) {
+      $form['submitted']['username']['#default_value'] = $params['username'];
+    }
+  }
 }
 
 /**
  * Alter the views exposed form for user search
- * 
+ *
  * Adding users match criteria to the form
  * if no criteria has been entered manually
- * 
+ *
  * @param $form
  *   A form
- * 
+ *
  * @param $form_state
  */
 function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_state) {
@@ -430,13 +444,13 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
 
   // remove some fields for anonymous users
   _twoofakind_com_au_form_user_search_remove_fields($form);
-  
+
   // This exposed search view filter block is picking up all filters / sorts passed via GET
   // we need to make sure it is passed only what it knows it can accept then it at least plays nice
   // the the view who is supposed to accept the input does so and away we go
   if (!array_key_exists($form_state['input']['sort_by'], $form['sort_by']['#options'])) {
     $default_sort_by = key($form['sort_by']['#options']); // not really default, just first
-    $form_state['view']->exposed_input['sort_by'] = $default_sort_by;    
+    $form_state['view']->exposed_input['sort_by'] = $default_sort_by;
     $form_state['input']['sort_by'] = $default_sort_by;
     $form_state['values']['sort_by'] = $default_sort_by;
     $form_state['complete form']['sort_by']['#value'] = $default_sort_by;
@@ -456,7 +470,7 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
   if (isset($_SESSION['UserSearchFormClear'])) {
     return;
   }
-  
+
   // we are now no longer overriding  search fields with personal options
   // we may bring this back in on a button push at some point for the more intelligent people
   return;
@@ -464,7 +478,7 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
   // THIS HAS BEEN SHELVED FOR THE TIME BEING
   // IT IS NOT POSSIBLE WITHOUT CREATING A NEW TABLE
   // TO STORE THE FORM STATE BETWEEN PAGE LOADS
-  // WILL REQUIRE THE SESSION_API AND MORE WORK THAN I 
+  // WILL REQUIRE THE SESSION_API AND MORE WORK THAN I
   // HAVE TIME FOR AT THIS POINT
   // we need to store each form state in to a session variable
   // so we can compare this form_state against the last
@@ -519,7 +533,7 @@ function _twoofakind_com_au_form_views_exposed_form_user_search(&$form, &$form_s
 
 /**
  * Grab a match fields from user object and return as array
- * 
+ *
  * @param integer $uid (optional)
  *   A user id
  */
@@ -591,7 +605,7 @@ function _twoofakind_com_au_user_match_criteria($uid = NULL) {
 
 /**
  * Remove some fields from the search form for anon users
- * 
+ *
  * @param $form
  *   A form
  */
@@ -604,7 +618,7 @@ function _twoofakind_com_au_form_user_search_remove_fields(&$form) {
     return;
   }
 
-  // we need to remove some options from the form if 
+  // we need to remove some options from the form if
   // the user is not logged in
   // there is some JS that goes along with this
   // stupid labels were still appearing
@@ -636,16 +650,16 @@ function _twoofakind_com_au_form_user_search_remove_fields(&$form) {
 
 /**
  * A check to see if we should overwrite this value with match criteria
- * 
+ *
  * @param $form_state
  *   A form state
- * 
+ *
  * @param $field
  *   The field we're looking to override
- * 
+ *
  * @param $min_max
  *   A special addition for BETWEEN values
- * 
+ *
  * @todo It would be better to do the session handling in this function as well
  */
 function _twoofakind_com_au_form_user_search_override_field($form_state, $field_key) {
@@ -679,16 +693,16 @@ function _twoofakind_com_au_form_user_search_override_field($form_state, $field_
 
 /**
  * Alter the views exposed form for people page
- * 
+ *
  * Add some help text
  * And modify some form elements
  * And add another submit function
- * 
+ *
  * Modifying to checkbox and submit functions were taking too long
- * 
+ *
  * @param $form
  *   A form
- * 
+ *
  * @param $form_state
  *   And it's for  state
  */
@@ -712,7 +726,7 @@ function _twoofakind_com_au_form_views_exposed_form_people_page(&$form, &$form_s
 //  dsm($form);
 //  if (isset($form_state['values']['access_new'])) {
 //    if () {
-//      
+//
 //    }
 //  }
   // add your own submit function to deal with checkbox modification
@@ -725,10 +739,10 @@ function _twoofakind_com_au_form_views_exposed_form_people_page(&$form, &$form_s
 
 /**
  * Add some additional submit processing
- * 
+ *
  * @param $form
  *   A form
- * 
+ *
  * @param $form_state
  *   And it's for  state
  */
@@ -746,10 +760,10 @@ function _twoofakind_com_au_form_views_exposed_form_people_page(&$form, &$form_s
 
 /**
  * Alter the views exposed form for all other views
- * 
+ *
  * @param $form
  *   A form
- * 
+ *
  * @param $form_state
  *  A form's state
  */
@@ -777,10 +791,10 @@ function _twoofakind_com_au_form_views_exposed_form(&$form, &$form_state) {
 
 /**
  * Alter the comment form for question
- * 
+ *
  * @param $form
  *   A form
- * 
+ *
  * @param $form_state
  *  A form's state
  */
@@ -799,10 +813,10 @@ function _twoofakind_com_au_form_comment_form(&$form, &$form_state) {
 
 /**
  * Fix location fieldset as it's ridiculous
- * 
+ *
  * @param $form
  *   A form
- * 
+ *
  * @param $form_state
  *   The form's state
  */
@@ -817,15 +831,15 @@ function _twoofakind_com_au_form_fix_location_fieldset(&$form, &$form_state) {
 /**
  * Modifies the user login form
  * Simply adding another validator
- * 
+ *
  * @param array $form
  *   The form to alter
- * 
+ *
  * @param array $form_state
  *   It's current state
- * 
+ *
  * @return <none>
- * 
+ *
  * @see hook_form_alter().
  */
 function _twoofakind_com_au_form_alter_user_login_form(&$form, &$form_state) {
@@ -839,15 +853,15 @@ function _twoofakind_com_au_form_alter_user_login_form(&$form, &$form_state) {
 /**
  * Modifies the user registration form
  * Simply adding another validator
- * 
+ *
  * @param array $form
  *   The form to alter
- * 
+ *
  * @param array $form_state
  *   It's current state
- * 
+ *
  * @return <none>
- * 
+ *
  * @see hook_form_alter().
  */
 function _twoofakind_com_au_form_alter_user_register_form(&$form, &$form_state) {
@@ -860,17 +874,17 @@ function _twoofakind_com_au_form_alter_user_register_form(&$form, &$form_state) 
 
 /**
  * Additional validation for user login form
- * We're throwing one more in to deal with 
+ * We're throwing one more in to deal with
  * users who might want to reactivate
- * 
+ *
  * @param array $form
  *   The form to alter
- * 
+ *
  * @param array $form_state
  *   It's current state
- * 
+ *
  * @return <none>
- * 
+ *
  * @see hook_form_alter().
  */
 function _twoofakind_com_au_form_validate_user_login_form_users_roles(&$form, &$form_state) {
@@ -890,7 +904,7 @@ function _twoofakind_com_au_form_validate_user_login_form_users_roles(&$form, &$
       break;
     }
   }
-  
+
   // did they match one of the roles?
   if (!isset($message_callback)) {
     // no, then we'll use the standard login process and messages
@@ -907,22 +921,22 @@ function _twoofakind_com_au_form_validate_user_login_form_users_roles(&$form, &$
     $message = $message_callback($uid, $form_state['values']['name']);
     form_set_error('name', t($message));
   }
-  
+
 }
 
 /**
  * Additional validation for user register form
- * We're throwing one more in to deal with 
+ * We're throwing one more in to deal with
  * users who might want to reactivate
- * 
+ *
  * @param array $form
  *   The form to alter
- * 
+ *
  * @param array $form_state
  *   It's current state
- * 
+ *
  * @return <none>
- * 
+ *
  * @see hook_form_alter().
  */
 function _twoofakind_com_au_form_validate_user_register_form_users_roles(&$form, &$form_state) {
@@ -942,24 +956,24 @@ function _twoofakind_com_au_form_validate_user_register_form_users_roles(&$form,
       break;
     }
   }
-  
+
   // did they match one of the roles?
   if (!isset($message_callback)) {
     // no, then we'll use the standard registration process and messages
     return;
   }
-  
+
   // set form error
   $message = $message_callback($uid, $form_state['values']['name']);
   form_set_error('mail', t($message));
-  
+
 }
 
 /**
  * Roles we'll be checking and their respective messages
- * 
+ *
  * @param none
- * 
+ *
  * @return array
  *   roles and messages
  */
@@ -976,16 +990,16 @@ function _twoofakind_com_au_form_validate_users_roles_messages() {
 
 /**
  * Returns a message for abusive users
- * 
+ *
  * @param string $uid
  *   UID of the user
- * 
+ *
  * @param string $name
  *   Username of the user
- * 
+ *
  * @return string
  *   Message for the user
- * 
+ *
  * @todo
  *   At some point we could replace the static content with a box
  */
@@ -996,16 +1010,16 @@ function _twoofakind_com_au_user_login_message_abusive($uid, $name) {
 
 /**
  * Returns a message for deactivated users
- * 
+ *
  * @param string $uid
  *   UID of the user
- * 
+ *
  * @param string $name
  *   Username of the user
- * 
+ *
  * @return string
  *   Message for the user
- * 
+ *
  * @todo
  *   At some point we could replace the static content with a box
  */
@@ -1089,7 +1103,7 @@ function twoofakind_com_au_action_info() {
 
 /**
  * UnBlocks the current user.
- * 
+ *
  * For some reason this action does not exist in the user module
  *
  * @ingroup actions
@@ -1212,13 +1226,13 @@ function twoofakind_com_au_abusive_user_action(&$entity, $context = array()) {
     'value' => date('F jS Y') . ' - ' . t('User confirmed as abusive and blocked by administrator')
   );
   $edit[TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES] = $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES};
-  
+
   // save account
   $account = user_save($account, $edit);
-  
+
   // notify user
   _user_mail_notify('abusive_user', $account);
-  
+
   watchdog('action', 'User %name marked as abusive.', array('%name' => $account->name));
 }
 
@@ -1258,10 +1272,10 @@ function twoofakind_com_au_deactivate_user_action(&$entity, $context = array()) 
     $edit['roles'] = $account->roles;
   }
   $account = user_save($account, $edit);
-  
+
   // notify user
   _user_mail_notify('deactivate_user', $account);
-  
+
   watchdog('action', 'User %name deactivated.', array('%name' => $account->name));
 }
 
@@ -1296,10 +1310,10 @@ function twoofakind_com_au_reactivate_user_action(&$entity, $context = array()) 
     $edit['roles'] = $account->roles;
   }
   $account = user_save($account, $edit);
-  
+
   // notify user
   _user_mail_notify('reactivate_user', $account);
-  
+
   watchdog('action', 'User %name reactivated.', array('%name' => $account->name));
 }
 
@@ -1386,9 +1400,9 @@ function twoofakind_com_au_entity_info() {
 
 /**
  * Implements hook_user_view().
- * 
+ *
  * This needs to be here and not the user include
- * 
+ *
  * @todo
  *   Improve the process matches section
  *   Ideally there should only ever be one match record
@@ -1444,7 +1458,7 @@ function twoofakind_com_au_user_view($account, $view_mode, $langcode) {
 
 /**
  * Implements hook_user_login().
- * 
+ *
  * This needs to be here and not the user include
  */
 function twoofakind_com_au_user_login(&$edit, $account) {
@@ -1508,16 +1522,16 @@ function twoofakind_com_au_user_login(&$edit, $account) {
  * Implements hook_user_presave().
  */
 function twoofakind_com_au_user_presave(&$edit, $account, $category) {
-  
+
   // add Active User role
   if (isset($account->is_new) && !empty($account->is_new)) {
-    
+
     $roles_to_add = array();
     $role_active = user_role_load_by_name(TWOOFAKIND_COM_AU_ROLE_ACTIVE_USER);
     if ($role_active) {
       $roles_to_add[$role_active->rid] = $role_active->name;
     }
-    
+
     $edit['roles'] = $roles_to_add + $edit['roles'];
   }
 }
@@ -1528,7 +1542,7 @@ function twoofakind_com_au_user_presave(&$edit, $account, $category) {
 
 /**
  * Implements hook_field_formatter_info
- * 
+ *
  * @see hook_field_formatter_info_alter()
  * @see hook_field_formatter_view()
  * @see hook_field_formatter_prepare_view()
@@ -1710,6 +1724,14 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
       )
     );
 
+    // abusive user webform
+    $fields['abusive_user_webform'] = array(
+      'title' => t('Abusive user complaint form'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
+      'function' => 'theme_ds_abusive_user_webform_field'
+    );
+
     // pvt message
     $fields['privatemsg'] = array(
       'title' => t('Private Message'),
@@ -1829,7 +1851,7 @@ function _twoofakind_com_au_ds_render_user_picture($field) {
  * @param $field
  *   The field to be output
  *
- * @return 
+ * @return
  *   The rendered field
  *
  * @see hook_ds_fields_info()
@@ -1856,7 +1878,7 @@ function theme_ds_age_field($field) {
  * @param $field
  *   The field to be output
  *
- * @return 
+ * @return
  *   The rendered field
  *
  * @see hook_ds_fields_info()
@@ -1880,7 +1902,7 @@ function theme_ds_location_field($field) {
  * @param $field
  *   The field to be output
  *
- * @return 
+ * @return
  *   The rendered field
  *
  * @see hook_ds_fields_info()
@@ -1923,7 +1945,7 @@ function theme_ds_admin_notes_protected_field($field) {
  * @param $field
  *   The field to be output
  *
- * @return 
+ * @return
  *   The rendered field
  *
  * @see hook_ds_fields_info()
@@ -2001,7 +2023,7 @@ function theme_ds_privatemsg_field($field) {
  * @param $field
  *   The field to be output
  *
- * @return 
+ * @return
  *   The rendered field
  *
  * @see hook_ds_fields_info()
@@ -2041,13 +2063,49 @@ function theme_ds_abusive_user_field($field) {
   return $output;
 }
 
+/**
+ * Theme field for abusive user webform DS field
+ *
+ * @param $field
+ *   The field to be output
+ *
+ * @return
+ *   The rendered field
+ *
+ * @see hook_ds_fields_info()
+ */
+function theme_ds_abusive_user_webform_field($field) {
+
+  if (!user_access('access user profiles')) {
+    return '';
+  }
+
+  // grab the username from the url
+  $path = request_path();
+  $path_parts = explode('/', $path);
+  $username = end($path_parts);
+
+  $output = l(
+    'Report as abusive',
+    'abusive-user-complaint',
+    array(
+      'title' => 'Report user as abusive',
+      'query' => array(
+        'username' => $username
+      )
+    )
+  );
+
+  return $output;
+}
+
 /* * ****************************************************************************
  * Utility functions
  * **************************************************************************** */
 
 /**
  * Turns the block subject in to a link that is directed to the more link href
- * 
+ *
  * This function has ceased to work
  * The content array doesn't include anything but markup any more
  * I've added some jQuery to make the headings clickable
@@ -2056,7 +2114,7 @@ function _twoofakind_com_au_subject_more(&$data) {
 
   // return
   return;
-  
+
   // grab view information
   $view_path = false;
   if (isset($data['content']['#views_contextual_links_info']['views_ui']['view_name'])) {
@@ -2157,7 +2215,7 @@ function _twoofakind_com_au_user_ajax_response($user, $entity_type, $message, $l
   // wrap it all in a div
   $output = "<div id=\"$entity_type-{$user->uid}\">$link $message</div>";
 
-  // send it back  
+  // send it back
   $page = array(
     '#type' => 'ajax',
     '#commands' => array(
@@ -2183,7 +2241,7 @@ function _twoofakind_com_au_user_nojs_response($message, $redirect, $status = 'e
  *
  * @param object $object
  *   Object to extract it from
- * 
+ *
  * @return string
  *   Langcode
  */
@@ -2227,31 +2285,31 @@ function twoofakind_com_au_cron() {
   foreach ($uids as $uid) {
     $queue_matches->createItem($uid);
   }
-  
+
   // notify new users
 //  $uids = _twoofakind_com_au_users_to_notify();
 //  $queue_notify = DrupalQueue::get('user_notify');
 //  foreach ($uids as $uid) {
 //    $queue_notify->createItem($uid);
 //  }
-  
+
 }
 
 /**
  * Grabs a list of UID's or User objects that we will create matches for
- * 
+ *
  * At the moment it does nothing but return published users
  * At some later point we could add criteria if we need to
- * 
+ *
  * @param boolean $objects
  *   Do you want the return array to include id's or objects
- * 
+ *
  * @return array
  *   Array of ids or objects
  */
 function _twoofakind_com_au_users_to_match($objects = FALSE) {
 
-  // set up the query   
+  // set up the query
   $query = new EntityFieldQuery();
   // we only want users
   $query->entityCondition('entity_type', 'user', '=');
@@ -2274,10 +2332,10 @@ function _twoofakind_com_au_users_to_match($objects = FALSE) {
 
 /**
  * Grabs a list of UID's or User objects that we need to notify
- * 
+ *
  * @param boolean $objects
  *   Do you want the return array to include id's or objects
- * 
+ *
  * @return array
  *   Array of ids or objects
  */
@@ -2294,7 +2352,7 @@ function _twoofakind_com_au_users_to_notify($objects = FALSE) {
 
   // this implemented as a double check to make sure people aren't being emailed continually
   return array();
-  
+
   // return result
   if (count($result)) {
     $return = array_keys($result);
@@ -2309,7 +2367,7 @@ function _twoofakind_com_au_users_to_notify($objects = FALSE) {
 
 /**
  * Process matches for an individual user
- * 
+ *
  * @param $uid
  *   User id of user to be matched
  */
@@ -2363,7 +2421,7 @@ function _twoofakind_com_au_cron_process_user_matches($uid) {
 
 /**
  * Process notifying an individual user
- * 
+ *
  * @param $uid
  *   User id of user to be notified
  */
@@ -2371,14 +2429,14 @@ function _twoofakind_com_au_cron_process_user_notify($uid) {
 
   // load the account
   $account = user_load($uid);
-  
+
   // add the active user role to their account
   $edit = array();
   $role_active = user_role_load_by_name(TWOOFAKIND_COM_AU_ROLE_ACTIVE_USER);
   if ($role_active) {
     $account->roles[$role_active->rid] = $role_active->name;
     $edit['roles'] = $account->roles;
-    
+
     // save account
     $account = user_save($account, $edit);
 
@@ -2443,7 +2501,7 @@ function twoofakind_com_au_migrate_api() {
  *
  * @param object $object
  *   Object to extract it from
- * 
+ *
  * @return string
  *   Langcode
  */
@@ -2457,33 +2515,33 @@ function _object_language($object) {
 /**
  * Checks if a user has a role
  * I've copied the concept from user_is_blocked
- * 
+ *
  * @param string $name
  *   Username of the user
- * 
+ *
  * @param string $role_name
  *   Name of the role
- * 
+ *
  * @return object
- * 
+ *
  * @see user_is_blocked()
  */
 function _twoofakind_com_au_user_has_role($role_name, $name = null, $mail = null) {
-  
+
   if (empty($name) && empty ($mail)) {
     return FALSE;
   }
-  
+
   $query = db_select('users', 'u');
   $query->addJoin('LEFT', 'users_roles', 'ur', 'u.uid = %alias.uid');
   $query->addJoin('LEFT', 'role', 'r', 'ur.rid = %alias.rid');
   if (!empty($name)) {
-    $query->condition('u.name', db_like($name), 'LIKE'); 
+    $query->condition('u.name', db_like($name), 'LIKE');
   }
   else if (!empty($mail)) {
-    $query->condition('u.mail', db_like($mail), 'LIKE'); 
+    $query->condition('u.mail', db_like($mail), 'LIKE');
   }
-  $query->condition('r.name', db_like($role_name), 'LIKE'); 
+  $query->condition('r.name', db_like($role_name), 'LIKE');
   $query->fields('u', array('uid' => 'uid'));
   return $query->execute()->fetchObject();
 }
