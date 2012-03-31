@@ -5,7 +5,7 @@
  */
 
 /**
- * Implementation of hook_image_default_styles().
+ * Implements hook_image_default_styles().
  */
 function theme_unite_config_image_default_styles() {
   $styles = array();
@@ -35,7 +35,7 @@ function theme_unite_config_image_default_styles() {
   $styles['featured_content'] = array(
     'name' => 'featured_content',
     'effects' => array(
-      3 => array(
+      5 => array(
         'label' => 'Scale and crop',
         'help' => 'Scale and crop will maintain the aspect-ratio of the original image, then crop the larger dimension. This is most useful for creating perfectly square thumbnails without stretching the image.',
         'effect callback' => 'image_scale_and_crop_effect',
@@ -120,7 +120,7 @@ function theme_unite_config_image_default_styles() {
   $styles['slide_shows_1'] = array(
     'name' => 'slide_shows_1',
     'effects' => array(
-      7 => array(
+      4 => array(
         'label' => 'Scale and crop',
         'help' => 'Scale and crop will maintain the aspect-ratio of the original image, then crop the larger dimension. This is most useful for creating perfectly square thumbnails without stretching the image.',
         'effect callback' => 'image_scale_and_crop_effect',
@@ -129,8 +129,8 @@ function theme_unite_config_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale_and_crop',
         'data' => array(
-          'width' => '948',
-          'height' => '341',
+          'width' => '480',
+          'height' => '240',
         ),
         'weight' => '1',
       ),
