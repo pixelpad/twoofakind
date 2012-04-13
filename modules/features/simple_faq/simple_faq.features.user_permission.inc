@@ -5,7 +5,7 @@
  */
 
 /**
- * Implementation of hook_user_default_permissions().
+ * Implements hook_user_default_permissions().
  */
 function simple_faq_user_default_permissions() {
   $permissions = array();

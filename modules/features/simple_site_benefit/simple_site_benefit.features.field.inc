@@ -5,7 +5,7 @@
  */
 
 /**
- * Implementation of hook_field_default_fields().
+ * Implements hook_field_default_fields().
  */
 function simple_site_benefit_field_default_fields() {
   $fields = array();
@@ -49,16 +49,25 @@ function simple_site_benefit_field_default_fields() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => 0,
+          'weight' => '0',
+        ),
+        'slideshow' => array(
+          'label' => 'hidden',
+          'module' => 'text',
+          'settings' => array(
+            'trim_length' => '200',
+          ),
+          'type' => 'text_summary_or_trimmed',
+          'weight' => '2',
         ),
         'teaser' => array(
           'label' => 'hidden',
           'module' => 'text',
           'settings' => array(
-            'trim_length' => 600,
+            'trim_length' => '200',
           ),
           'type' => 'text_summary_or_trimmed',
-          'weight' => 0,
+          'weight' => '0',
         ),
       ),
       'entity_type' => 'node',
@@ -119,19 +128,25 @@ function simple_site_benefit_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '1',
+        ),
+        'slideshow' => array(
+          'label' => 'hidden',
           'module' => 'image',
           'settings' => array(
-            'image_link' => '',
-            'image_style' => '',
+            'image_link' => 'content',
+            'image_style' => 'slide_shows_1',
           ),
           'type' => 'image',
-          'weight' => 1,
+          'weight' => '0',
         ),
         'teaser' => array(
           'label' => 'above',
           'settings' => array(),
           'type' => 'hidden',
-          'weight' => 0,
+          'weight' => '0',
         ),
       ),
       'entity_type' => 'node',
@@ -142,9 +157,9 @@ function simple_site_benefit_field_default_fields() {
         'alt_field' => 1,
         'file_directory' => 'content_types/benefit',
         'file_extensions' => 'png gif jpg jpeg',
-        'max_filesize' => '200KB',
-        'max_resolution' => '800x600',
-        'min_resolution' => '400x400',
+        'max_filesize' => '480KB',
+        'max_resolution' => '800x800',
+        'min_resolution' => '480x480',
         'title_field' => 1,
         'user_register_form' => FALSE,
       ),
@@ -161,80 +176,10 @@ function simple_site_benefit_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-simple_site_benefit-field_slideshows'
-  $fields['node-simple_site_benefit-field_slideshows'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_slideshows',
-      'foreign keys' => array(),
-      'indexes' => array(
-        'value' => array(
-          0 => 'value',
-        ),
-      ),
-      'module' => 'list',
-      'settings' => array(
-        'allowed_values' => array(
-          0 => '0',
-          1 => 'Slide shows',
-        ),
-        'allowed_values_function' => '',
-      ),
-      'translatable' => '1',
-      'type' => 'list_boolean',
-    ),
-    'field_instance' => array(
-      'bundle' => 'simple_site_benefit',
-      'default_value' => array(
-        0 => array(
-          'value' => 0,
-        ),
-      ),
-      'deleted' => '0',
-      'description' => 'Check this box if you would like this content to be included in the slide show',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'list',
-          'settings' => array(),
-          'type' => 'list_default',
-          'weight' => 2,
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-      ),
-      'entity_type' => 'node',
-      'field_name' => 'field_slideshows',
-      'label' => 'Slide show',
-      'required' => 0,
-      'settings' => array(
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'options',
-        'settings' => array(
-          'display_label' => 0,
-        ),
-        'type' => 'options_onoff',
-        'weight' => 0,
-      ),
-    ),
-  );
-
   // Translatables
   // Included for use with string extractors like potx.
   t('Body');
-  t('Check this box if you would like this content to be included in the slide show');
   t('Main image');
-  t('Slide show');
 
   return $fields;
 }
