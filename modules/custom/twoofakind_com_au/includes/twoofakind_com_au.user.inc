@@ -14,7 +14,7 @@
  *
  * @param $items
  *   Menu items array
- * 
+ *
  * @see hook_menu()
  */
 function _twoofakind_com_au_user_menu(&$items) {
@@ -27,7 +27,7 @@ function _twoofakind_com_au_user_menu(&$items) {
     'access arguments' => array('access user profiles'),
     'file' => 'includes/twoofakind_com_au.user.inc',
   );
-  
+
   // Edit profile
   $items['user/edit/profile'] = array(
     'title' => 'Edit profile',
@@ -37,7 +37,7 @@ function _twoofakind_com_au_user_menu(&$items) {
     'access arguments' => array('access user profiles'),
     'file' => 'includes/twoofakind_com_au.user.inc',
   );
-  
+
   // Edit match criteria
   $items['user/edit/match'] = array(
     'title' => 'Edit match criteria',
@@ -47,7 +47,7 @@ function _twoofakind_com_au_user_menu(&$items) {
     'access arguments' => array('access user profiles'),
     'file' => 'includes/twoofakind_com_au.user.inc',
   );
-  
+
   // Request reactivation
   $items['user/%user/reactivate'] = array(
     'title' => 'Reactivate account',
@@ -56,9 +56,18 @@ function _twoofakind_com_au_user_menu(&$items) {
     'access callback' => TRUE,
     'file' => 'includes/twoofakind_com_au.user.inc',
   );
-  
+
+  // Mark as abusive and block
+  $items['user/%user/abusive'] = array(
+    'title' => 'Block abusive user',
+    'page callback' => 'twoofakind_com_au_user_abusive',
+    'page arguments' => array(1),
+    'access arguments' => array('administer user profiles'),
+    'file' => 'includes/twoofakind_com_au.user.inc',
+  );
+
   // ADMIN
-  
+
   // user emails admin screen
   $items['admin/config/people/email_templates'] = array(
     'title' => 'Account email templates',
@@ -74,15 +83,15 @@ function _twoofakind_com_au_user_menu(&$items) {
 
 /**
  * Process user menu view items
- * 
+ *
  * @see hook_menu()
  */
 function twoofakind_com_au_user_menu_view() {
 
   global $user;
-  
+
   $path = sprintf('profile/%s', $user->name);
-  
+
   drupal_goto($path);
 
 }
@@ -92,29 +101,29 @@ function twoofakind_com_au_user_menu_view() {
  *
  * @param $type
  *   Menu type
- * 
+ *
  * @see hook_menu()
  */
 function twoofakind_com_au_user_menu_edit($edit) {
 
   global $user;
-  
+
   $path = sprintf('user/%d/edit', $user->uid);
   $options = array(
     'fragment' => $edit
   );
-  
+
   drupal_goto($path, $options);
 
 }
 
 /**
  * Reactivate user
- * 
+ *
  * @see hook_menu()
  */
 function twoofakind_com_au_user_reactivate($account) {
-  
+
   $edit = array();
   $role_reactivate = user_role_load_by_name('Reactivate');
   if (!$role_reactivate) {
@@ -124,11 +133,11 @@ function twoofakind_com_au_user_reactivate($account) {
     drupal_goto('<front>');
     return;
   }
-  
+
   // add reactivate role
   $account->roles[$role_reactivate->rid] = $role_reactivate->name;
   $edit['roles'] = $account->roles;
-    
+
   // add a note to the account indicating they would like to reactivate
   $langid = _object_language($account);
   if (
@@ -143,13 +152,51 @@ function twoofakind_com_au_user_reactivate($account) {
     'value' => date('F jS Y') . ' - ' . t('User requested reactivation')
   );
   $edit[TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES] = $account->{TWOOFAKIND_COM_AU_FIELD_NAME_ADMIN_NOTES};
-  
+
   // save account
   $account = user_save($account, $edit);
-  
+
   // set message and redirect
   drupal_set_message('Your request for reactivation has been processed, please keep an eye on your email account for confirmation.', 'status');
   drupal_goto('<front>');
+
+}
+
+/**
+ * Block abusive user
+ *
+ * @see hook_menu()
+ */
+function twoofakind_com_au_user_abusive($account) {
+
+  // determine if destination has been provided
+  $params = drupal_get_query_parameters();
+  $destination = 'admin'; // default
+  if (isset($params['destination'])) {
+    $destination = $params['destination'];
+  }
+
+  // if no account given then throw up a message
+  // and redirect
+  if (!$account) {
+    drupal_set_message(t('Could not find user to mark as abusive'), 'error');
+    drupal_goto($destination);
+  }
+
+  // use the action that exists
+  twoofakind_com_au_abusive_user_action($account);
+
+  // set message and redirect
+  drupal_set_message(
+    t(
+      'User @username marked as abusive - they have been notified and blocked',
+      array(
+        '@username' => $account->name
+      )
+    ),
+    'status'
+  );
+  drupal_goto($destination);
 
 }
 
@@ -161,22 +208,22 @@ function twoofakind_com_au_user_reactivate($account) {
  * Implementation of hook_settings().
  */
 function twoofakind_com_au_user_email_templates_settings() {
-  
+
   // init form
   $form = array();
-  
+
   // include user module admin functions
   module_load_include('inc', 'user', 'user.admin');
 
   // grab current templates from user module
   $form_user_admin_settings = user_admin_settings();
-  
+
   // set up vertical tabs for our form
   $form['email'] = array(
     '#type' => 'vertical_tabs',
   );
   $email_token_help = t('Available variables are: [site:name], [site:url], [user:name], [user:mail], [site:login-url], [site:url-brief], [user:edit-url], [user:one-time-login-url], [user:cancel-url].');
-  
+
   // email field groups (vertical tabs)
   $fieldgroups_emails_current = array(
     'email_admin_created',
@@ -186,17 +233,17 @@ function twoofakind_com_au_user_email_templates_settings() {
     'email_activated',
     'email_cancel_confirm',
   );
-  
+
   // grab the current email field groups and
   // add to our own form
   foreach ($fieldgroups_emails_current as $fieldgroup) {
     $form[$fieldgroup] = $form_user_admin_settings[$fieldgroup];
   }
-  
+
   // make some minor changes to the form
   $form['email_pending_approval']['#title'] = t('Welcome');
   $form['email_activated']['#title'] = t('Account approved');
-  
+
   // add some of our own emails
   // use the pending approval as a base
   $email_template_fieldset = $form['email_password_reset'];
@@ -204,7 +251,7 @@ function twoofakind_com_au_user_email_templates_settings() {
   unset($email_template_fieldset['user_mail_password_reset_subject']);
   $email_template_body = $email_template_fieldset['user_mail_password_reset_body'];
   unset($email_template_fieldset['user_mail_password_reset_body']);
-  
+
   // add the custom emails
   $emails_custom = _twoofakind_com_au_custom_email_templates();
   foreach ($emails_custom as $key => $data) {
@@ -218,17 +265,17 @@ function twoofakind_com_au_user_email_templates_settings() {
     $form['email_' . $key]['user_mail_' . $key . '_body'] = $email_template_body;
     $form['email_' . $key]['user_mail_' . $key . '_body']['#default_value'] = _twoofakind_com_au_user_mail_text($key . '_body', NULL, array(), FALSE);
   }
-  
+
   return system_settings_form($form);
 }
 
 /**
  * Returns a mail string for a variable name.
- * 
+ *
  * Duplicate of _user_mail_text but for our custom email templates
  *
  * Used by user_mail() and the settings forms to retrieve strings.
- * 
+ *
  * @see _user_mail_text()
  */
 function _twoofakind_com_au_user_mail_text($key, $language = NULL, $variables = array(), $replace = TRUE) {
@@ -239,7 +286,7 @@ function _twoofakind_com_au_user_mail_text($key, $language = NULL, $variables = 
     $text = $admin_setting;
   }
   else {
-    
+
     // No override, return default string.
     $key_parts = explode('_', $key);
     $data_key = array_pop($key_parts);
@@ -263,17 +310,17 @@ function _twoofakind_com_au_user_mail_text($key, $language = NULL, $variables = 
 
 /**
  * Current custom email templates
- * 
+ *
  * @param string $key
  *  Pass a key if you only want info from one of the custom emails
- * 
+ *
  * @param string $data_key
  *  Pass a data_key if you only want one section of the data
- * 
+ *
  * @return none
  */
 function _twoofakind_com_au_custom_email_templates($key = NULL, $data_key = NULL) {
-  
+
   $emails_custom = array(
     'abusive_user' => array(
       'title' => 'Abusive user',
@@ -314,7 +361,7 @@ Your account on [site:name] has been activated.
 --  [site:name] team"
     ),
   );
-  
+
   $return = $emails_custom;
   if (!empty($key) && isset($emails_custom[$key])) {
     $return = $emails_custom[$key];
@@ -322,9 +369,9 @@ Your account on [site:name] has been activated.
       $return = $return[$data_key];
     }
   }
-  
+
   return $return;
-  
+
 }
 
 /******************************************************************************
@@ -333,29 +380,29 @@ Your account on [site:name] has been activated.
 
 /**
  * Render the profile block
- * 
+ *
  * Simple block that will output picture and links
- * 
+ *
  * @return
  *   A completed block array with subject and content
  */
 function _twoofakind_com_au_block_profile() {
-  
+
   global $user;
-  
+
   $block = array();
-  
+
   // empty subject
   $block['subject'] = $user->name;
-  
+
   // initialise content
   $content = array(
     '<div class="block-user-profile">'
   );
-  
+
   // grab the picture of the user
   $content[] = theme('user_picture', array('account' => $user));
-  
+
   // grab the user profile menu
   $menu_minified = array();
   $options = array(
@@ -365,12 +412,12 @@ function _twoofakind_com_au_block_profile() {
   );
   $menu_items = menu_tree('menu-user-profile-block');
   foreach ($menu_items as $menu_item) {
-    
+
     // only process actual menu items
     if (is_array($menu_item) && !array_key_exists('#title', $menu_item)) {
       continue;
     }
-    
+
     if (isset($menu_item['#localized_options']['attributes']['title'])) {
       $options['attributes']['title'] = $menu_item['#localized_options']['attributes']['title'];
     } else {
@@ -378,7 +425,7 @@ function _twoofakind_com_au_block_profile() {
     }
     $menu_minified[] = l($menu_item['#title'], $menu_item['#href'], $options);
   }
-  
+
   // add the menu to the content
   $content[] = theme('item_list', array(
       'items' => $menu_minified,
@@ -388,15 +435,15 @@ function _twoofakind_com_au_block_profile() {
       )
     )
   );
-  
+
   // close surrounding div
   $content[] = '</div>';
-  
+
   // finalise the content
   $block['content'] = implode("\n", $content);
-  
+
   return $block;
-  
+
 }
 
 /******************************************************************************
@@ -405,18 +452,18 @@ function _twoofakind_com_au_block_profile() {
 
 /**
  * Alter the user profile form
- * 
+ *
  * Adding some headings and text to user profile form
  * and collapsing (by default) the pvt messages fieldset
- * 
+ *
  * @param
  *   A form
- * 
+ *
  * @param
  *   And it's for  state
  */
 function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
-  
+
   global $user;
 
   // set up some basic defaults
@@ -443,16 +490,16 @@ function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
   $form['#groups']['group_tabs']->weight = 0;
   $form['#groups']['group_tabs_match']->weight = 1;
   $form['account']['name']['#weight'] = -2000;
-  
+
   // and locations
   if (isset($form['locations'])) {
     $form['locations']['#weight'] = -500;
   }
-  
+
   // cycle through each of the above and insert them in to the form
   $index = 0;
   foreach ($defaults as $delta => $data) {
-    
+
     // grab box if one exists
     $box = boxes_block_view($delta);
     if ($box) {
@@ -462,16 +509,16 @@ function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
       $box_title = $data['subject'];
       $box_content = $data['content'];
     }
-    
+
     // extract the anchor
     $anchor_parts = explode('_', $delta);
     $anchor = end($anchor_parts);
-    
+
     // put it all together
     $markup = array();
     $markup[] = sprintf($title, $anchor, $box_title);
     $markup[] = $box_content;
-    
+
     // build a form delta
     $form_delta = str_replace('user_edit_', 'user_edit_'.$index.'_', $delta);
     // add to form
@@ -479,10 +526,10 @@ function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
       '#markup' => implode("\n", $markup),
       '#weight' => $data['weight']
     );
-    
+
     ++$index;
   }
-  
+
   // hide the cancel input and add a link instead
   drupal_add_css(drupal_get_path('module', 'twoofakind_com_au') . '/css/twoofakind_com_au.admin.css', 'file');
   $output = array(
@@ -494,7 +541,7 @@ function _twoofakind_com_au_form_user_profile_form(&$form, &$form_state) {
 
   // collapse the pvt messages fieldset
   $form['privatemsg']['#collapsed'] = TRUE;
-  
+
   // hide the admin notes section for non-admin users
   if (!user_access('administer users')) {
     $form['field_admin_notes']['#access'] = FALSE;
