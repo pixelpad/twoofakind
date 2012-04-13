@@ -56,11 +56,11 @@ function twoofakind_user_flag_default_flags() {
     ),
     'show_on_profile' => 0,
     'access_uid' => 'others',
-    'api_version' => 2,
     'module' => 'twoofakind_user',
     'locked' => array(
       0 => 'name',
     ),
+    'api_version' => 2,
   );
   return $flags;
 }
