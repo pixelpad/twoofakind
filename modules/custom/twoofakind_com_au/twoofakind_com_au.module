@@ -385,13 +385,20 @@ function twoofakind_com_au_form_alter(&$form, &$form_state, $form_id) {
   // there is a better way
   if (
     strpos($form_id, 'webform_client_form') !== FALSE
-    && isset($form['submitted']['username'])
+    && isset($form['submitted']['abusive_user'])
   ) {
     // we don't want to do this for the contact form
     // we only need this function for the abusive user form
     $params = drupal_get_query_parameters();
-    if (isset($params['username'])) {
-      $form['submitted']['username']['#default_value'] = $params['username'];
+    if (isset($params['uid'])) {
+      $form['submitted']['abusive_user']['#value'] = $params['uid'];
+    }
+    elseif (!isset($form_state['input']['abusive_user'])) {
+      // we don't have an abusive user id
+      // this form shouldn't be submitted without one
+      // NOTE - we only want to do this if the form hasn't been submitted
+      drupal_set_message(t('Missing abusive user, please visit the abusive user profile and try again.'), 'error');
+      drupal_goto('<front>');
     }
   }
 }
@@ -1724,12 +1731,15 @@ function twoofakind_com_au_ds_fields_info($entity_type) {
       )
     );
 
-    // abusive user webform
+    // abusive user
     $fields['abusive_user_webform'] = array(
-      'title' => t('Abusive user complaint form'),
+      'title' => t('Abusive user webform link'),
       'field_type' => DS_FIELD_TYPE_FUNCTION,
       'ui_limit' => array('user|full', 'user|default', 'user|user_list', 'user|user_list_block'),
-      'function' => 'theme_ds_abusive_user_webform_field'
+      'function' => 'theme_ds_abusive_user_webform_field',
+      'properties' => array(
+        'entity_id_key' => 'uid'
+      )
     );
 
     // pvt message
@@ -2077,13 +2087,14 @@ function theme_ds_abusive_user_field($field) {
 function theme_ds_abusive_user_webform_field($field) {
 
   if (!user_access('access user profiles')) {
-    return '';
+    return;
   }
 
-  // grab the username from the url
-  $path = request_path();
-  $path_parts = explode('/', $path);
-  $username = end($path_parts);
+  // grab the user
+  $account = menu_get_object('user');
+  if (!$account) {
+    return;
+  }
 
   $output = l(
     'Report as abusive',
@@ -2091,7 +2102,7 @@ function theme_ds_abusive_user_webform_field($field) {
     array(
       'title' => 'Report user as abusive',
       'query' => array(
-        'username' => $username
+        'uid' => $account->uid
       )
     )
   );
@@ -2490,6 +2501,120 @@ function twoofakind_com_au_migrate_api() {
     'api' => 2,
   );
   return $api;
+}
+
+/* * ****************************************************************************
+ * Webform functions
+ * **************************************************************************** */
+
+/**
+ * Implements hook_webform_submission_render_alter()
+ * @param type $renderable
+ */
+function twoofakind_com_au_webform_submission_render_alter(&$renderable) {
+
+  // alter the output of some of the webform submission values
+  $webform_nid_abusive = variable_get('twoofakind_com_au_webform_abusive_user', 67);
+  if ($renderable['#node']->nid == $webform_nid_abusive) {
+
+    // grab reporting user
+    $account_reporting = user_load_by_name($renderable['reporting_username']['#markup']);
+    if (!$account_reporting) {
+      return;
+    }
+    // grab abusive user
+    $account_abusive = user_load($renderable['abusive_user']['#markup']);
+    if (!$account_abusive) {
+      return;
+    }
+
+    // change reporting user name in to a link
+    $renderable_reporting_user = $renderable['reporting_username'];
+    $renderable['reporting_username'] = array();
+    $renderable['reporting_username']['#weight'] = $renderable_reporting_user['#weight'];
+    $renderable['reporting_username']['#markup'] = '<label>';
+    $renderable['reporting_username']['#markup'] .= $renderable_reporting_user['#title'];
+    $renderable['reporting_username']['#markup'] .= '</label>';
+    $renderable['reporting_username']['#markup'] .= l(
+      $account_reporting->name,
+      'user/' . $account_reporting->uid,
+      array(
+        'title' => 'Click here to view the reporting user'
+      )
+    );
+    // change reporting user email in to a link
+    $renderable_reporting_email = $renderable['reporting_user_email'];
+    $renderable['reporting_user_email'] = array();
+    $renderable['reporting_user_email']['#weight'] = $renderable_reporting_email['#weight'];
+    $renderable['reporting_user_email']['#markup'] = '<label>';
+    $renderable['reporting_user_email']['#markup'] .= $renderable_reporting_email['#title'];
+    $renderable['reporting_user_email']['#markup'] .= '</label>';
+    $renderable['reporting_user_email']['#markup'] .= l(
+      $account_reporting->mail,
+      'mailto:' . $account_reporting->mail,
+      array(
+        'title' => 'Click here to email the reporting user'
+      )
+    );
+    // change abusive user id in to a link
+    $renderable_abusive_user = $renderable['abusive_user'];
+    $renderable['abusive_user'] = array();
+    $renderable['abusive_user']['#weight'] = $renderable_abusive_user['#weight'];
+    $renderable['abusive_user']['#markup'] = '<label>';
+    $renderable['abusive_user']['#markup'] .= $renderable_abusive_user['#title'];
+    $renderable['abusive_user']['#markup'] .= '</label>';
+    $renderable['abusive_user']['#markup'] .= l(
+      $account_abusive->name,
+      'user/' . $account_abusive->uid,
+      array(
+        'title' => 'Click here to view the abusive user'
+      )
+    );
+    // add a second link to mark the user as abusive
+    $renderable['abusive_user']['#markup'] .= '<p>';
+    $renderable['abusive_user']['#markup'] .=
+      'If you have determined this user is actually abusive click below to bar them from the site';
+    $renderable['abusive_user']['#markup'] .= '</p>';
+    $renderable['abusive_user']['#markup'] .= l(
+      t('Mark @username as abusive', array('@username' => $account_abusive->name)),
+      'user/' . $account_abusive->uid . '/abusive',
+      array(
+        'title' => 'Click here to mark this user as abusive',
+        'query' => array(
+          'destination' => current_path()
+        )
+      )
+    );
+
+  }
+
+}
+
+/**
+ * Helper function which is used to import webforms.
+ */
+function _twoofakind_com_au_build_webform($webform) {
+
+  // Create webform node.
+  $node = (object) array('type' => 'webform');
+  node_object_prepare($node);
+  $node->title = $webform['name'];
+  $node->uid = 1;
+  // Don't promote nodes.
+  $node->promote = 0;
+  $node->status = $webform['status'];
+  $node->webform = $webform['webform'];
+
+  // Make sure we set the default language
+  $node->language = LANGUAGE_NONE;
+
+  // Save it and retain a copy.
+  node_save($node);
+
+  // Set a variable so we can track node ids.
+  variable_set('twoofakind_com_au_webform_' . $webform['machine_name'], $node->nid);
+
+  return $node;
 }
 
 /* * ****************************************************************************

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Twoofakind user feature.
+ */
+
+include_once('twoofakind_user.features.inc');
