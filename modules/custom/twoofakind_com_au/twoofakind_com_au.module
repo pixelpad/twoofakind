@@ -1052,6 +1052,25 @@ function _twoofakind_com_au_user_login_message_deactivated($uid, $name) {
 //  return '<form' . drupal_attributes($element['#attributes']) . '><div>' . $element['#children'] . '</div></form>';
 //}
 
+function twoofakind_com_au_preprocess_user_picture(&$variables) {
+
+  $user = $variables['user'];
+  $account = $variables['account'];
+  if (empty($account->picture)) {
+    $variables['user_picture_is_default'] = TRUE;
+  }
+  else {
+    $variables['user_picture_is_default'] = FALSE;
+  }
+  if ($account->uid == $user->uid) {
+    $variables['user_picture_is_user'] = TRUE;
+  }
+  else {
+    $variables['user_picture_is_user'] = FALSE;
+  }
+
+}
+
 /* * ****************************************************************************
  * View functions
  * **************************************************************************** */
