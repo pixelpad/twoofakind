@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Twoofakind.com.au conf feature.
+ */
+
+include_once('twoofakind_com_au_conf.features.inc');
