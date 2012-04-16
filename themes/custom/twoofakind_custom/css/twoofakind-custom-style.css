@@ -277,7 +277,6 @@ div#block-twoofakind-profile div.item-list {
 }
 
 div.user-picture span.user-picture-upload {
-  margin-left: -50px;
   position: absolute;
   text-align: center;
   width: 60px;
@@ -286,6 +285,32 @@ div.user-picture span.user-picture-upload {
 div.user-picture span.user-picture-upload a {
   color: #000000;
   font-weight: bold;
+}
+
+/* Profile complete block
+-------------------------------------------------------------- */
+
+div#profile-completion {
+  position: absolute;
+  left: 50px;
+  top: 140px;
+}
+
+div#profile-completion h2 {
+  float: left;
+  margin: 0px 10px 0px 0px;
+}
+
+div#profile-completion p.profile-completion-next-step {
+  float: left;
+  margin: 5px 0px 0px 0px;
+}
+
+div#profile-completion p.profile-completion-more-info {
+  clear: left;
+  position: absolute;
+  margin: 0px;
+  top: 15px;
 }
 
 /* Matches view exposed filter form
@@ -810,6 +835,23 @@ div.user-profile.view-mode-full div.group-right div.field.field-name-field-image
 
 div#user-cancel-link {
   float: right;
+}
+
+/* Profile form - basically adding the other save buttons
+-------------------------------------------------------------- */
+
+fieldset.horizontal-tabs-pane textarea {
+  width: 88%;
+}
+
+div.form-actions-clone {
+  position: absolute;
+  top: 20px;
+  right: 5px;
+}
+
+div.form-actions-clone div#user-cancel-link {
+  display: none;
 }
 
 /* Slide show

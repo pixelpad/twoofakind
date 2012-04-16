@@ -6,15 +6,15 @@
   -------------------------------------------------------------- */
   Drupal.behaviors.matchesExposedFilters = {
     attach: function (context, settings) {
-      
+
       /* find current search block and modify it's behaviour */
       $('div#Search:not(.js-processed)', context).each(function () {
         $(this).addClass('js-processed');
-        
+
         /* grab the input field the search will be replacing */
         var input_username = $('input#edit-name-search', context);
         var dummy_text = 'Search for username or just...';
-        
+
         /* send the value of this input field to the relevant field in
          * the matches exposed filters form
          */
@@ -52,7 +52,7 @@
           }
         });
       });
-      
+
       /* make the home page login button reveal the login slider */
       $('div.region-home-banner-1 a[href="/user/login"]').bind({
         click: function() {
@@ -61,7 +61,7 @@
           return false;
         }
       });
-      
+
       /* block titles in RH column need to click through to more link */
       $('div.region-sidebar-right div.block').each(function() {
         var more_link = $('div.more-link a', $(this));
@@ -83,7 +83,7 @@
           });
         }
       });
-      
+
       /* adding a form navigate confirm */
       var form_user_profile = $('form#user-profile-form');
       if (form_user_profile.size() > 0) {
@@ -92,6 +92,11 @@
         form_user_profile.find('button#edit-submit').click(function () {
           global_formNavigate = true;
         });
+
+        /* add a submit button to every fieldset */
+        var div_actions_html = $('div.form-actions').html();
+        var fieldset_div_actions = $('<div class="form-actions form-wrapper form-actions-clone" />').html(div_actions_html);
+        $('fieldset.horizontal-tabs-pane > div.fieldset-wrapper').after(fieldset_div_actions);
       }
     }
   }

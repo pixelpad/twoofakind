@@ -22,9 +22,9 @@
   </div>
 <?php elseif (isset($user_picture)): ?>
   <div class="user-picture">
-    <?php print $user_picture; ?>
     <?php if ($user_picture_is_user && $user_picture_is_default) : ?>
-    <span class="user-picture-upload"><a href="/" title="Upload a profile photo now for more winks">Upload a profile photo</a></span>
+    <span class="user-picture-upload"><?php print $use_picture_upload_link; ?></span>
     <?php endif; ?>
+    <?php print $user_picture; ?>
   </div>
 <?php endif; ?>

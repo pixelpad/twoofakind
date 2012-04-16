@@ -446,6 +446,126 @@ function _twoofakind_com_au_block_profile() {
 
 }
 
+/**
+ * Render the profile completion block
+ *
+ * Outputs the percentage completion of someones profile
+ *
+ * @return
+ *   A completed block array with subject and content
+ */
+function _twoofakind_com_au_block_profile_completion() {
+
+  global $user;
+
+  // grab the rest of the fields
+  $user = user_load($user->uid);
+
+  // init vars
+  $remaining_titles = array();
+  $remaining_weights = array();
+
+  // grab all groups used in the form
+  $field_groups_all = field_group_info_groups('user', 'user', 'form');
+  // however we only want those items in the first tab group
+  $field_group_names_process = $field_groups_all['group_tabs']->children;
+  foreach ($field_group_names_process as $group_machine_name) {
+
+    // grab the group
+    $group = $field_groups_all[$group_machine_name];
+
+    $fragment_id = sprintf('user_user_form_%1$s', $group_machine_name);
+
+    // determine whether or not this group has been edited or not
+    $group_remaining = TRUE;
+    // we only need one of the fields to have been edited
+    // this is our current measure of completion
+    foreach ($group->children as $field_name) {
+      // check if this field has a value
+      if (isset($user->{$field_name}) && !empty($user->{$field_name})) {
+        // technically this should be enough
+        // we'll double check
+        if (
+          is_array($user->{$field_name})
+          && array_key_exists(LANGUAGE_NONE, $user->{$field_name})
+          && empty($user->{$field_name}[LANGUAGE_NONE])
+        ) {
+          // it's still empty
+            continue;
+        }
+        // we've got "A" value for "A" field so this group is "Complete"
+        // by our (current) standards
+        $group_remaining = FALSE;
+        break;
+      }
+    }
+
+    // if this group remains add it to the list
+    if ($group_remaining) {
+      $remaining_weights[$group->weight] = $fragment_id;
+      $remaining_titles[$fragment_id] = $group->label;
+    }
+  }
+
+  // work out if we are not complete
+  $count_total = count($field_group_names_process);
+  $count_remaining = count($remaining_weights);
+
+  // if we have nothing remaining display nothing
+  if (!$count_remaining) {
+    return;
+  }
+
+  // otherwise determine the percentage
+  $percent_complete = 100 - ceil($count_remaining / $count_total * 100);
+
+  // sort the remaining
+  ksort($remaining_weights);
+  // grab the top fragment
+  reset($remaining_weights);
+  $fragment_next = current($remaining_weights);
+  // grab the title
+  $fragment_next_title = $remaining_titles[$fragment_next];
+  // build the next link
+  $url = sprintf('user/%1$d/edit', $user->uid, $fragment_next);
+  $link = l(
+    $fragment_next_title,
+    $url,
+    array(
+      'title' => 'Next step : ' . $fragment_next_title,
+      'fragment' => $fragment_next,
+      'query' => array(
+        'destination' => current_path()
+      )
+    )
+  );
+
+  // build the block
+  $block_title = t('Your profile is <strong>@per%</strong> complete', array('@per' => $percent_complete));
+  if (FALSE) {
+    $block = array(
+      'subject' => $block_title,
+      'content' => '<p class="profile-completion-next-step">Next step : ' . $link . '</p>'
+    );
+    }
+  else {
+    $block = array(
+      'subject' => '',
+      'content' => '<h2>' . $block_title . '</h2>'
+        . '<p class="profile-completion-next-step">Next step : ' . $link . '</p>'
+    );
+  }
+  // here we could add a link to the FAQ
+//  $link = l(t('Click here to learn more'), 'help/complete-my-profile', array('title' => 'Click here to learn more about completing your profile'));
+//  $block['subject'] .= '<p class="profile-completion-more-info">' . $link . '</p>';
+
+  // wrap the block content
+  // this should be in a template or preprocess function (please move it)
+  $block['content'] = sprintf('<div id="profile-completion">%1$s</div>', $block['content']);
+
+  return $block;
+}
+
 /******************************************************************************
  * Form functions
  ******************************************************************************/
