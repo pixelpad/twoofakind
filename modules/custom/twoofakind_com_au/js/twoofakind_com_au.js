@@ -10,7 +10,7 @@
       });
     }
   }
-  
+
   /* Show and hide the blocks
   -------------------------------------------------------------- */
   Drupal.behaviors.sideBarProcessing = {
@@ -18,7 +18,7 @@
       $('div.region-sidebar-right:not(.js-processed)', context).each(function () {
         $(this).addClass('js-processed');
         var sidebar = $(this);
-        
+
         /* block expansion */
         $('a.block-expand', sidebar).each(function () {
           var expand_link = $(this);
@@ -37,13 +37,13 @@
             return false;
           });
         });
-      
+
         /* I DON'T LIKE THIS BEING HERE AS IT'S A TEMPLATE BASED SELECTOR (div#SearchOptions)
          * BUT I WANTED THE COOKIE STUFF IN HERE SO...
          * UNTIL A BETTER SOLUTION (OR TEMPLATE) PRESENTS ITSELF WE'LL STICK
          * WITH THIS DIRTY HACK
          **/
-        
+
         /* matches form stuff */
         var matchesForm = $('div#matches_form', sidebar);
 
@@ -59,7 +59,7 @@
           /* we're on the search page, keep it open */
           matchesForm.fadeToggle();
         }
-        
+
         /* "show less options" link functionality */
         matchesForm.each(function() {
           var matches_form = $(this);
@@ -71,7 +71,7 @@
             }
           });
         });
-        
+
         /* make the more options link open and close the search box */
         $('div#SearchOptions a').bind({
           click: function () {
@@ -80,9 +80,9 @@
             return false;
           }
         });
-        
+
       });
-      
+
       /* hide form elements that should not appear */
       $('body.not-logged-in div.region-sidebar-right:not(.js-processed-twice)', context).each(function () {
         var sidebar = $(this);
@@ -97,7 +97,7 @@
           }
         });
       });
-      
+
       /* make the terms and conditions link in registration pop up */
       $('label a[href*="terms"]').bind({
         click: function () {
@@ -105,14 +105,14 @@
           return false;
         }
       });
-      
+
       /* add links that will perform the clear search button action */
       $('a.clear-action').bind('click', function(e) {
         e.preventDefault();
         $('button#edit-reset').click();
         return false;
       });
-      
+
     }
   }
 
@@ -122,7 +122,7 @@
   function drupal_set_cookie(key, val) {
     $.cookie(key, val, {expires: 1, path: '/', domain: document.location.host});
   }
-  
+
   /*
    * Wrapper to get cookie
    */
@@ -133,14 +133,14 @@
       return false;
     }
   }
-  
+
   /*
    * Wrapper to clear cookie
    */
   function drupal_clear_cookie(key) {
     $.cookie(key, null, {expires: -1, path: '/', domain: document.location.host});
   }
-  
+
   /*
    * Wrapper to toggle search sate
    */
@@ -153,7 +153,7 @@
       drupal_set_cookie('search_state', 1);
     }
   }
-  
+
   /*
    * Wrapper to get search state
    */

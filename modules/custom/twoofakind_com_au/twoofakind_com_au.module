@@ -219,6 +219,11 @@ function twoofakind_com_au_block_info() {
     'info' => t('Two of a kind : Profile block'),
   );
 
+  // profile completion block
+  $blocks['twoofakind_profile_completion'] = array(
+    'info' => t('Two of a kind : Profile completion block'),
+  );
+
   return $blocks;
 }
 
@@ -239,6 +244,11 @@ function twoofakind_com_au_block_view($delta = '') {
     case 'twoofakind_profile':
       module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
       $block = _twoofakind_com_au_block_profile();
+      break;
+
+    case 'twoofakind_profile_completion':
+      module_load_include('inc', 'twoofakind_com_au', 'includes/twoofakind_com_au.user');
+      $block = _twoofakind_com_au_block_profile_completion();
       break;
   }
   return $block;
@@ -1051,6 +1061,43 @@ function _twoofakind_com_au_user_login_message_deactivated($uid, $name) {
 //  // Anonymous DIV to satisfy XHTML compliance.
 //  return '<form' . drupal_attributes($element['#attributes']) . '><div>' . $element['#children'] . '</div></form>';
 //}
+
+/**
+ * Implements HOOK_preprocess_HOOK
+ *
+ * @param array $variables
+ *   Array of variables to be passed to the template file
+ */
+function twoofakind_com_au_preprocess_user_picture(&$variables) {
+
+  $user = $variables['user'];
+  $account = $variables['account'];
+  if (empty($account->picture)) {
+    $variables['user_picture_is_default'] = TRUE;
+  }
+  else {
+    $variables['user_picture_is_default'] = FALSE;
+  }
+  if ($account->uid == $user->uid) {
+    $variables['user_picture_is_user'] = TRUE;
+  }
+  else {
+    $variables['user_picture_is_user'] = FALSE;
+  }
+  $variables['use_picture_upload_link'] =
+    l(
+      t('Upload a profile photo'),
+      sprintf('user/%1$d/edit', $user->uid),
+      array(
+        'title' => t('Upload a profile photo now for more winks'),
+        'fragment' => 'user_user_form_group_media',
+        'query' => array(
+          'destination' => current_path()
+        )
+      )
+    );
+
+}
 
 /* * ****************************************************************************
  * View functions
