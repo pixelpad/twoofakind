@@ -948,3 +948,15 @@ function twoofakind_com_au_update_7012() {
 
   return _twoofakind_com_au_install_webforms('abusive_user');
 }
+
+/**
+ * Implement hook_update_N().
+ *
+ * Enable the site controller feature
+ */
+function twoofakind_com_au_update_7013() {
+  $modules = array(
+    'twoofakind_com_au_conf'
+  );
+  module_enable($modules);
+}
