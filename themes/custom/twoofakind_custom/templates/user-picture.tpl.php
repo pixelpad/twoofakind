@@ -17,11 +17,14 @@
 //dsm($user_picture);
 ?>
 <?php if (isset($account->content['user_picture_alternate'])): ?>
-  <div class="user-picture fuck">what
+  <div class="user-picture">
     <?php print $account->content['user_picture_alternate']; ?>
   </div>
 <?php elseif (isset($user_picture)): ?>
   <div class="user-picture">
+    <?php if ($user_picture_is_user && $user_picture_is_default) : ?>
+    <span class="user-picture-upload"><?php print $use_picture_upload_link; ?></span>
+    <?php endif; ?>
     <?php print $user_picture; ?>
   </div>
 <?php endif; ?>
